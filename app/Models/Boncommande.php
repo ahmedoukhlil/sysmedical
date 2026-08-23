@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenant;
 
 /**
  * Class Boncommande
@@ -26,6 +27,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Boncommande extends Model
 {
+	use BelongsToTenant;
+
 	protected $table = 'boncommande';
 	protected $primaryKey = 'idBC';
 	public $timestamps = false;

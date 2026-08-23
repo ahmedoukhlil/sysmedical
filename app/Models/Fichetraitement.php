@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenant;
 
 /**
  * Class Fichetraitement
@@ -30,6 +31,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Fichetraitement extends Model
 {
+	use BelongsToTenant;
+
 	protected $table = 'fichetraitement';
 	protected $primaryKey = 'idFicheTraitement';
 	public $timestamps = false;

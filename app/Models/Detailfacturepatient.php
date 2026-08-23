@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenant;
 
 /**
  * Class Detailfacturepatient
@@ -33,6 +34,10 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Detailfacturepatient extends Model
 {
+	use BelongsToTenant;
+
+	protected static $tenantColumn = 'fkidcabinet';
+
 	protected $table = 'detailfacturepatient';
 	protected $primaryKey = 'idDetfacture';
 	public $timestamps = false;

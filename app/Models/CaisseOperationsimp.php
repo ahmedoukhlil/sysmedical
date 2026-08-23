@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenant;
 
 /**
  * Class CaisseOperationsimp
@@ -34,6 +35,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class CaisseOperationsimp extends Model
 {
+	use BelongsToTenant;
+
 	protected $table = 'caisse_operationsimp';
 	protected $primaryKey = 'cle';
 	public $timestamps = false;

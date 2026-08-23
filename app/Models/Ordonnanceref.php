@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenant;
 
 /**
  * Class Ordonnanceref
@@ -26,6 +27,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Ordonnanceref extends Model
 {
+	use BelongsToTenant;
+
 	protected $table = 'ordonnanceref';
 	public $timestamps = false;
 

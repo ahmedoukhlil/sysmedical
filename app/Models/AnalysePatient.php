@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Concerns\BelongsToTenant;
 
 class AnalysePatient extends Model
 {
+    use BelongsToTenant;
+
     protected $table = 'analyses_patient';
     protected $primaryKey = 'id';
     public $timestamps = true;

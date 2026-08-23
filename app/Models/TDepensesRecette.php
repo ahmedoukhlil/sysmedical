@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenant;
 
 /**
  * Class TDepensesRecette
@@ -31,6 +32,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TDepensesRecette extends Model
 {
+	use BelongsToTenant;
+
 	protected $table = 't_depenses_recette';
 	protected $primaryKey = 'iddepenserecette';
 	public $timestamps = false;

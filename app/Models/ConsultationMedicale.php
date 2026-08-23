@@ -3,9 +3,12 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenant;
 
 class ConsultationMedicale extends Model
 {
+    use BelongsToTenant;
+
     protected $table = 'consultation_medicale';
     protected $primaryKey = 'id';
     public $timestamps = true;

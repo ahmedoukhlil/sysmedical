@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenantViaRelation;
 
 /**
  * Class Reglement
@@ -28,6 +29,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Reglement extends Model
 {
+	use BelongsToTenantViaRelation;
+
+	protected static $tenantRelation = 'facture';
+	protected static $tenantRelationColumn = 'fkidCabinet';
+
 	protected $table = 'reglements';
 	protected $primaryKey = 'idreglement';
 	public $timestamps = false;

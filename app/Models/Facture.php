@@ -9,6 +9,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Models\Concerns\BelongsToTenant;
 
 /**
  * Class Facture
@@ -44,6 +45,8 @@ use Illuminate\Support\Facades\DB;
  */
 class Facture extends Model
 {
+	use BelongsToTenant;
+
 	protected $table = 'facture';
 	protected $primaryKey = 'Idfacture';
 	public $timestamps = false;

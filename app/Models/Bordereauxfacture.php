@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenant;
 
 /**
  * Class Bordereauxfacture
@@ -30,6 +31,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Bordereauxfacture extends Model
 {
+	use BelongsToTenant;
+
 	protected $table = 'bordereauxfactures';
 	protected $primaryKey = 'IDBordFacture';
 	public $timestamps = false;

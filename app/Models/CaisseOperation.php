@@ -8,6 +8,7 @@ namespace App\Models;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use App\Models\Concerns\BelongsToTenant;
 
 /**
  * Class CaisseOperation
@@ -36,6 +37,10 @@ use Illuminate\Support\Facades\DB;
  */
 class CaisseOperation extends Model
 {
+	use BelongsToTenant;
+
+	protected static $tenantColumn = 'fkidcabinet';
+
 	protected $table = 'caisse_operations';
 	protected $primaryKey = 'cle';
 	public $timestamps = false;

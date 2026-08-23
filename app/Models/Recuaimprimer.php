@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenant;
 
 /**
  * Class Recuaimprimer
@@ -31,6 +32,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Recuaimprimer extends Model
 {
+	use BelongsToTenant;
+
 	protected $table = 'recuaimprimer';
 	protected $primaryKey = 'IdRecu';
 	public $timestamps = false;

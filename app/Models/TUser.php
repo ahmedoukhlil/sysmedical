@@ -8,10 +8,14 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\Concerns\BelongsToTenant;
 
 class TUser extends Authenticatable
 {
     use Notifiable;
+    use BelongsToTenant;
+
+    protected static $tenantColumn = 'fkidcabinet';
 
     /**
      * Nom de la table dans la base de données

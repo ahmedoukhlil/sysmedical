@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
+use App\Models\Concerns\BelongsToTenantViaRelation;
 
 /**
  * Class LotMedicament
@@ -26,6 +27,11 @@ use Carbon\Carbon;
  */
 class LotMedicament extends Model
 {
+    use BelongsToTenantViaRelation;
+
+    protected static $tenantRelation = 'stock';
+    protected static $tenantRelationColumn = 'fkidCabinet';
+
     protected $table = 'lots_medicaments';
     protected $primaryKey = 'idLot';
     public $timestamps = false;

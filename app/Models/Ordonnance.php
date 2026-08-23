@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenantViaRelation;
 
 /**
  * Class Ordonnance
@@ -24,6 +25,11 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Ordonnance extends Model
 {
+	use BelongsToTenantViaRelation;
+
+	protected static $tenantRelation = 'ordonnanceRef';
+	protected static $tenantRelationColumn = 'fkidCabinet';
+
 	protected $table = 'ordonnances';
 	protected $primaryKey = 'IDOrdonnances';
 	public $timestamps = false;

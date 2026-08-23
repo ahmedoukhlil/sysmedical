@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use App\Models\Rendezvou;
 use App\Models\Facture;
 use App\Models\CaisseOperation;
+use App\Models\Concerns\BelongsToTenant;
 
 /**
  * Class Medecin
@@ -25,6 +26,10 @@ use App\Models\CaisseOperation;
  */
 class Medecin extends Model
 {
+	use BelongsToTenant;
+
+	protected static $tenantColumn = 'fkidcabinet';
+
 	protected $table = 'medecins';
 	protected $primaryKey = 'idMedecin';
 	public $timestamps = false;

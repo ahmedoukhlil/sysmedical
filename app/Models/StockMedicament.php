@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenant;
 
 /**
  * Class StockMedicament
@@ -22,6 +23,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class StockMedicament extends Model
 {
+    use BelongsToTenant;
+
     protected $table = 'stock_medicaments';
     protected $primaryKey = 'idStock';
     public $timestamps = false;

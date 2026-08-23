@@ -5,9 +5,14 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
+use App\Models\Concerns\BelongsToTenant;
 
 class Rendezvou extends Model
 {
+    use BelongsToTenant;
+
+    protected static $tenantColumn = 'fkidcabinet';
+
     // Nom de la table
     protected $table = 'rendezvous';
 
