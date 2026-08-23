@@ -8,31 +8,13 @@ use App\Models\Patient;
 use App\Models\TUser;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Auth;
+use Tests\Feature\Concerns\CreatesTenantFixtures;
 use Tests\TestCase;
 
 class TenantIsolationTest extends TestCase
 {
     use DatabaseTransactions;
-
-    private function makeCabinetWithUser(int $idEntete, string $login): array
-    {
-        $cabinet = new Infocabinet();
-        $cabinet->forceFill([
-            'idEntete' => $idEntete,
-            'NomCabFr' => "Cabinet $idEntete",
-        ])->save();
-
-        $user = TUser::create([
-            'login' => $login,
-            'password' => 'secret',
-            'NomComplet' => "User $login",
-            'IdClasseUser' => 1,
-            'fkidcabinet' => $idEntete,
-            'ismasquer' => 0,
-        ]);
-
-        return [$cabinet, $user];
-    }
+    use CreatesTenantFixtures;
 
     public function test_patient_list_is_scoped_to_current_cabinet()
     {
