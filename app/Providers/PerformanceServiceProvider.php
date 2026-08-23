@@ -73,7 +73,6 @@ class PerformanceServiceProvider extends ServiceProvider
                 \Log::warning('Requête lente détectée', [
                     'sql' => $event->sql,
                     'time' => $event->time,
-                    'bindings' => $event->bindings,
                     'connection' => $event->connectionName
                 ]);
             }

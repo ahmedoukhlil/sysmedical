@@ -37,7 +37,12 @@ class OptimizeQueries
 
             if ($slowQueries->isNotEmpty()) {
                 \Log::warning('Slow queries detected', [
-                    'queries' => $slowQueries->toArray(),
+                    'queries' => $slowQueries->map(function ($query) {
+                        return [
+                            'sql' => $query['query'] ?? null,
+                            'time' => $query['time'] ?? null,
+                        ];
+                    })->values()->toArray(),
                     'url' => $request->fullUrl()
                 ]);
             }

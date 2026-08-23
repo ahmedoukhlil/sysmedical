@@ -115,7 +115,7 @@ class RdvReminders extends Component
             // Log pour débogage
             \Log::info('WhatsApp reminder sent', [
                 'rdvId' => $rdvId,
-                'patientName' => $rdv->patient->Nom,
+                'patientId' => $rdv->patient->ID,
                 'isRelance' => $wasAlreadySent
             ]);
             

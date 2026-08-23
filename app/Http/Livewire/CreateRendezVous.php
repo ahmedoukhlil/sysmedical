@@ -97,7 +97,9 @@ class CreateRendezVous extends Component
         $this->initializePermissions();
         
         // Gérer le patient passé en paramètre
-        \Log::info('CreateRendezVous mount: patient reçu', ['patient' => $patient]);
+        \Log::info('CreateRendezVous mount: patient reçu', [
+            'patient_id' => is_array($patient) ? ($patient['ID'] ?? null) : ($patient->ID ?? null),
+        ]);
         
         if ($patient) {
             if (is_array($patient)) {
@@ -110,7 +112,6 @@ class CreateRendezVous extends Component
             
             \Log::info('CreateRendezVous mount: patient traité', [
                 'patient_id' => $this->patient_id,
-                'selectedPatient' => $this->selectedPatient
             ]);
             
             // Sauvegarder l'état dans la session
@@ -397,7 +398,9 @@ class CreateRendezVous extends Component
 
     public function handlePatientSelected($patient)
     {
-        \Log::info('CreateRendezVous: handlePatientSelected appelé', ['patient' => $patient]);
+        \Log::info('CreateRendezVous: handlePatientSelected appelé', [
+            'patient_id' => is_array($patient) ? ($patient['ID'] ?? null) : ($patient->ID ?? null),
+        ]);
         
         if ($patient === null) {
             $this->patient_id = null;

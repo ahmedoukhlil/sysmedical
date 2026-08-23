@@ -146,7 +146,7 @@ class PatientSearch extends Component
                 $this->patients = [];
                 $this->showResults = false;
                 
-                \Log::info('Patient sélectionné dans PatientSearch', $this->selectedPatient);
+                \Log::info('Patient sélectionné dans PatientSearch', ['patient_id' => $this->selectedPatient['ID']]);
                 $this->emit('patientSelected', $this->selectedPatient);
             } else {
                 session()->flash('error', 'Patient non trouvé.');

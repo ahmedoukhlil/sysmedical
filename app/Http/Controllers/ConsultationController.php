@@ -49,7 +49,10 @@ class ConsultationController extends Controller
                 }
             ])->findOrFail($factureId);
 
-            \Log::info('Facture trouvée', ['facture' => $facture->toArray()]);
+            \Log::info('Facture trouvée', [
+                'facture_id' => $facture->Idfacture,
+                'patient_id' => $facture->IDPatient,
+            ]);
 
             // Mettre en cache la conversion en lettres (1h)
             $facture->en_lettres = cache()->remember('facture_lettres_' . $factureId, 3600, function() use ($facture) {

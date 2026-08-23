@@ -231,7 +231,9 @@ class ConsultationForm extends Component
     {
         // Vérifier que le patient n'est pas null
         if (!$patient || !is_array($patient)) {
-            \Log::warning('Patient reçu est null ou invalide dans ConsultationForm', ['patient' => $patient]);
+            \Log::warning('Patient reçu est null ou invalide dans ConsultationForm', [
+                'patient_type' => is_array($patient) ? 'array_invalide' : gettype($patient),
+            ]);
             return;
         }
         

@@ -265,9 +265,12 @@ class PatientManager extends Component
                 $this->emit('patientCreated', $patient->ID);
             }
         } catch (\Exception $e) {
-            \Log::error('Erreur création patient : ' . $e->getMessage());
-            \Log::error('Stack trace : ' . $e->getTraceAsString());
-            session()->flash('error', 'Erreur SQL : ' . $e->getMessage() . ' (code: ' . $e->getCode() . ')');
+            $message = $e instanceof \Illuminate\Database\QueryException
+                ? 'Erreur base de données (code: ' . $e->getCode() . ')'
+                : $e->getMessage();
+
+            \Log::error('Erreur création patient : ' . $message);
+            session()->flash('error', 'Erreur lors de la création du patient (code: ' . $e->getCode() . ')');
             // Ne pas fermer le modal ni reset le formulaire en cas d'erreur
         }
     }
