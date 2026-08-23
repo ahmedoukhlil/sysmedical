@@ -11,31 +11,6 @@
       0 => 'Barryvdh\\DomPDF\\ServiceProvider',
     ),
   ),
-  'facade/ignition' => 
-  array (
-    'aliases' => 
-    array (
-      'Flare' => 'Facade\\Ignition\\Facades\\Flare',
-    ),
-    'providers' => 
-    array (
-      0 => 'Facade\\Ignition\\IgnitionServiceProvider',
-    ),
-  ),
-  'fruitcake/laravel-cors' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'Fruitcake\\Cors\\CorsServiceProvider',
-    ),
-  ),
-  'kitloong/laravel-migrations-generator' => 
-  array (
-    'providers' => 
-    array (
-      0 => 'KitLoong\\MigrationsGenerator\\MigrationsGeneratorServiceProvider',
-    ),
-  ),
   'laravel/sail' => 
   array (
     'providers' => 
@@ -82,11 +57,11 @@
       0 => 'NunoMaduro\\Collision\\Adapters\\Laravel\\CollisionServiceProvider',
     ),
   ),
-  'reliese/laravel' => 
+  'nunomaduro/termwind' => 
   array (
     'providers' => 
     array (
-      0 => 'Reliese\\Coders\\CodersServiceProvider',
+      0 => 'Termwind\\Laravel\\TermwindServiceProvider',
     ),
   ),
   'simplesoftwareio/simple-qrcode' => 
@@ -98,6 +73,17 @@
     'providers' => 
     array (
       0 => 'SimpleSoftwareIO\\QrCode\\QrCodeServiceProvider',
+    ),
+  ),
+  'spatie/laravel-ignition' => 
+  array (
+    'aliases' => 
+    array (
+      'Flare' => 'Spatie\\LaravelIgnition\\Facades\\Flare',
+    ),
+    'providers' => 
+    array (
+      0 => 'Spatie\\LaravelIgnition\\IgnitionServiceProvider',
     ),
   ),
 );

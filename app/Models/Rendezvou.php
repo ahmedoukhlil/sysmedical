@@ -23,11 +23,11 @@ class Rendezvou extends Model
     public $timestamps = false;
 
     // Champs à caster en date/heure
-    protected $dates = [
-        'DtAjRdv',
-        'dtPrevuRDV',
-        'HeureRdv',
-        'HeureConfRDV'
+    protected $casts = [
+        'DtAjRdv' => 'datetime',
+        'dtPrevuRDV' => 'datetime',
+        'HeureRdv' => 'datetime',
+        'HeureConfRDV' => 'datetime',
     ];
 
     // Champs assignables en masse
