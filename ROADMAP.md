@@ -68,9 +68,10 @@ Objectif : transformer l'outil sécurisé en produit vendable en autonomie.
 
 Objectif : réduire la dette qui freinera les évolutions futures et l'expérience utilisateur au quotidien.
 
-### 2.1 Design system minimal — **M**
-- Composants Blade réutilisables pour : badge de statut (mapping couleur centralisé), bouton, carte, champ de formulaire.
-- Migrer progressivement les 79 vues vers ces composants au fil des autres chantiers (pas un big-bang).
+### 2.1 Design system minimal — **M** ✅ Fait (2026-08-27)
+- 4 composants Blade créés (`resources/views/components/`) : `status-badge`, `button`, `card`, `form-input` — enveloppent le CSS déjà présent dans `resources/css/app.css` (`.btn-*`, `.card*`, `.form-input`), sans nouvelle classe CSS.
+- 2 fichiers migrés en preuve de concept : `create-rendez-vous.blade.php` (switch statut RDV dupliqué) et `admin/cabinets/create.blade.php` (bouton/carte/champs). `rendez-vous-manager.blade.php` volontairement laissé tel quel : ses libellés de statut ("Présent au cabinet", "Avec le médecin") diffèrent de ceux déjà codés dans `x-status-badge`, migrer aurait changé le texte affiché — décision de ne pas casser la fidélité visuelle plutôt que de forcer la migration.
+- **Convention pour la suite** : tout nouveau code utilise `<x-status-badge>`, `<x-button>`, `<x-card>`, `<x-form-input>` au lieu de classes Tailwind brutes ou d'un switch PHP recopié. Migration des vues existantes uniquement en marge d'un autre ticket qui touche déjà le fichier — pas de PR dédiée "migration design system" en masse. `x-status-badge` en `domain="generic"` + prop `:map` sert pour tout nouveau statut métier (abonnement, utilisateur, paiement) tant qu'il n'y a pas 3+ fichiers qui répètent le même mapping — au-delà, envisager un vrai domaine dédié.
 
 ### 2.2 Feedback utilisateur — **S**
 - Généraliser `wire:loading` sur les actions asynchrones (priorité : `AccueilPatient` et ses modals).

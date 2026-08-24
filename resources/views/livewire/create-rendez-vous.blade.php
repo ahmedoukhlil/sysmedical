@@ -164,53 +164,7 @@
 
                     <!-- Statut -->
                     <div class="flex items-center justify-between mb-3">
-                        @php
-                            switch($rdv->rdvConfirmer) {
-                                case 'En Attente':
-                                case 'En attente':
-                                    $statusClass = 'bg-yellow-100 text-yellow-800';
-                                    $statusIcon = 'fas fa-clock';
-                                    $statusText = 'En Attente';
-                                    break;
-                                case 'confirmé':
-                                case 'Confirmé':
-                                    $statusClass = 'bg-blue-100 text-blue-800';
-                                    $statusIcon = 'fas fa-user-check';
-                                    $statusText = 'Présent';
-                                    break;
-                                case 'En cours':
-                                    $statusClass = 'bg-green-100 text-green-800';
-                                    $statusIcon = 'fas fa-user-md';
-                                    $statusText = 'En cours';
-                                    break;
-                                case 'terminé':
-                                case 'Terminé':
-                                    $statusClass = 'bg-gray-100 text-gray-800';
-                                    $statusIcon = 'fas fa-check-double';
-                                    $statusText = 'Terminé';
-                                    break;
-                                case 'annulé':
-                                case 'Annulé':
-                                    $statusClass = 'bg-red-100 text-red-800';
-                                    $statusIcon = 'fas fa-times';
-                                    $statusText = 'Annulé';
-                                    break;
-                                case 'Consultation':
-                                    $statusClass = 'bg-purple-100 text-purple-800';
-                                    $statusIcon = 'fas fa-stethoscope';
-                                    $statusText = 'Consultation';
-                                    break;
-                                default:
-                                    $statusClass = 'bg-yellow-100 text-yellow-800';
-                                    $statusIcon = 'fas fa-clock';
-                                    $statusText = 'En Attente';
-                                    break;
-                            }
-                        @endphp
-                        <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium {{ $statusClass }}">
-                            <i class="{{ $statusIcon }} mr-1"></i>
-                            {{ $statusText }}
-                        </span>
+                        <x-status-badge :status="$rdv->rdvConfirmer" domain="rdv" />
                     </div>
 
                     <!-- Actions -->
