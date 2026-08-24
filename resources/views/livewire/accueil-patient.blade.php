@@ -307,14 +307,14 @@ $patientId = $selectedPatient
 
 {{-- Consultation --}}
 @if($showConsultation && $selectedPatient)
-<div class="modal-overlay" wire:click.self="fermerConsultationModal">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerConsultationModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-consultation">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
             <div>
-                <h2><i class="fas fa-stethoscope mr-2"></i>Consultation</h2>
+                <h2 id="modal-title-consultation"><i class="fas fa-stethoscope mr-2"></i>Consultation</h2>
                 <p>{{ $patientNom }}</p>
             </div>
-            <button type="button" wire:click="fermerConsultationModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <button type="button" wire:click="fermerConsultationModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:consultation-form wire:key="consultation-modal-{{ $patientId }}" :patient="$selectedPatient" />
@@ -325,14 +325,14 @@ $patientId = $selectedPatient
 
 {{-- Facture / Devis --}}
 @if($showReglement && $selectedPatient)
-<div class="modal-overlay" wire:click.self="fermerReglementModal">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerReglementModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-reglement">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
             <div>
-                <h2><i class="fas fa-file-invoice-dollar mr-2"></i>Facture / Devis</h2>
+                <h2 id="modal-title-reglement"><i class="fas fa-file-invoice-dollar mr-2"></i>Facture / Devis</h2>
                 <p>{{ $patientNom }}</p>
             </div>
-            <button type="button" wire:click="fermerReglementModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <button type="button" wire:click="fermerReglementModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:reglement-facture wire:key="reglement-modal-{{ $patientId }}" :selectedPatient="$selectedPatient" />
@@ -343,14 +343,14 @@ $patientId = $selectedPatient
 
 {{-- Rendez-vous patient --}}
 @if($showRendezVous && $selectedPatient)
-<div class="modal-overlay" wire:click.self="fermerRendezVousModal">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerRendezVousModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-rendezvous">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
             <div>
-                <h2><i class="fas fa-calendar-check mr-2"></i>Rendez-vous</h2>
+                <h2 id="modal-title-rendezvous"><i class="fas fa-calendar-check mr-2"></i>Rendez-vous</h2>
                 <p>{{ $patientNom }}</p>
             </div>
-            <button type="button" wire:click="fermerRendezVousModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <button type="button" wire:click="fermerRendezVousModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:create-rendez-vous wire:key="rendez-vous-modal-{{ $patientId }}" :patient="$selectedPatient" />
@@ -361,14 +361,14 @@ $patientId = $selectedPatient
 
 {{-- Traitement d'urgence --}}
 @if($showUrgenceModal && $selectedPatient)
-<div class="modal-overlay" wire:click.self="fermerUrgenceModal">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerUrgenceModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-urgence">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
             <div>
-                <h2><i class="fas fa-bolt mr-2"></i>Traitement d'urgence</h2>
+                <h2 id="modal-title-urgence"><i class="fas fa-bolt mr-2"></i>Traitement d'urgence</h2>
                 <p>{{ $patientNom }}</p>
             </div>
-            <button type="button" wire:click="fermerUrgenceModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <button type="button" wire:click="fermerUrgenceModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:ordonnance-manager wire:key="urgence-modal-{{ $patientId }}" :patient="$selectedPatient" :mode-force="'urgence'" />
@@ -379,14 +379,14 @@ $patientId = $selectedPatient
 
 {{-- Ordonnances --}}
 @if($showOrdonnanceModal && $selectedPatient)
-<div class="modal-overlay" wire:click.self="fermerOrdonnanceModal">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerOrdonnanceModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-ordonnance">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
             <div>
-                <h2><i class="fas fa-file-prescription mr-2"></i>Ordonnances</h2>
+                <h2 id="modal-title-ordonnance"><i class="fas fa-file-prescription mr-2"></i>Ordonnances</h2>
                 <p>{{ $patientNom }}</p>
             </div>
-            <button type="button" wire:click="fermerOrdonnanceModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <button type="button" wire:click="fermerOrdonnanceModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:ordonnance-manager wire:key="ordonnance-modal-{{ $patientId }}" :patient="$selectedPatient" />
@@ -397,14 +397,14 @@ $patientId = $selectedPatient
 
 {{-- Dossier médical --}}
 @if($showDossierMedical && $selectedPatient)
-<div class="modal-overlay" wire:click.self="fermerDossierMedicalModal">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerDossierMedicalModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-dossier-medical">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
             <div>
-                <h2><i class="fas fa-folder-open mr-2"></i>Dossier médical</h2>
+                <h2 id="modal-title-dossier-medical"><i class="fas fa-folder-open mr-2"></i>Dossier médical</h2>
                 <p>{{ $patientNom }}</p>
             </div>
-            <button type="button" wire:click="fermerDossierMedicalModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <button type="button" wire:click="fermerDossierMedicalModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:dossier-medical-manager wire:key="dossier-medical-{{ $patientId }}" :patient="$selectedPatient" />
@@ -416,13 +416,13 @@ $patientId = $selectedPatient
 {{-- ── GESTION RDV (général) ── --}}
 
 @if($showCreateRdvModal)
-<div class="modal-overlay" wire:click.self="closeCreateRdvModal">
-    <div class="modal-box max-w-6xl w-full">
+<div class="modal-overlay" wire:click.self="closeCreateRdvModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-create-rdv">
+    <div class="modal-box max-w-6xl w-full" tabindex="-1">
         <div class="modal-header">
             <div>
-                <h2><i class="fas fa-calendar-alt mr-2"></i>Gestion des Rendez-vous</h2>
+                <h2 id="modal-title-create-rdv"><i class="fas fa-calendar-alt mr-2"></i>Gestion des Rendez-vous</h2>
             </div>
-            <button type="button" wire:click="closeCreateRdvModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <button type="button" wire:click="closeCreateRdvModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         {{-- Onglets --}}
         <div class="border-b border-gray-200 px-6 flex gap-6">
@@ -458,11 +458,11 @@ $patientId = $selectedPatient
 {{-- ── GESTION DES PATIENTS ── --}}
 
 @if($showNouveauPatientModal)
-<div class="modal-overlay" wire:click.self="closeNouveauPatientModal">
-    <div class="modal-box max-w-3xl w-full">
+<div class="modal-overlay" wire:click.self="closeNouveauPatientModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-nouveau-patient">
+    <div class="modal-box max-w-3xl w-full" tabindex="-1">
         <div class="modal-header">
-            <h2><i class="fas fa-user-plus mr-2"></i>Nouveau patient</h2>
-            <button type="button" wire:click="closeNouveauPatientModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <h2 id="modal-title-nouveau-patient"><i class="fas fa-user-plus mr-2"></i>Nouveau patient</h2>
+            <button type="button" wire:click="closeNouveauPatientModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:patient-manager wire:key="nouveau-patient-modal" :creationOnly="true" />
@@ -472,11 +472,11 @@ $patientId = $selectedPatient
 @endif
 
 @if($showGestionPatientsModal)
-<div class="modal-overlay" wire:click.self="closeGestionPatientsModal">
-    <div class="modal-box max-w-6xl w-full">
+<div class="modal-overlay" wire:click.self="closeGestionPatientsModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-gestion-patients">
+    <div class="modal-box max-w-6xl w-full" tabindex="-1">
         <div class="modal-header">
-            <h2><i class="fas fa-users mr-2"></i>Gestion des patients</h2>
-            <button type="button" wire:click="closeGestionPatientsModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <h2 id="modal-title-gestion-patients"><i class="fas fa-users mr-2"></i>Gestion des patients</h2>
+            <button type="button" wire:click="closeGestionPatientsModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:patient-manager />
@@ -486,11 +486,11 @@ $patientId = $selectedPatient
 @endif
 
 @if($showCreateModal)
-<div class="modal-overlay" wire:click.self="closeCreateModal">
-    <div class="modal-box max-w-6xl w-full">
+<div class="modal-overlay" wire:click.self="closeCreateModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-create">
+    <div class="modal-box max-w-6xl w-full" tabindex="-1">
         <div class="modal-header">
-            <h2><i class="fas fa-users mr-2"></i>Gestion des patients</h2>
-            <button type="button" wire:click="closeCreateModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <h2 id="modal-title-create"><i class="fas fa-users mr-2"></i>Gestion des patients</h2>
+            <button type="button" wire:click="closeCreateModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:patient-manager />
@@ -503,11 +503,11 @@ $patientId = $selectedPatient
 
 {{-- Caisse Paie --}}
 @if($showCaisseOperations)
-<div class="modal-overlay" wire:click.self="fermerCaisseOperationsModal">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerCaisseOperationsModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-caisse">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
-            <h2><i class="fas fa-cash-register mr-2"></i>Caisse Paie</h2>
-            <button type="button" wire:click="fermerCaisseOperationsModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <h2 id="modal-title-caisse"><i class="fas fa-cash-register mr-2"></i>Caisse Paie</h2>
+            <button type="button" wire:click="fermerCaisseOperationsModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:caisse-operations-manager wire:key="caisse-operations-modal" />
@@ -518,11 +518,11 @@ $patientId = $selectedPatient
 
 {{-- Dépenses --}}
 @if($showDepenses)
-<div class="modal-overlay" wire:click.self="fermerDepensesModal">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerDepensesModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-depenses">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
-            <h2><i class="fas fa-receipt mr-2"></i>Dépenses</h2>
-            <button type="button" wire:click="fermerDepensesModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <h2 id="modal-title-depenses"><i class="fas fa-receipt mr-2"></i>Dépenses</h2>
+            <button type="button" wire:click="fermerDepensesModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:depenses-manager wire:key="depenses-manager-modal" />
@@ -533,11 +533,11 @@ $patientId = $selectedPatient
 
 {{-- Statistiques --}}
 @if($showStatistiques)
-<div class="modal-overlay" wire:click.self="fermerStatistiquesModal">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerStatistiquesModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-statistiques">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
-            <h2><i class="fas fa-chart-bar mr-2"></i>Statistiques</h2>
-            <button type="button" wire:click="fermerStatistiquesModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <h2 id="modal-title-statistiques"><i class="fas fa-chart-bar mr-2"></i>Statistiques</h2>
+            <button type="button" wire:click="fermerStatistiquesModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:statistiques-manager wire:key="statistiques-manager-modal" />
@@ -548,11 +548,11 @@ $patientId = $selectedPatient
 
 {{-- Assurances --}}
 @if($showAssureurModal)
-<div class="modal-overlay" wire:click.self="fermerAssureurModal">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerAssureurModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-assureur">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
-            <h2><i class="fas fa-shield-alt mr-2"></i>Gestion des assurances</h2>
-            <button type="button" wire:click="fermerAssureurModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <h2 id="modal-title-assureur"><i class="fas fa-shield-alt mr-2"></i>Gestion des assurances</h2>
+            <button type="button" wire:click="fermerAssureurModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:assureur-manager wire:key="assureur-manager-modal" />
@@ -563,11 +563,11 @@ $patientId = $selectedPatient
 
 {{-- Actes / Soins --}}
 @if($showListeActesModal)
-<div class="modal-overlay" wire:click.self="fermerListeActesModal">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerListeActesModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-liste-actes">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
-            <h2><i class="fas fa-list-alt mr-2"></i>Liste des actes</h2>
-            <button type="button" wire:click="fermerListeActesModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <h2 id="modal-title-liste-actes"><i class="fas fa-list-alt mr-2"></i>Liste des actes</h2>
+            <button type="button" wire:click="fermerListeActesModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:acte-manager wire:key="acte-manager-modal" />
@@ -578,11 +578,11 @@ $patientId = $selectedPatient
 
 {{-- Médicaments --}}
 @if($showListeMedicamentsModal)
-<div class="modal-overlay" wire:click.self="fermerListeMedicamentsModal">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerListeMedicamentsModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-liste-medicaments">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
-            <h2><i class="fas fa-pills mr-2"></i>Liste des médicaments</h2>
-            <button type="button" wire:click="fermerListeMedicamentsModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <h2 id="modal-title-liste-medicaments"><i class="fas fa-pills mr-2"></i>Liste des médicaments</h2>
+            <button type="button" wire:click="fermerListeMedicamentsModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:medicament-manager wire:key="medicament-manager-modal" />
@@ -593,11 +593,11 @@ $patientId = $selectedPatient
 
 {{-- Médecins --}}
 @if($showMedecinsModal)
-<div class="modal-overlay" wire:click.self="fermerMedecinsModal">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerMedecinsModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-medecins">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
-            <h2><i class="fas fa-user-md mr-2"></i>Gestion des médecins</h2>
-            <button type="button" wire:click="fermerMedecinsModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <h2 id="modal-title-medecins"><i class="fas fa-user-md mr-2"></i>Gestion des médecins</h2>
+            <button type="button" wire:click="fermerMedecinsModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:medecin-manager wire:key="medecin-manager-modal" />
@@ -608,11 +608,11 @@ $patientId = $selectedPatient
 
 {{-- Modes de paiement --}}
 @if($showTypePaiementModal)
-<div class="modal-overlay" wire:click.self="fermerTypePaiementModal">
-    <div class="modal-box max-w-4xl w-full">
+<div class="modal-overlay" wire:click.self="fermerTypePaiementModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-type-paiement">
+    <div class="modal-box max-w-4xl w-full" tabindex="-1">
         <div class="modal-header">
-            <h2><i class="fas fa-credit-card mr-2"></i>Modes de paiement</h2>
-            <button type="button" wire:click="fermerTypePaiementModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <h2 id="modal-title-type-paiement"><i class="fas fa-credit-card mr-2"></i>Modes de paiement</h2>
+            <button type="button" wire:click="fermerTypePaiementModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:type-paiement-manager wire:key="type-paiement-manager-modal" />
@@ -623,11 +623,11 @@ $patientId = $selectedPatient
 
 {{-- Suivi de stock --}}
 @if($showDashboardStock)
-<div class="modal-overlay" wire:click.self="fermerDashboardStockModal">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerDashboardStockModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-dashboard-stock">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
-            <h2><i class="fas fa-chart-line mr-2"></i>Suivi de stock</h2>
-            <button type="button" wire:click="fermerDashboardStockModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <h2 id="modal-title-dashboard-stock"><i class="fas fa-chart-line mr-2"></i>Suivi de stock</h2>
+            <button type="button" wire:click="fermerDashboardStockModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:pharmacie-manager wire:key="dashboard-stock-modal" />
@@ -638,14 +638,14 @@ $patientId = $selectedPatient
 
 {{-- Salle d'attente --}}
 @if($showSalleAttenteModal)
-<div class="modal-overlay" wire:click.self="fermerSalleAttenteModal">
-    <div class="modal-box max-w-4xl w-full">
+<div class="modal-overlay" wire:click.self="fermerSalleAttenteModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-salle-attente">
+    <div class="modal-box max-w-4xl w-full" tabindex="-1">
         <div class="modal-header">
             <div>
-                <h2><i class="fas fa-couch mr-2"></i>Salle d'attente</h2>
+                <h2 id="modal-title-salle-attente"><i class="fas fa-couch mr-2"></i>Salle d'attente</h2>
                 <p class="text-sm text-white/70">Rendez-vous du jour — cliquez sur un patient pour accéder à son dossier</p>
             </div>
-            <button type="button" wire:click="fermerSalleAttenteModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <button type="button" wire:click="fermerSalleAttenteModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:salle-attente wire:key="salle-attente-modal" />
@@ -656,14 +656,14 @@ $patientId = $selectedPatient
 
 {{-- Salle de soins --}}
 @if($showSalleSoinsModal)
-<div class="modal-overlay" wire:click.self="fermerSalleSoinsModal">
-    <div class="modal-box max-w-3xl w-full">
+<div class="modal-overlay" wire:click.self="fermerSalleSoinsModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-salle-soins">
+    <div class="modal-box max-w-3xl w-full" tabindex="-1">
         <div class="modal-header">
             <div>
-                <h2><i class="fas fa-syringe mr-2"></i>Salle de soins</h2>
+                <h2 id="modal-title-salle-soins"><i class="fas fa-syringe mr-2"></i>Salle de soins</h2>
                 <p>Ordonnances internes prescrites aujourd'hui — soins à effectuer</p>
             </div>
-            <button type="button" wire:click="fermerSalleSoinsModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <button type="button" wire:click="fermerSalleSoinsModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:salle-soins wire:key="salle-soins-modal" />
@@ -674,14 +674,14 @@ $patientId = $selectedPatient
 
 {{-- Actes à effectuer --}}
 @if($showActesPatientModal && $selectedPatient)
-<div class="modal-overlay" wire:click.self="fermerActesPatientModal">
-    <div class="modal-box max-w-4xl w-full">
+<div class="modal-overlay" wire:click.self="fermerActesPatientModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-actes-patient">
+    <div class="modal-box max-w-4xl w-full" tabindex="-1">
         <div class="modal-header">
             <div>
-                <h2><i class="fas fa-procedures mr-2"></i>Actes à effectuer</h2>
+                <h2 id="modal-title-actes-patient"><i class="fas fa-procedures mr-2"></i>Actes à effectuer</h2>
                 <p>{{ $patientNom }}</p>
             </div>
-            <button type="button" wire:click="fermerActesPatientModal" class="modal-close"><i class="fas fa-times"></i></button>
+            <button type="button" wire:click="fermerActesPatientModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:actes-patient wire:key="actes-patient-{{ $patientId }}" :patient="$selectedPatient" />
@@ -692,14 +692,14 @@ $patientId = $selectedPatient
 
 {{-- Paramètres cabinet --}}
 @if($showParametresCabinetModal)
-<div class="modal-overlay" wire:click.self="fermerParametresCabinet">
-    <div class="modal-box max-w-5xl w-full">
+<div class="modal-overlay" wire:click.self="fermerParametresCabinet" role="dialog" aria-modal="true" aria-labelledby="modal-title-parametres-cabinet">
+    <div class="modal-box max-w-5xl w-full" tabindex="-1">
         <div class="modal-header">
             <div>
-                <h2><i class="fas fa-sliders-h mr-2"></i>Paramètres du cabinet</h2>
+                <h2 id="modal-title-parametres-cabinet"><i class="fas fa-sliders-h mr-2"></i>Paramètres du cabinet</h2>
                 <p>Configuration de l'en-tête et du pied de page des imprimés</p>
             </div>
-            <button type="button" wire:click="fermerParametresCabinet" class="modal-close"><i class="fas fa-times"></i></button>
+            <button type="button" wire:click="fermerParametresCabinet" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
         </div>
         <div class="modal-body">
             <livewire:parametres-cabinet wire:key="parametres-cabinet-modal" />
@@ -864,16 +864,90 @@ document.addEventListener('livewire:load', function () {
     // Keyboard shortcuts (when modal is open)
     document.addEventListener('keydown', function(e) {
         if (!document.querySelector('.modal-overlay')) return;
-        if (e.key === 'Escape') {
-            const closeBtn = document.querySelector('button[wire\\:click*="fermer"], button[wire\\:click*="close"], button[wire\\:click*="Close"]');
-            if (closeBtn) closeBtn.click();
-        }
         if (e.ctrlKey && e.key === 'Enter') {
             const submitBtn = document.querySelector('button[type="submit"]');
             if (submitBtn) submitBtn.click();
         }
     });
 });
+
+/* ── Accessibilité modals : focus trap + restauration du focus ── */
+(function () {
+    let lastFocusedElement = null;
+
+    function getFocusableElements(container) {
+        return Array.from(container.querySelectorAll(
+            'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+        )).filter(el => el.offsetParent !== null);
+    }
+
+    function trapTabKey(e, modalBox) {
+        if (e.key !== 'Tab') return;
+        const focusable = getFocusableElements(modalBox);
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+            e.preventDefault();
+            first.focus();
+        }
+    }
+
+    function handleModalOpen(overlay) {
+        lastFocusedElement = document.activeElement;
+        const box = overlay.querySelector('.modal-box');
+        if (box) {
+            box.focus();
+            document.addEventListener('keydown', function trapHandler(e) {
+                if (!document.body.contains(overlay)) {
+                    document.removeEventListener('keydown', trapHandler);
+                    return;
+                }
+                trapTabKey(e, box);
+            });
+        }
+    }
+
+    function handleModalClose() {
+        if (lastFocusedElement) {
+            lastFocusedElement.focus();
+            lastFocusedElement = null;
+        }
+    }
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            const overlay = document.querySelector('.modal-overlay');
+            if (overlay) {
+                const closeBtn = overlay.querySelector('.modal-close');
+                if (closeBtn) closeBtn.click();
+            }
+        }
+    });
+
+    const modalObserver = new MutationObserver(function (mutations) {
+        for (const mutation of mutations) {
+            mutation.addedNodes.forEach(function (node) {
+                if (node.nodeType === 1 && node.classList && node.classList.contains('modal-overlay')) {
+                    handleModalOpen(node);
+                }
+            });
+            mutation.removedNodes.forEach(function (node) {
+                if (node.nodeType === 1 && node.classList && node.classList.contains('modal-overlay')) {
+                    handleModalClose();
+                }
+            });
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const root = document.querySelector('[wire\\:id]') || document.body;
+        modalObserver.observe(root, { childList: true, subtree: true });
+    });
+})();
 </script>
 
 </div>{{-- fin div racine --}}

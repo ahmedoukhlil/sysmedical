@@ -80,9 +80,12 @@ Objectif : réduire la dette qui freinera les évolutions futures et l'expérien
 - Nettoyage : 2 messages de debug oubliés dans `HistoriquePaiement.php` ("Méthode imprimer appelée") supprimés — jamais destinés à l'utilisateur.
 - **Convention pour la suite** : tout nouveau feedback utilisateur Livewire utilise `$this->emit('toast', [...])`, pas `session()->flash()`. Migration des 19 fichiers restants au fil de l'eau, pas de big-bang. `wire:loading` : `wire:loading.attr="disabled"` + `wire:target="methode"` sur le déclencheur, spinner via classe `.spinner`/`.spinner-dark` (pas `fa-spinner fa-spin` pour le nouveau code). Les 7 mini-modals de confirmation maison restent en l'état ; `window.confirmAction` (Phase 2.1) réservé aux nouveaux cas.
 
-### 2.3 Accessibilité de base — **S**
-- `aria-live` sur la file d'attente du portail patient (remplace le `location.reload()` toutes les 30s par un vrai polling Livewire).
-- `tabindex`/gestion de focus sur les modals, redondance texte+couleur sur les badges de statut.
+### 2.3 Accessibilité de base — **S** ✅ Fait (2026-08-27)
+- File d'attente du portail patient (`patient/rendez-vous.blade.php`) convertie en composant Livewire `PatientQueueStatus` avec `wire:poll.30s`, remplaçant le `setTimeout(() => location.reload(), 30000)`. `aria-live="polite" aria-atomic="true"` sur le conteneur du tableau — les mises à jour sont désormais annoncées aux lecteurs d'écran sans rechargement complet de page.
+- Les 23 modals de `AccueilPatient` ont maintenant `role="dialog"`, `aria-modal="true"`, `aria-labelledby` (pointant vers le titre), `tabindex="-1"` sur `.modal-box`, `aria-label="Fermer"` sur le bouton de fermeture. Script JS mutualisé ajouté (focus trap Tab/Shift+Tab, capture du focus à l'ouverture, restauration au déclencheur à la fermeture) — remplace le handler Escape isolé qui existait auparavant.
+- **Dette documentée** : `x-status-badge` (Phase 2.1) n'a toujours qu'1 seul consommateur réel (`create-rendez-vous.blade.php`) — non traité ici, candidat pour une future passe de migration du design system (`rendez-vous-manager.blade.php`, badges du portail patient en arabe, `admin/cabinets/*`, etc.).
+- **Dette documentée** : la logique de décodage de token (`decodeTokenParts`/`getDateFromToken`/`getMedecinIdFromToken`/`decodeToken`) est dupliquée entre `PatientInterfaceController` et `PatientQueueStatus` — à extraire en Trait/Service si un 3e consommateur apparaît.
+- **Convention** : les ~22 modals restants hors `AccueilPatient` (pharmacie, médicaments, etc.) suivent le même pattern `.modal-overlay`/`.modal-box` et bénéficient déjà du script JS mutualisé (le `MutationObserver` observe tout le document) — l'ajout ARIA (`role`/`aria-modal`/`tabindex`) reste à faire au fil de l'eau sur ces fichiers.
 
 ### 2.4 i18n structurée — **M**
 - Remplacer le bilinguisme ad hoc (champs `ArabText` dédiés) par un vrai système de traduction Laravel, prérequis avant toute expansion géographique/linguistique.

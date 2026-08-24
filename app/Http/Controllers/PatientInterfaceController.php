@@ -142,12 +142,12 @@ class PatientInterfaceController extends Controller
             }
 
             return view('patient.rendez-vous', compact(
-                'patient', 
-                'rendezVous', 
+                'patient',
+                'rendezVous',
                 'rendezVousMedecinJournee',
-                'prochainRdv', 
-                'fileAttente', 
-                'positionPatient', 
+                'prochainRdv',
+                'fileAttente',
+                'positionPatient',
                 'tempsAttenteEstime',
                 'patientEnCours',
                 'positionPatientEnCours',
@@ -155,7 +155,8 @@ class PatientInterfaceController extends Controller
                 'estAujourdhui',
                 'estFutur',
                 'estPasse',
-                'messageContrainte'
+                'messageContrainte',
+                'token'
             ));
             
         } catch (\Exception $e) {
