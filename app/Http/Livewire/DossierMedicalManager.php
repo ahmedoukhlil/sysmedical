@@ -361,6 +361,18 @@ class DossierMedicalManager extends Component
             'analyseLibelle.required'     => 'Le libellé est obligatoire.',
         ]);
 
+        $quotaService = app(\App\Services\StorageQuotaService::class);
+        $totalBytes = array_sum(array_map(fn($f) => $f->getSize(), $this->analysesFichiers));
+
+        if (!$quotaService->hasRoomFor(Auth::user()->fkidcabinet, $totalBytes)) {
+            $restant = $quotaService->remainingBytes(Auth::user()->fkidcabinet);
+            $restantMo = $restant !== null ? round($restant / 1024 / 1024, 1) : null;
+            session()->flash('error_analyse', $restantMo !== null
+                ? "Quota de stockage insuffisant. Espace restant : {$restantMo} Mo. Supprimez des fichiers ou contactez l'administrateur pour changer de plan."
+                : "Quota de stockage insuffisant.");
+            return;
+        }
+
         try {
             foreach ($this->analysesFichiers as $fichier) {
                 $path = $fichier->store(

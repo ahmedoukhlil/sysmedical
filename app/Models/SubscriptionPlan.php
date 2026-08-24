@@ -14,6 +14,7 @@ class SubscriptionPlan extends Model
         'description',
         'fonctionnalites',
         'max_users',
+        'max_storage_mb',
         'actif',
         'ordre',
     ];

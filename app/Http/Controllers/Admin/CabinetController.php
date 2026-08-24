@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Infocabinet;
 use App\Models\SubscriptionPlan;
 use App\Models\TUser;
+use App\Services\CabinetExportService;
+use App\Services\StorageQuotaService;
 use App\Services\SubscriptionService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,10 +16,12 @@ use Illuminate\Support\Facades\DB;
 class CabinetController extends Controller
 {
     private SubscriptionService $subscriptions;
+    private CabinetExportService $exports;
 
-    public function __construct(SubscriptionService $subscriptions)
+    public function __construct(SubscriptionService $subscriptions, CabinetExportService $exports)
     {
         $this->subscriptions = $subscriptions;
+        $this->exports = $exports;
     }
 
     public function index()
@@ -92,7 +96,19 @@ class CabinetController extends Controller
         $subscription = $cabinet->subscription()->with(['plan', 'payments.admin'])->first();
         $plans = SubscriptionPlan::where('actif', true)->orderBy('ordre')->get();
 
-        return view('admin.cabinets.subscription', compact('cabinet', 'subscription', 'plans'));
+        $quotaService = app(StorageQuotaService::class);
+        $usedBytes = $quotaService->usedBytes($cabinet->idEntete);
+        $quotaBytes = $quotaService->quotaBytes($cabinet->idEntete);
+
+        return view('admin.cabinets.subscription', compact('cabinet', 'subscription', 'plans', 'usedBytes', 'quotaBytes'));
+    }
+
+    public function export($id)
+    {
+        $cabinet = Infocabinet::findOrFail($id);
+        $zipPath = $this->exports->export($cabinet->idEntete);
+
+        return response()->download($zipPath)->deleteFileAfterSend(true);
     }
 
     public function recordPayment(Request $request, $id)

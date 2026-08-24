@@ -210,6 +210,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('/cabinets/{id}/subscription', [AdminCabinetController::class, 'subscription'])->name('cabinets.subscription');
         Route::post('/cabinets/{id}/subscription/payment', [AdminCabinetController::class, 'recordPayment'])->name('cabinets.subscription.payment');
         Route::post('/cabinets/{id}/subscription/plan', [AdminCabinetController::class, 'changePlan'])->name('cabinets.subscription.change-plan');
+        Route::get('/cabinets/{id}/export', [AdminCabinetController::class, 'export'])->name('cabinets.export');
 
         Route::get('/plans', [AdminPlanController::class, 'index'])->name('plans.index');
     });
