@@ -13,6 +13,7 @@ use App\Http\Controllers\CaisseController;
 use App\Http\Controllers\Admin\Auth\AdminAuthController;
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\CabinetController as AdminCabinetController;
+use App\Http\Controllers\Admin\PlanController as AdminPlanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -206,5 +207,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('/cabinets', [AdminCabinetController::class, 'store'])->name('cabinets.store');
         Route::post('/cabinets/{id}/suspend', [AdminCabinetController::class, 'suspend'])->name('cabinets.suspend');
         Route::post('/cabinets/{id}/activate', [AdminCabinetController::class, 'activate'])->name('cabinets.activate');
+        Route::get('/cabinets/{id}/subscription', [AdminCabinetController::class, 'subscription'])->name('cabinets.subscription');
+        Route::post('/cabinets/{id}/subscription/payment', [AdminCabinetController::class, 'recordPayment'])->name('cabinets.subscription.payment');
+        Route::post('/cabinets/{id}/subscription/plan', [AdminCabinetController::class, 'changePlan'])->name('cabinets.subscription.change-plan');
+
+        Route::get('/plans', [AdminPlanController::class, 'index'])->name('plans.index');
     });
 });

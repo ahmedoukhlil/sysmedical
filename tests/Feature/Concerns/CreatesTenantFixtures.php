@@ -2,8 +2,11 @@
 
 namespace Tests\Feature\Concerns;
 
+use App\Models\CabinetSubscription;
 use App\Models\Infocabinet;
+use App\Models\SubscriptionPlan;
 use App\Models\TUser;
+use Carbon\Carbon;
 
 trait CreatesTenantFixtures
 {
@@ -25,5 +28,40 @@ trait CreatesTenantFixtures
         ]);
 
         return [$cabinet, $user];
+    }
+
+    private function makeCabinetWithSubscription(
+        int $idEntete,
+        string $login,
+        string $planCode = 'essentiel',
+        string $statut = CabinetSubscription::STATUT_ESSAI,
+        ?Carbon $trialEndsAt = null,
+        ?Carbon $graceEndsAt = null,
+        ?Carbon $periodEndsAt = null
+    ): array {
+        [$cabinet, $user] = $this->makeCabinetWithUser($idEntete, $login);
+
+        $plan = SubscriptionPlan::firstOrCreate(
+            ['code' => $planCode],
+            [
+                'nom' => ucfirst($planCode),
+                'prix_mensuel' => 1500,
+                'devise' => 'MRU',
+                'actif' => true,
+                'ordre' => 1,
+            ]
+        );
+
+        $subscription = new CabinetSubscription();
+        $subscription->forceFill([
+            'idEntete' => $idEntete,
+            'subscription_plan_id' => $plan->id,
+            'statut' => $statut,
+            'trial_ends_at' => $trialEndsAt,
+            'grace_ends_at' => $graceEndsAt,
+            'current_period_ends_at' => $periodEndsAt,
+        ])->save();
+
+        return [$cabinet, $user, $subscription];
     }
 }

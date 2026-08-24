@@ -32,7 +32,8 @@
                             @endif
                         </td>
                         <td class="px-4 py-3">{{ $cabinet->users->count() }}</td>
-                        <td class="px-4 py-3">
+                        <td class="px-4 py-3 space-x-3">
+                            <a href="{{ route('admin.cabinets.subscription', $cabinet->idEntete) }}" class="text-blue-700 hover:underline">Abonnement</a>
                             @if ($cabinet->statut === 'actif')
                                 <form method="POST" action="{{ route('admin.cabinets.suspend', $cabinet->idEntete) }}" class="inline">
                                     @csrf

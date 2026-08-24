@@ -19,6 +19,7 @@ class DatabaseSeeder extends Seeder
             PatientsTableSeeder::class,
             RendezVousTableSeeder::class,
             CaisseOperationsTableSeeder::class,
+            SubscriptionPlansSeeder::class,
         ]);
     }
 }

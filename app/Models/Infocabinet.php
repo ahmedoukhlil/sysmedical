@@ -45,6 +45,7 @@ class Infocabinet extends Model
 	];
 
 	protected $fillable = [
+		'idEntete',
 		'statut',
 		'NomCabFr',
 		'NomCabAr',
@@ -71,5 +72,10 @@ class Infocabinet extends Model
 	public function users()
 	{
 		return $this->hasMany(TUser::class, 'fkidcabinet', 'idEntete');
+	}
+
+	public function subscription()
+	{
+		return $this->hasOne(CabinetSubscription::class, 'idEntete', 'idEntete');
 	}
 }

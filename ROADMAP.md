@@ -45,9 +45,9 @@ Objectif : transformer l'outil sécurisé en produit vendable en autonomie.
 - Nouvel espace `/admin` avec guard dédié.
 - Fonctions : lister les cabinets, créer/suspendre un cabinet, voir l'usage global (nombre d'utilisateurs, stockage, dernière activité).
 
-### 1.2 Onboarding self-service — **M**
-- Formulaire de création de cabinet + compte propriétaire initial.
-- Assistant d'import de patients existants (CSV a minima) — identifié dans l'audit business comme le vrai frein à l'essai.
+### 1.2 Onboarding self-service — **Reporté, hors périmètre**
+- Décision produit (2026-08-24) : pas d'auto-inscription publique — la création de cabinet reste réservée à l'admin plateforme (fait en 1.1, `Admin\CabinetController::store()`).
+- L'assistant d'import de patients existants (CSV) reste pertinent mais recadré : à faire depuis l'espace applicatif du cabinet (pas l'admin), en chantier séparé si besoin plus tard.
 
 ### 1.3 Facturation d'abonnement — **M**
 - Intégration paiement (Stripe et/ou solution mobile money locale selon marché cible).
