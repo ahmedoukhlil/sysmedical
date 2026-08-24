@@ -1,10 +1,5 @@
 <div class="max-w-lg mx-auto p-6 bg-white rounded shadow">
     <h2 class="text-2xl font-bold text-gray-800 mb-6 text-left">Créer un assureur</h2>
-    @if (session()->has('success'))
-        <div class="mb-4 p-2 bg-green-100 text-green-800 rounded text-center">
-            {{ session('success') }}
-        </div>
-    @endif
 
     <form wire:submit.prevent="save" class="space-y-6">
         <div>

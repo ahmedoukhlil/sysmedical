@@ -834,7 +834,7 @@ class AccueilPatient extends Component
         ]);
 
         if (!$this->selectedPatient) {
-            session()->flash('error', 'Veuillez sélectionner un patient.');
+            $this->emit('toast', ['message' => 'Veuillez sélectionner un patient.', 'type' => 'error']);
             \Log::warning('Aucun patient sélectionné');
             return;
         }
@@ -874,7 +874,7 @@ class AccueilPatient extends Component
     {
         if (!$this->requirePermission('ordonnance.create')) return;
         if (!$this->selectedPatient) {
-            session()->flash('error', 'Veuillez sélectionner un patient.');
+            $this->emit('toast', ['message' => 'Veuillez sélectionner un patient.', 'type' => 'error']);
             return;
         }
         $this->showAssureurModal = false;
@@ -908,7 +908,7 @@ class AccueilPatient extends Component
 
     public function handleOrdonnanceCreated($ordonnanceId)
     {
-        session()->flash('message', 'Ordonnance créée avec succès.');
+        $this->emit('toast', ['message' => 'Ordonnance créée avec succès.', 'type' => 'success']);
     }
 
     public function toggleCabinetMenu()

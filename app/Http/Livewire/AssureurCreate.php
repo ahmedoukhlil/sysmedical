@@ -27,7 +27,7 @@ class AssureurCreate extends Component
             'user' => Auth::user()->name ?? 'system',
         ]);
 
-        session()->flash('success', 'Assureur créé avec succès !');
+        $this->emit('toast', ['message' => 'Assureur créé avec succès !', 'type' => 'success']);
         $this->reset(['LibAssurance', 'TauxdePEC', 'DtConvention']);
     }
 

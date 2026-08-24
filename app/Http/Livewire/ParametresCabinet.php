@@ -74,7 +74,7 @@ class ParametresCabinet extends Component
     {
         $cabinet = Infocabinet::where('idEntete', Auth::user()->fkidcabinet)->first();
         if (!$cabinet) {
-            session()->flash('error', 'Cabinet introuvable.');
+            $this->emit('toast', ['message' => 'Cabinet introuvable.', 'type' => 'error']);
             return;
         }
 
@@ -119,7 +119,7 @@ class ParametresCabinet extends Component
         }
 
         $cabinet->fill($data)->save();
-        session()->flash('success', 'Paramètres enregistrés avec succès.');
+        $this->emit('toast', ['message' => 'Paramètres enregistrés avec succès.', 'type' => 'success']);
     }
 
     public function supprimerLogo()

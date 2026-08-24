@@ -51,7 +51,7 @@ class ActeCreate extends Component
             'ActeArab' => $this->ActeArab,
             'Masquer' => $this->Masquer ? 1 : 0,
         ]);
-        session()->flash('success', 'Acte créé avec succès !');
+        $this->emit('toast', ['message' => 'Acte créé avec succès !', 'type' => 'success']);
         $this->reset(['Acte', 'PrixRef', 'fkidTypeActe', 'ActeArab', 'fkidassureur', 'Masquer']);
     }
 

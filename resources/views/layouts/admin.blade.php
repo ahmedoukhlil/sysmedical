@@ -26,5 +26,28 @@
         @endif
         @yield('content')
     </main>
+
+    <!-- Conteneur de toasts -->
+    <div id="toast-container" aria-live="polite" aria-atomic="true"></div>
+
+    @livewireScripts
+
+    <script>
+        window.showToast = function(message, type = 'info', duration = 4000) {
+            const container = document.getElementById('toast-container');
+            if (!container) return;
+            const icons = { success:'fa-check-circle', error:'fa-exclamation-circle', warning:'fa-exclamation-triangle', info:'fa-info-circle' };
+            const colors = { success:'#16a34a', error:'#dc2626', warning:'#d97706', info:'var(--color-primary)' };
+            const t = document.createElement('div');
+            t.className = `toast toast-${type}`;
+            t.innerHTML = `<i class="fas ${icons[type]||icons.info}" style="color:${colors[type]||colors.info};flex-shrink:0"></i><span>${message}</span>`;
+            container.appendChild(t);
+            setTimeout(() => { t.classList.add('toast-hide'); setTimeout(() => t.remove(), 220); }, duration);
+        };
+
+        document.addEventListener('livewire:load', function() {
+            Livewire.on('toast', ({ message, type }) => window.showToast(message, type || 'info'));
+        });
+    </script>
 </body>
 </html>

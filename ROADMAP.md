@@ -73,9 +73,12 @@ Objectif : réduire la dette qui freinera les évolutions futures et l'expérien
 - 2 fichiers migrés en preuve de concept : `create-rendez-vous.blade.php` (switch statut RDV dupliqué) et `admin/cabinets/create.blade.php` (bouton/carte/champs). `rendez-vous-manager.blade.php` volontairement laissé tel quel : ses libellés de statut ("Présent au cabinet", "Avec le médecin") diffèrent de ceux déjà codés dans `x-status-badge`, migrer aurait changé le texte affiché — décision de ne pas casser la fidélité visuelle plutôt que de forcer la migration.
 - **Convention pour la suite** : tout nouveau code utilise `<x-status-badge>`, `<x-button>`, `<x-card>`, `<x-form-input>` au lieu de classes Tailwind brutes ou d'un switch PHP recopié. Migration des vues existantes uniquement en marge d'un autre ticket qui touche déjà le fichier — pas de PR dédiée "migration design system" en masse. `x-status-badge` en `domain="generic"` + prop `:map` sert pour tout nouveau statut métier (abonnement, utilisateur, paiement) tant qu'il n'y a pas 3+ fichiers qui répètent le même mapping — au-delà, envisager un vrai domaine dédié.
 
-### 2.2 Feedback utilisateur — **S**
-- Généraliser `wire:loading` sur les actions asynchrones (priorité : `AccueilPatient` et ses modals).
-- Introduire un système de toast non bloquant pour remplacer les flash messages classiques.
+### 2.2 Feedback utilisateur — **S** ✅ Fait (2026-08-27)
+- Le système toast construit en Phase 2.1 (`window.showToast`, pont `Livewire.on('toast')`, CSS `.toast`/`.spinner`) était quasi inexploité (5 `emit('toast')` contre 178 `session()->flash()`) — ajouté aussi à `layouts/admin.blade.php`, qui ne l'avait pas.
+- `wire:loading` généralisé sur les ~21 actions d'ouverture de modal de `AccueilPatient` (composant hub, 48 `wire:click`, précédemment 0 `wire:loading`) : icône masquée + spinner `.spinner-dark` pendant le chargement, bouton désactivé via `wire:loading.attr="disabled"`.
+- 4 composants migrés de `session()->flash()` vers `$this->emit('toast', ['message' => '...', 'type' => 'success'|'error'])` : `AccueilPatient`, `ActeCreate`, `AssureurCreate`, `ParametresCabinet`. Blocs HTML de flash dupliqués retirés des vues correspondantes.
+- Nettoyage : 2 messages de debug oubliés dans `HistoriquePaiement.php` ("Méthode imprimer appelée") supprimés — jamais destinés à l'utilisateur.
+- **Convention pour la suite** : tout nouveau feedback utilisateur Livewire utilise `$this->emit('toast', [...])`, pas `session()->flash()`. Migration des 19 fichiers restants au fil de l'eau, pas de big-bang. `wire:loading` : `wire:loading.attr="disabled"` + `wire:target="methode"` sur le déclencheur, spinner via classe `.spinner`/`.spinner-dark` (pas `fa-spinner fa-spin` pour le nouveau code). Les 7 mini-modals de confirmation maison restent en l'état ; `window.confirmAction` (Phase 2.1) réservé aux nouveaux cas.
 
 ### 2.3 Accessibilité de base — **S**
 - `aria-live` sur la file d'attente du portail patient (remplace le `location.reload()` toutes les 30s par un vrai polling Livewire).

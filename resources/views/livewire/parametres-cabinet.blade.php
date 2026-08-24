@@ -1,19 +1,5 @@
 <div class="p-4 max-w-5xl mx-auto">
 
-    {{-- Notifications flash --}}
-    @if(session()->has('success'))
-    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)"
-         class="mb-4 flex items-center gap-2 p-3 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm">
-        <i class="fas fa-check-circle"></i> {{ session('success') }}
-    </div>
-    @endif
-    @if(session()->has('error'))
-    <div x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 4000)"
-         class="mb-4 flex items-center gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">
-        <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
-    </div>
-    @endif
-
     <form wire:submit.prevent="save" enctype="multipart/form-data">
 
         {{-- LOGO --}}
