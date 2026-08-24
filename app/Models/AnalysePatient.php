@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Concerns\BelongsToTenant;
 
 class AnalysePatient extends Model
 {
     use BelongsToTenant;
+    use SoftDeletes;
 
     protected $table = 'analyses_patient';
     protected $primaryKey = 'id';

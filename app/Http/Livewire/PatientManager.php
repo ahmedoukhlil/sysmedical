@@ -314,12 +314,12 @@ class PatientManager extends Component
                 // Supprimer les factures
                 DB::table('facture')->where('IDPatient', $id)->delete();
 
-                // Supprimer les ordonnances et leurs détails
-                $ordIds = DB::table('ordonnanceref')->where('fkidpatient', $id)->pluck('id');
+                // Supprimer (soft delete) les ordonnances et leurs détails
+                $ordIds = \App\Models\Ordonnanceref::where('fkidpatient', $id)->pluck('id');
                 if ($ordIds->isNotEmpty()) {
-                    DB::table('ordonnances')->whereIn('fkidrefOrd', $ordIds)->delete();
+                    \App\Models\Ordonnance::whereIn('fkidrefOrd', $ordIds)->delete();
                 }
-                DB::table('ordonnanceref')->where('fkidpatient', $id)->delete();
+                \App\Models\Ordonnanceref::where('fkidpatient', $id)->delete();
 
                 // Supprimer les rendez-vous
                 DB::table('rendezvous')->where('fkidPatient', $id)->delete();
@@ -327,14 +327,14 @@ class PatientManager extends Component
                 // Supprimer les mouvements stock liés
                 DB::table('mouvements_stock')->where('fkidPatient', $id)->delete();
 
-                // Supprimer consultations et analyses
-                DB::table('consultation_medicale')->where('fkidPatient', $id)->delete();
-                DB::table('analyses_patient')->where('fkidPatient', $id)->delete();
+                // Supprimer (soft delete) consultations et analyses
+                \App\Models\ConsultationMedicale::where('fkidPatient', $id)->delete();
+                \App\Models\AnalysePatient::where('fkidPatient', $id)->delete();
 
-                // Supprimer dossier médical
-                DB::table('dossier_medical')->where('fkidPatient', $id)->delete();
+                // Supprimer (soft delete) dossier médical
+                \App\Models\DossierMedical::where('fkidPatient', $id)->delete();
 
-                // Supprimer le patient
+                // Supprimer (soft delete) le patient
                 Patient::destroy($id);
             });
 

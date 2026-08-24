@@ -405,7 +405,6 @@ class DossierMedicalManager extends Component
         $id = $id ?? $this->confirmDeleteAnalyseId;
         $a = AnalysePatient::find($id);
         if ($a && $a->fkidCabinet == Auth::user()->fkidcabinet) {
-            Storage::disk('public')->delete($a->fichier_path);
             $a->delete();
             $this->loadAnalyses();
             if ($this->analysePreviewId === $id) {

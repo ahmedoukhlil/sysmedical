@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Concerns\BelongsToTenantViaRelation;
 
 /**
@@ -26,6 +27,7 @@ use App\Models\Concerns\BelongsToTenantViaRelation;
 class Ordonnance extends Model
 {
 	use BelongsToTenantViaRelation;
+	use SoftDeletes;
 
 	protected static $tenantRelation = 'ordonnanceRef';
 	protected static $tenantRelationColumn = 'fkidCabinet';

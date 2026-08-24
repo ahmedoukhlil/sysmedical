@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Concerns\BelongsToTenant;
 
 /**
@@ -44,6 +45,7 @@ use App\Models\Concerns\BelongsToTenant;
 class Patient extends Model
 {
 	use BelongsToTenant;
+	use SoftDeletes;
 
 	protected static $tenantColumn = 'fkidcabinet';
 

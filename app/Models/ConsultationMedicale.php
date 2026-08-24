@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Concerns\BelongsToTenant;
 
 class ConsultationMedicale extends Model
 {
     use BelongsToTenant;
+    use SoftDeletes;
 
     protected $table = 'consultation_medicale';
     protected $primaryKey = 'id';
