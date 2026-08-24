@@ -10,6 +10,9 @@ use App\Http\Controllers\ConsultationController;
 use App\Http\Controllers\ReglementFactureController;
 use App\Http\Livewire\StatistiquesManager;
 use App\Http\Controllers\CaisseController;
+use App\Http\Controllers\Admin\Auth\AdminAuthController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\CabinetController as AdminCabinetController;
 
 /*
 |--------------------------------------------------------------------------
@@ -187,4 +190,21 @@ Route::middleware(['auth'])->group(function () {
 Route::prefix('patient')->group(function () {
     Route::get('/rendez-vous/{token}', [App\Http\Controllers\PatientInterfaceController::class, 'showRendezVous'])->name('patient.rendez-vous');
     Route::get('/consultation/{token}', [App\Http\Controllers\PatientInterfaceController::class, 'showConsultation'])->name('patient.consultation');
+});
+
+// ─── Admin plateforme ───────────────────────────────────────────────────
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::get('login', [AdminAuthController::class, 'showLoginForm'])->name('login');
+    Route::post('login', [AdminAuthController::class, 'login']);
+    Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
+
+    Route::middleware(['auth:admin'])->group(function () {
+        Route::get('/', [AdminDashboardController::class, 'index'])->name('dashboard');
+
+        Route::get('/cabinets', [AdminCabinetController::class, 'index'])->name('cabinets.index');
+        Route::get('/cabinets/create', [AdminCabinetController::class, 'create'])->name('cabinets.create');
+        Route::post('/cabinets', [AdminCabinetController::class, 'store'])->name('cabinets.store');
+        Route::post('/cabinets/{id}/suspend', [AdminCabinetController::class, 'suspend'])->name('cabinets.suspend');
+        Route::post('/cabinets/{id}/activate', [AdminCabinetController::class, 'activate'])->name('cabinets.activate');
+    });
 });

@@ -45,6 +45,7 @@ class Infocabinet extends Model
 	];
 
 	protected $fillable = [
+		'statut',
 		'NomCabFr',
 		'NomCabAr',
 		'Specialite1Fr',
@@ -66,4 +67,9 @@ class Infocabinet extends Model
 		'logo',
 		'piedPage',
 	];
+
+	public function users()
+	{
+		return $this->hasMany(TUser::class, 'fkidcabinet', 'idEntete');
+	}
 }

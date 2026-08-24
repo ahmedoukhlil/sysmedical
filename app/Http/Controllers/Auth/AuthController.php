@@ -34,6 +34,14 @@ class AuthController extends Controller
                     ->first();
 
         if ($user && $this->checkPassword($credentials['password'], $user->password)) {
+            if ($user->cabinet && $user->cabinet->statut === 'suspendu') {
+                return back()->withErrors([
+                    'login' => 'Ce cabinet est actuellement suspendu. Contactez l\'administrateur.',
+                ]);
+            }
+
+            $user->forceFill(['last_login_at' => now()])->save();
+
             // Authentification réussie
             Auth::login($user);
             return redirect()->route('accueil.patient');
