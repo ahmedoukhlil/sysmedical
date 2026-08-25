@@ -290,7 +290,9 @@
 
     @php
         use App\Models\Infocabinet;
-        $cab = Infocabinet::first();
+        $cab = isset($ordonnance) && $ordonnance->fkidCabinet
+            ? Infocabinet::find($ordonnance->fkidCabinet)
+            : (auth()->check() ? Infocabinet::find(auth()->user()->fkidcabinet ?? 0) : null);
         $logoBase64 = null;
         if ($cab && $cab->logo && file_exists(public_path($cab->logo))) {
             try {

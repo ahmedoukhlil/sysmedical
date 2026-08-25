@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     @php
-        $__cab = \App\Models\Infocabinet::find(Auth::user()->fkidcabinet ?? 0) ?? \App\Models\Infocabinet::first();
+        $__cab = Auth::check() ? \App\Models\Infocabinet::find(Auth::user()->fkidcabinet ?? 0) : null;
         $__appName = ($__cab && !empty($__cab->nom_application)) ? $__cab->nom_application : 'SysMedical';
         $__logo = ($__cab && !empty($__cab->logo) && file_exists(public_path($__cab->logo))) ? asset($__cab->logo) : asset('SysMedical.png');
     @endphp

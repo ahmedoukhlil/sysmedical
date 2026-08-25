@@ -79,7 +79,7 @@ class DossierMedicalController extends Controller
         $patient = Patient::where('fkidcabinet', Auth::user()->fkidcabinet)
             ->findOrFail($patientId);
 
-        $cabinet = Infocabinet::first();
+        $cabinet = Infocabinet::find(Auth::user()->fkidcabinet);
 
         $dossier = DossierMedical::where('fkidPatient', $patientId)
             ->where('fkidCabinet', Auth::user()->fkidcabinet)

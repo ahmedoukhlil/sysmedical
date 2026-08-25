@@ -78,4 +78,37 @@ class Infocabinet extends Model
 	{
 		return $this->hasOne(CabinetSubscription::class, 'idEntete', 'idEntete');
 	}
+
+	/**
+	 * Mapping champ logique => [colonne fr, colonne ar]. Les noms de colonnes
+	 * ci-dessous reflètent des incohérences de casse déjà présentes en base
+	 * (Specialite2fr en minuscule, DrAr vs DRAr en migration) — non renommées
+	 * pour ne rien casser d'existant.
+	 */
+	protected const TRANSLATABLE_FIELDS = [
+		'nom_cab' => ['NomCabFr', 'NomCabAr'],
+		'dr' => ['DrFr', 'DrAr'],
+		'specialite1' => ['Specialite1Fr', 'Specialite1Ar'],
+		'specialite2' => ['Specialite2fr', 'Specialite2Ar'],
+		'specialite3' => ['Specialite3Fr', 'Specialite3Ar'],
+		'adresse1' => ['AdresseFr1', 'AdresseL1AR'],
+		'adresse2' => ['AdresseFr2', 'AdresseL2AR'],
+		'contact' => ['ContactFR', 'ContactAR'],
+	];
+
+	/**
+	 * Retourne la valeur d'un champ bilingue selon la locale demandée
+	 * (par défaut la locale applicative courante).
+	 */
+	public function trans(string $field, ?string $locale = null): ?string
+	{
+		if (!isset(self::TRANSLATABLE_FIELDS[$field])) {
+			return null;
+		}
+
+		[$colFr, $colAr] = self::TRANSLATABLE_FIELDS[$field];
+		$locale = $locale ?? app()->getLocale();
+
+		return $locale === 'ar' ? $this->{$colAr} : $this->{$colFr};
+	}
 }

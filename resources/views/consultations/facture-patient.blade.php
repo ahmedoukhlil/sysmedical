@@ -276,7 +276,9 @@
 
     @php
         use App\Models\Infocabinet;
-        $cab = Infocabinet::first();
+        $cab = isset($facture) && $facture->fkidCabinet
+            ? Infocabinet::find($facture->fkidCabinet)
+            : (auth()->check() ? Infocabinet::find(auth()->user()->fkidcabinet ?? 0) : null);
         $logoBase64 = null;
         if ($cab && $cab->logo && file_exists(public_path($cab->logo))) {
             try {

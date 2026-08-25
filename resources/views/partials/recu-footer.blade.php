@@ -7,7 +7,11 @@
         $cabFooter = $cabinet;
     }
     if (!$cabFooter) {
-        $cabFooter = Infocabinet::first();
+        $fkidcabinetFooter = auth()->check() ? auth()->user()->fkidcabinet ?? null : null;
+        $cabFooter = $fkidcabinetFooter ? Infocabinet::find($fkidcabinetFooter) : null;
+        if (!$cabFooter) {
+            \Illuminate\Support\Facades\Log::warning('recu-footer: impossible de résoudre le cabinet pour ce document, aucun fallback tenant disponible.');
+        }
     }
 @endphp
 @if($cabFooter && $cabFooter->piedPage)

@@ -62,4 +62,29 @@ class PatientQueueStatusTest extends TestCase
         $this->assertNull($component->get('patient'));
         $this->assertNull($component->get('prochainRdv'));
     }
+
+    public function test_statuts_rdv_sont_traduits_via_cles_i18n()
+    {
+        [$cabinet, $user] = $this->makeCabinetWithUser(12003, 'userQueue3');
+        $this->actingAs($user);
+
+        $patient = Patient::create(['Nom' => 'PatientQueue3', 'fkidcabinet' => $cabinet->idEntete]);
+
+        Rendezvou::create([
+            'fkidPatient' => $patient->ID,
+            'fkidMedecin' => 1,
+            'fkidcabinet' => $cabinet->idEntete,
+            'dtPrevuRDV' => now()->format('Y-m-d'),
+            'HeureRdv' => now(),
+            'OrdreRDV' => 1,
+            'rdvConfirmer' => 'En cours',
+        ]);
+
+        $token = PatientInterfaceController::generateToken($patient->ID, now()->format('Y-m-d'));
+
+        app()->setLocale('ar');
+        $component = Livewire::test(PatientQueueStatus::class, ['token' => $token]);
+
+        $component->assertSee(__('rdv.statuts.en_cours'));
+    }
 }

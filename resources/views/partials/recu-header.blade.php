@@ -11,7 +11,11 @@
         }
     }
     if (!$cab) {
-        $cab = Infocabinet::first();
+        $fkidcabinet = auth()->check() ? auth()->user()->fkidcabinet ?? null : null;
+        $cab = $fkidcabinet ? Infocabinet::find($fkidcabinet) : null;
+        if (!$cab) {
+            \Illuminate\Support\Facades\Log::warning('recu-header: impossible de résoudre le cabinet pour ce document, aucun fallback tenant disponible.');
+        }
     }
 
     // Logo base64

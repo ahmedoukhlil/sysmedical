@@ -189,7 +189,7 @@ Route::middleware(['auth'])->group(function () {
 
 // Routes publiques pour l'interface patient (accessible via QR code)
 Route::prefix('patient')->group(function () {
-    Route::get('/rendez-vous/{token}', [App\Http\Controllers\PatientInterfaceController::class, 'showRendezVous'])->name('patient.rendez-vous');
+    Route::get('/rendez-vous/{token}', [App\Http\Controllers\PatientInterfaceController::class, 'showRendezVous'])->middleware('patient.locale')->name('patient.rendez-vous');
     Route::get('/consultation/{token}', [App\Http\Controllers\PatientInterfaceController::class, 'showConsultation'])->name('patient.consultation');
 });
 
