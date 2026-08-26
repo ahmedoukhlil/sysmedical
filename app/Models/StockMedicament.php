@@ -61,7 +61,7 @@ class StockMedicament extends Model
 
     public function cabinet()
     {
-        return $this->belongsTo(Cabinet::class, 'fkidCabinet', 'idCabinet');
+        return $this->belongsTo(Infocabinet::class, 'fkidCabinet', 'idEntete');
     }
 
     public function lots()

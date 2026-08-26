@@ -7,10 +7,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Concerns\BelongsToTenant;
 
 /**
  * Class TFournisseurPersonnel
- * 
+ *
  * @property int $IDFournisseur
  * @property string|null $NomTiers
  * @property string|null $TelephoneAutre
@@ -22,6 +23,12 @@ use Illuminate\Database\Eloquent\Model;
  */
 class TFournisseurPersonnel extends Model
 {
+	use BelongsToTenant;
+
+	// Nom de colonne réel en base (faute de frappe historique : "fkidcaibnet"),
+	// conservé tel quel pour ne pas nécessiter de migration de renommage.
+	protected static $tenantColumn = 'fkidcaibnet';
+
 	protected $table = 't_fournisseur_personnel';
 	protected $primaryKey = 'IDFournisseur';
 	public $timestamps = false;
