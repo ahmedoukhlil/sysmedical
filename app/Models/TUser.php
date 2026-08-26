@@ -233,18 +233,6 @@ class TUser extends Authenticatable
     }
 
     /**
-     * Récupère les rendez-vous associés à ce médecin
-     */
-    public function rendezVous()
-    {
-        if (!$this->fkidmedecin) {
-            return collect([]);
-        }
-        
-        return Rendezvou::where('fkidMedecin', $this->fkidmedecin)->get();
-    }
-
-    /**
      * Récupère les rendez-vous du jour pour ce médecin
      */
     public function rendezVousDuJour()
@@ -257,20 +245,6 @@ class TUser extends Authenticatable
             ->whereDate('dtPrevuRDV', Carbon::today())
             ->orderBy('HeureRdv')
             ->get();
-    }
-
-    /**
-     * Récupère les factures associées à ce médecin
-     */
-    public function factures()
-    {
-        if (!$this->fkidmedecin) {
-            return collect([]);
-        }
-        
-        return Facture::whereHas('detailFactures', function($query) {
-            $query->where('fkidMedecin', $this->fkidmedecin);
-        })->get();
     }
 
     /**
