@@ -16,6 +16,16 @@ class TenantScope implements Scope
             return;
         }
 
+        // Le modèle utilisateur du guard ne peut pas être filtré par son propre
+        // cabinet pour se résoudre lui-même : Auth::user() interroge ce modèle,
+        // qui réappliquerait ce scope, qui rappellerait Auth::user()... boucle
+        // infinie jusqu'à épuisement mémoire. Le guard résout l'utilisateur non
+        // scopé ; les relations/requêtes explicites depuis ce modèle restent
+        // scopées normalement par leurs propres modèles cibles.
+        if ($model instanceof \Illuminate\Contracts\Auth\Authenticatable) {
+            return;
+        }
+
         if (!Auth::check()) {
             return;
         }
