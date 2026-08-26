@@ -94,14 +94,19 @@ class RdvReminders extends Component
                 return;
             }
 
-            // Vérifier si c'est un relancement (le statut était déjà "Rappel envoyé")
-            $wasAlreadySent = $rdv->rdvConfirmer === 'Rappel envoyé';
-            
-            // Marquer le rappel comme envoyé
+            // Vérifier si c'est une relance (un rappel avait déjà été envoyé)
+            $wasAlreadySent = $rdv->date_dernier_rappel !== null;
+
+            \App\Jobs\SendWhatsAppMessage::dispatch(
+                $rdv->patient->Telephone1,
+                $this->generateReminderMessage($rdv)
+            );
+
+            // Tracer l'envoi sans altérer le statut fonctionnel du rendez-vous
             $rdv->update([
-                'rdvConfirmer' => 'Rappel envoyé'
+                'date_dernier_rappel' => now()
             ]);
-            
+
             // Ajouter à la liste des rappels envoyés dans cette session
             $this->sentReminders[$rdvId] = true;
 
@@ -130,55 +135,15 @@ class RdvReminders extends Component
     // Méthode pour vérifier si un rappel a été envoyé
     public function isReminderSent($rdvId)
     {
-        return isset($this->sentReminders[$rdvId]) || 
+        return isset($this->sentReminders[$rdvId]) ||
                Rendezvou::where('IDRdv', $rdvId)
-                        ->where('rdvConfirmer', 'Rappel envoyé')
+                        ->whereNotNull('date_dernier_rappel')
                         ->exists();
     }
 
     protected function generateReminderMessage($rdv)
     {
-        $patientName = $rdv->patient->Nom;
-        $rdvDate = Carbon::parse($rdv->dtPrevuRDV)->format('d/m/Y');
-        $rdvTime = Carbon::parse($rdv->HeureRdv)->format('H:i');
-        $medecinName = $rdv->medecin ? 'Dr. ' . $rdv->medecin->Nom : 'le médecin';
-        $acte = $rdv->ActePrevu ?: 'Consultation';
-
-        // Générer le lien de suivi de la file d'attente
-        $token = \App\Http\Controllers\PatientInterfaceController::generateToken(
-            $rdv->patient->ID, 
-            $rdv->dtPrevuRDV, 
-            $rdv->fkidMedecin
-        );
-        $queueLink = url("/patient/rendez-vous/{$token}");
-
-        // Message en arabe d'abord, puis français
-        $message = "🔔 *تذكير بالموعد* 🔔\n\n";
-        $message .= "مرحباً *{$patientName}*،\n\n";
-        $message .= "نذكركم بموعدكم :\n";
-        $message .= "📅 *التاريخ :* {$rdvDate}\n";
-        $message .= "🕐 *الوقت :* {$rdvTime}\n";
-        $message .= "👨‍⚕️ *الطبيب :* {$medecinName}\n";
-        $message .= "🦷 *العملية :* {$acte}\n\n";
-        $message .= "⚠️ *يرجى تأكيد حضوركم بالرد على هذه الرسالة.*\n\n";
-        $message .= "*رابط متابعة طابور الانتظار:*\n";
-        $message .= "هذا الرابط يسمح لك بمتابعة موقعك في طابور الانتظار يوم الموعد\n";
-        $message .= "{$queueLink}\n\n";
-        $message .= "───────────────────\n\n";
-        $message .= "🔔 *RAPPEL RENDEZ-VOUS* 🔔\n\n";
-        $message .= "Bonjour *{$patientName}*,\n\n";
-        $message .= "Nous vous rappelons votre rendez-vous :\n";
-        $message .= "📅 *Date :* {$rdvDate}\n";
-        $message .= "🕐 *Heure :* {$rdvTime}\n";
-        $message .= "👨‍⚕️ *Médecin :* {$medecinName}\n";
-        $message .= "🦷 *Acte :* {$acte}\n\n";
-        $message .= "⚠️ *Veuillez confirmer votre présence en répondant à ce message.*\n\n";
-        $message .= "*Lien de suivi de la file d'attente:*\n";
-        $message .= "Ce lien vous permet de suivre votre position dans la file d'attente le jour du rendez-vous\n";
-        $message .= "{$queueLink}\n\n";
-        $message .= "شكراً / Merci";
-
-        return $message;
+        return \App\Support\RdvMessageFormatter::formatReminder($rdv);
     }
 
     public function updatedDateFilter()

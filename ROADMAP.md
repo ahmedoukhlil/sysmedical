@@ -105,11 +105,22 @@ Objectif : réduire la dette qui freinera les évolutions futures et l'expérien
 Objectif : construire l'avantage compétitif une fois le socle sécurisé et vendable.
 
 - **Paiement mobile local intégré** (Bankily, Masrvi, Orange Money) dans le règlement/caisse — **M**
-- **Portail patient enrichi** : prise de RDV en ligne, rappels SMS/WhatsApp — **M**
+- **Portail patient enrichi** : prise de RDV en ligne, rappels SMS/WhatsApp — **M** ✅ Fait (2026-08-26)
 - **Module tiers-payant avancé** : bordereaux automatiques groupés par assureur — **M**
 - **Application mobile légère praticiens** (agenda, salle d'attente/soins temps réel) — **L**
 
 Ces chantiers sont volontairement en dernier : ils apportent de la valeur commerciale mais n'ont pas de sens à construire sur une fondation multi-tenant non sécurisée.
+
+### Portail patient enrichi — détail
+
+- **Authentification OTP par WhatsApp** : un patient déjà connu du cabinet (identifié par `Telephone1`/`Telephone2`) reçoit un code à usage unique pour accéder à un calendrier de créneaux. Pas d'auto-inscription — un nouveau patient doit toujours passer par le cabinet. Nouveaux composants `app/Http/Livewire/PatientOtpLogin.php` et `PatientBookingCalendar.php`, service de tokens signés `app/Services/PatientTokenService.php` (distinct des tokens de suivi de RDV existants dans `PatientInterfaceController`, volontairement non fusionnés pour ne pas risquer de régression sur un mécanisme déjà en prod).
+- **Service WhatsApp Business API « prêt à brancher »** (`app/Services/WhatsAppService.php`, `config/services.php`) : mode dry-run (log au lieu d'un envoi réel) tant que `WHATSAPP_TOKEN`/`WHATSAPP_PHONE_NUMBER_ID` ne sont pas renseignés en `.env`. **Credentials Meta Business réels à obtenir côté business avant toute mise en production** — le code est fonctionnel mais rien n'est envoyé réellement sans eux.
+- **Anti-double-booking** : `Rendezvou::createWithLock()` (verrou pessimiste `lockForUpdate()`, même patron que `generateNextOrderNumber()` déjà existant) remplace l'ancien `hasConflict()` non protégé contre la concurrence — réutilisé par le flux staff (`CreateRendezVous.php`) et le nouveau flux patient. Pas de contrainte unique DB stricte en V1 (dette actée : MySQL gère mal les index uniques partiels excluant les RDV annulés).
+- **Bug corrigé en cours de route** : `Rendezvou::hasConflict()` parsait `HeureRdv` (stockée en base comme heure seule `H:i`) sans la recombiner avec la date du RDV, donc `Carbon::parse()` résolvait implicitement à la date du jour — un conflit sur une date future n'était jamais détecté. Corrigé en recombinant explicitement avec `$date` avant parsing (`app/Models/Rendezvou.php`).
+- **Horaires et durée de RDV configurables par cabinet** (pas par médecin, dette assumée) : nouvelles colonnes `Infocabinet.heure_ouverture/heure_fermeture/duree_rdv_minutes`, défauts identiques au comportement précédent codé en dur (8h-18h, 10 min).
+- **`RdvReminders.php`** : bug corrigé où l'envoi d'un rappel écrasait inconditionnellement `rdvConfirmer` à `'Rappel envoyé'`, détruisant le vrai statut du RDV (`'Confirmé'`/`'En cours'` perdu). Nouvelle colonne `rendezvous.date_dernier_rappel` dédiée au tracking d'envoi ; le bouton "Rappeler" déclenche maintenant un vrai envoi via `WhatsAppService` (job `SendWhatsAppMessage`, `ShouldQueue`) au lieu d'ouvrir un lien `wa.me` côté navigateur. Les RDV historiques déjà marqués `rdvConfirmer = 'Rappel envoyé'` ne sont pas corrigés rétroactivement (dette gelée).
+- **Dette documentée** : pas d'horaires par médecin (hérite du cabinet) ; envois WhatsApp effectivement synchrones tant que `QUEUE_CONNECTION=sync` ; pas de vraie table `actes` avec durée par type d'acte (durée fixe par cabinet uniquement).
+- **Convention** : tout nouvel appelant de `Rendezvou::hasConflict()`/`generateNextOrderNumber()`/`getCreneauxDisponibles()`/`getProchainCreneauPropose()` en contexte non authentifié doit passer `$cabinetId` explicitement — ces méthodes lèvent `InvalidArgumentException` si le cabinet ne peut être résolu ni depuis le paramètre ni depuis `Auth::user()`.
 
 ---
 

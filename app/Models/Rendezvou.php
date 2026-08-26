@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Concerns\BelongsToTenant;
+use App\Exceptions\RdvConflictException;
 
 class Rendezvou extends Model
 {
@@ -43,7 +44,8 @@ class Rendezvou extends Model
         'OrdreRDV',
         'HeureConfRDV',
         'fkidcabinet',
-        'fkidFacture'
+        'fkidFacture',
+        'date_dernier_rappel'
     ];
 
     /**
@@ -71,26 +73,47 @@ class Rendezvou extends Model
     }
 
     /**
+     * Résout le cabinet à utiliser pour une opération de RDV : l'ID explicite
+     * s'il est fourni (contexte non authentifié, ex. portail patient public),
+     * sinon l'utilisateur connecté (contexte staff). Lève une exception plutôt
+     * que d'exécuter une requête non filtrée par tenant si aucun des deux
+     * n'est disponible — TenantScope ne filtre pas automatiquement quand
+     * Auth::check() est faux (cf. app/Models/Scopes/TenantScope.php).
+     */
+    protected static function resolveCabinetId($cabinetId = null): int
+    {
+        $cabinetId = $cabinetId ?? (Auth::check() ? Auth::user()->fkidcabinet : null);
+
+        if (!$cabinetId) {
+            throw new \InvalidArgumentException('Impossible de déterminer le cabinet pour cette opération de rendez-vous.');
+        }
+
+        return (int) $cabinetId;
+    }
+
+    /**
      * Génère le prochain numéro d'ordre pour la date et le médecin donnés
      * Utilise un verrou pour éviter les conditions de course
      */
-    public static function generateNextOrderNumber($date, $medecinId = null)
+    public static function generateNextOrderNumber($date, $medecinId = null, $cabinetId = null)
     {
         if (is_string($date)) {
             $date = \Carbon\Carbon::parse($date);
         }
-        
+
+        $cabinetId = self::resolveCabinetId($cabinetId);
+
         // Utiliser une transaction avec verrou pour éviter les conditions de course
-        return \DB::transaction(function () use ($date, $medecinId) {
+        return \DB::transaction(function () use ($date, $medecinId, $cabinetId) {
             $query = self::select('OrdreRDV')
                 ->whereDate('dtPrevuRDV', $date->format('Y-m-d'))
-                ->where('fkidcabinet', Auth::user()->fkidcabinet);
-                
+                ->where('fkidcabinet', $cabinetId);
+
             // Si un médecin est spécifié, filtrer par médecin
             if ($medecinId) {
                 $query->where('fkidMedecin', $medecinId);
             }
-            
+
             // Utiliser lockForUpdate pour éviter les conditions de course
             $lastOrder = $query->lockForUpdate()->max('OrdreRDV');
 
@@ -154,22 +177,24 @@ class Rendezvou extends Model
      * @param int|null $excludeRdvId ID du rendez-vous à exclure (pour les modifications)
      * @return bool True s'il y a un conflit
      */
-    public static function hasConflict($medecinId, $date, $heure, $excludeRdvId = null)
+    public static function hasConflict($medecinId, $date, $heure, $excludeRdvId = null, $cabinetId = null)
     {
+        $cabinetId = self::resolveCabinetId($cabinetId);
+
         // Convertir la date et l'heure en datetime
         $dateTimeRdv = Carbon::parse($date . ' ' . $heure);
-        
-        // Définir la durée d'un rendez-vous (10 minutes)
-        $dureeRdv = 10; // minutes
-        
+
+        // Durée d'un rendez-vous, configurable par cabinet (défaut 10 minutes)
+        $dureeRdv = Infocabinet::find($cabinetId)->duree_rdv_minutes ?? 10;
+
         // Calculer l'heure de fin du rendez-vous
         $heureFin = $dateTimeRdv->copy()->addMinutes($dureeRdv);
-        
+
         // Chercher les rendez-vous existants pour ce médecin à cette date
         $query = self::where('fkidMedecin', $medecinId)
             ->whereDate('dtPrevuRDV', $date)
             ->whereNotIn('rdvConfirmer', ['Annulé', 'annulé'])
-            ->where('fkidcabinet', Auth::user()->fkidcabinet);
+            ->where('fkidcabinet', $cabinetId);
         
         // Exclure le rendez-vous en cours de modification
         if ($excludeRdvId) {
@@ -180,8 +205,11 @@ class Rendezvou extends Model
         
         foreach ($rendezVousExistants as $rdv) {
             if (!$rdv->HeureRdv) continue;
-            
-            $heureDebutExistant = Carbon::parse($rdv->HeureRdv);
+
+            // HeureRdv est stockée en base comme une heure seule (H:i) : la
+            // recombiner avec la date du RDV existant plutôt que de la
+            // parser seule, qui résoudrait implicitement à la date du jour.
+            $heureDebutExistant = Carbon::parse($date . ' ' . Carbon::parse($rdv->HeureRdv)->format('H:i'));
             $heureFinExistant = $heureDebutExistant->copy()->addMinutes($dureeRdv);
             
             // Vérifier s'il y a un chevauchement
@@ -199,26 +227,28 @@ class Rendezvou extends Model
      * @param string $date Date (Y-m-d)
      * @return array Liste des créneaux disponibles
      */
-    public static function getCreneauxDisponibles($medecinId, $date)
+    public static function getCreneauxDisponibles($medecinId, $date, $cabinetId = null)
     {
-        // Heures de travail (8h-18h)
-        $heureDebut = 8;
-        $heureFin = 18;
-        $dureeCreneau = 10; // minutes (créneaux de 10 minutes)
-        
+        $cabinetId = self::resolveCabinetId($cabinetId);
+        $cabinet = Infocabinet::find($cabinetId);
+
+        $heureDebut = $cabinet && $cabinet->heure_ouverture ? (int) Carbon::parse($cabinet->heure_ouverture)->format('H') : 8;
+        $heureFin = $cabinet && $cabinet->heure_fermeture ? (int) Carbon::parse($cabinet->heure_fermeture)->format('H') : 18;
+        $dureeCreneau = $cabinet->duree_rdv_minutes ?? 10;
+
         $creneauxDisponibles = [];
-        
+
         for ($heure = $heureDebut; $heure < $heureFin; $heure++) {
             for ($minute = 0; $minute < 60; $minute += $dureeCreneau) {
                 $heureCreneau = sprintf('%02d:%02d', $heure, $minute);
-                
+
                 // Vérifier s'il y a un conflit pour ce créneau
-                if (!self::hasConflict($medecinId, $date, $heureCreneau)) {
+                if (!self::hasConflict($medecinId, $date, $heureCreneau, null, $cabinetId)) {
                     $creneauxDisponibles[] = $heureCreneau;
                 }
             }
         }
-        
+
         return $creneauxDisponibles;
     }
 
@@ -228,29 +258,65 @@ class Rendezvou extends Model
      * @param string $date Date (Y-m-d)
      * @return string|null Heure proposée ou null si aucun créneau disponible
      */
-    public static function getProchainCreneauPropose($medecinId, $date)
+    public static function getProchainCreneauPropose($medecinId, $date, $cabinetId = null)
     {
+        $cabinetId = self::resolveCabinetId($cabinetId);
+        $cabinet = Infocabinet::find($cabinetId);
+
+        $heureOuverture = $cabinet && $cabinet->heure_ouverture ? Carbon::parse($cabinet->heure_ouverture)->format('H:i') : '08:00';
+        $heureFermeture = $cabinet && $cabinet->heure_fermeture ? (int) Carbon::parse($cabinet->heure_fermeture)->format('H') : 18;
+        $dureeRdv = $cabinet->duree_rdv_minutes ?? 10;
+
         // Récupérer le dernier rendez-vous du médecin pour cette date
         $dernierRdv = self::where('fkidMedecin', $medecinId)
             ->whereDate('dtPrevuRDV', $date)
             ->whereNotIn('rdvConfirmer', ['Annulé', 'annulé'])
-            ->where('fkidcabinet', Auth::user()->fkidcabinet)
+            ->where('fkidcabinet', $cabinetId)
             ->orderBy('HeureRdv', 'desc')
             ->first();
 
         if (!$dernierRdv || !$dernierRdv->HeureRdv) {
-            // Aucun RDV existant, proposer 8h00
-            return '08:00';
+            // Aucun RDV existant, proposer l'heure d'ouverture
+            return $heureOuverture;
         }
 
-        // Calculer le prochain créneau (10 minutes après la fin du dernier RDV)
-        $heureFinDernierRdv = Carbon::parse($dernierRdv->HeureRdv)->addMinutes(10);
-        
+        // Calculer le prochain créneau (durée configurée après la fin du dernier RDV)
+        $heureFinDernierRdv = Carbon::parse($dernierRdv->HeureRdv)->addMinutes($dureeRdv);
+
         // Vérifier que l'heure proposée est dans les heures de travail
-        if ($heureFinDernierRdv->hour >= 18) {
+        if ($heureFinDernierRdv->hour >= $heureFermeture) {
             return null; // Plus de créneaux disponibles aujourd'hui
         }
 
         return $heureFinDernierRdv->format('H:i');
+    }
+
+    /**
+     * Crée un rendez-vous de façon atomique : verrouille les RDV actifs du
+     * médecin/jour, revalide l'absence de conflit à l'intérieur du verrou
+     * (hasConflict() seul n'a aucune protection contre la concurrence),
+     * calcule le numéro d'ordre, puis crée le RDV. Réutilisée par le flux
+     * staff (CreateRendezVous) et le flux patient self-service.
+     */
+    public static function createWithLock(array $data, $cabinetId): self
+    {
+        $cabinetId = self::resolveCabinetId($cabinetId);
+
+        return \DB::transaction(function () use ($data, $cabinetId) {
+            self::where('fkidMedecin', $data['fkidMedecin'])
+                ->whereDate('dtPrevuRDV', $data['dtPrevuRDV'])
+                ->where('fkidcabinet', $cabinetId)
+                ->lockForUpdate()
+                ->get();
+
+            if (self::hasConflict($data['fkidMedecin'], $data['dtPrevuRDV'], $data['HeureRdv'], null, $cabinetId)) {
+                throw new RdvConflictException('Ce créneau vient d\'être réservé par un autre rendez-vous.');
+            }
+
+            $data['fkidcabinet'] = $cabinetId;
+            $data['OrdreRDV'] = self::generateNextOrderNumber($data['dtPrevuRDV'], $data['fkidMedecin'], $cabinetId);
+
+            return self::create($data);
+        });
     }
 } 

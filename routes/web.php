@@ -191,6 +191,9 @@ Route::middleware(['auth'])->group(function () {
 Route::prefix('patient')->group(function () {
     Route::get('/rendez-vous/{token}', [App\Http\Controllers\PatientInterfaceController::class, 'showRendezVous'])->middleware('patient.locale')->name('patient.rendez-vous');
     Route::get('/consultation/{token}', [App\Http\Controllers\PatientInterfaceController::class, 'showConsultation'])->name('patient.consultation');
+    Route::get('/prendre-rdv/{cabinetToken}', fn ($cabinetToken) => view('patient.prendre-rdv', ['cabinetToken' => $cabinetToken]))
+        ->middleware(['throttle:20,1'])
+        ->name('patient.prendre-rdv');
 });
 
 // ─── Admin plateforme ───────────────────────────────────────────────────
