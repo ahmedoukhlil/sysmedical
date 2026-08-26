@@ -40,7 +40,8 @@ class Ordonnanceref extends Model
 		'fkidpatient' => 'int',
 		'fkidprescripteur' => 'int',
 		'dtPrescript' => 'datetime',
-		'fkidCabinet' => 'int'
+		'fkidCabinet' => 'int',
+		'statutSoin' => 'string'
 	];
 
 	protected $fillable = [

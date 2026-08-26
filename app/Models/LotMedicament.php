@@ -45,7 +45,7 @@ class LotMedicament extends Model
         'dateEntree' => 'datetime',
         'prixAchatUnitaire' => 'float',
         'fkidUser' => 'int',
-        'Masquer' => 'int'
+        'Masquer' => 'boolean'
     ];
 
     protected $fillable = [

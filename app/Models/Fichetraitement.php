@@ -44,8 +44,8 @@ class Fichetraitement extends Model
 		'Prix' => 'float',
 		'dateTraite' => 'datetime',
 		'Ordre' => 'int',
-		'IsImprimer' => 'int',
-		'IsSupprimer' => 'int',
+		'IsImprimer' => 'boolean',
+		'IsSupprimer' => 'boolean',
 		'fkidCabinet' => 'int'
 	];
 

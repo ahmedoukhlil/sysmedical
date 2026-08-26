@@ -34,7 +34,7 @@ class Acte extends Model
 		'fkidTypeActe' => 'int',
 		'nordre' => 'int',
 		'fkidassureur' => 'int',
-		'Masquer' => 'int'
+		'Masquer' => 'boolean'
 	];
 
 	protected $fillable = [

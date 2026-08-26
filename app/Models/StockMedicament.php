@@ -38,7 +38,7 @@ class StockMedicament extends Model
         'prixVente' => 'float',
         'dateDerniereEntree' => 'datetime',
         'dateDerniereSortie' => 'datetime',
-        'Masquer' => 'int'
+        'Masquer' => 'boolean'
     ];
 
     protected $fillable = [
