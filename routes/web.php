@@ -187,6 +187,13 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/test-modals',    fn() => view('test-modals'))->name('test.modals');
 });
 
+// Espace mobile praticiens (PWA)
+Route::middleware(['auth'])->prefix('mobile')->name('mobile.')->group(function () {
+    Route::view('/agenda', 'mobile.agenda')->name('agenda');
+    Route::view('/salle-attente', 'mobile.salle-attente')->name('salle-attente');
+    Route::view('/salle-soins', 'mobile.salle-soins')->name('salle-soins');
+});
+
 // Routes publiques pour l'interface patient (accessible via QR code)
 Route::prefix('patient')->group(function () {
     Route::get('/rendez-vous/{token}', [App\Http\Controllers\PatientInterfaceController::class, 'showRendezVous'])->middleware('patient.locale')->name('patient.rendez-vous');

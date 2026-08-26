@@ -54,6 +54,9 @@
                             </button>
                             <div class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-100 opacity-0 group-hover:opacity-100 transition-all duration-200 transform origin-top-right scale-95 group-hover:scale-100 z-50">
                                 <div class="py-1">
+                                    <a href="{{ route('mobile.agenda') }}" class="block px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200">
+                                        Version mobile
+                                    </a>
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="block">
                                         @csrf
                                         <button type="submit" class="w-full text-left px-4 py-2 text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-all duration-200">

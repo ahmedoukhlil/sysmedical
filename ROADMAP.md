@@ -104,10 +104,10 @@ Objectif : réduire la dette qui freinera les évolutions futures et l'expérien
 
 Objectif : construire l'avantage compétitif une fois le socle sécurisé et vendable.
 
-- **Paiement mobile local intégré** (Bankily, Masrvi, Orange Money) dans le règlement/caisse — **M**
+- **Paiement mobile local intégré** (Bankily, Masrvi, Orange Money) dans le règlement/caisse — **M** — Reporté (2026-08-26), chantier séparé à traiter plus tard.
 - **Portail patient enrichi** : prise de RDV en ligne, rappels SMS/WhatsApp — **M** ✅ Fait (2026-08-26)
 - **Module tiers-payant avancé** : bordereaux automatiques groupés par assureur — **M**
-- **Application mobile légère praticiens** (agenda, salle d'attente/soins temps réel) — **L**
+- **Application mobile légère praticiens** (agenda, salle d'attente/soins temps réel) — **L** ✅ Fait (2026-08-26)
 
 Ces chantiers sont volontairement en dernier : ils apportent de la valeur commerciale mais n'ont pas de sens à construire sur une fondation multi-tenant non sécurisée.
 
@@ -121,6 +121,15 @@ Ces chantiers sont volontairement en dernier : ils apportent de la valeur commer
 - **`RdvReminders.php`** : bug corrigé où l'envoi d'un rappel écrasait inconditionnellement `rdvConfirmer` à `'Rappel envoyé'`, détruisant le vrai statut du RDV (`'Confirmé'`/`'En cours'` perdu). Nouvelle colonne `rendezvous.date_dernier_rappel` dédiée au tracking d'envoi ; le bouton "Rappeler" déclenche maintenant un vrai envoi via `WhatsAppService` (job `SendWhatsAppMessage`, `ShouldQueue`) au lieu d'ouvrir un lien `wa.me` côté navigateur. Les RDV historiques déjà marqués `rdvConfirmer = 'Rappel envoyé'` ne sont pas corrigés rétroactivement (dette gelée).
 - **Dette documentée** : pas d'horaires par médecin (hérite du cabinet) ; envois WhatsApp effectivement synchrones tant que `QUEUE_CONNECTION=sync` ; pas de vraie table `actes` avec durée par type d'acte (durée fixe par cabinet uniquement).
 - **Convention** : tout nouvel appelant de `Rendezvou::hasConflict()`/`generateNextOrderNumber()`/`getCreneauxDisponibles()`/`getProchainCreneauPropose()` en contexte non authentifié doit passer `$cabinetId` explicitement — ces méthodes lèvent `InvalidArgumentException` si le cabinet ne peut être résolu ni depuis le paramètre ni depuis `Auth::user()`.
+
+### Application mobile légère praticiens — détail
+
+- **PWA** (Progressive Web App) sous `/mobile/*`, réutilisant l'app Laravel/Livewire existante — pas d'app native. Layout dédié `resources/views/layouts/mobile.blade.php` (bottom nav, meta tags PWA), lien "Version mobile" ajouté au menu utilisateur du layout desktop.
+- **Socle PWA** : `public/manifest.json`, `public/sw.js` (cache-first sur une whitelist stricte d'assets statiques, network-first + fallback `public/offline.html` pour la navigation), `public/icons/*` — gérés manuellement en dehors du pipeline Laravel Mix (pas de migration vers Vite pour ce chantier). Scope du service worker volontairement limité à `/mobile/`, zéro risque d'interférence avec le reste de l'app desktop.
+- **Icônes placeholder** : les icônes PWA actuelles (`public/icons/icon-*.png`) sont générées programmatiquement (texte "SM" sur fond bleu) — à remplacer par un vrai jeu d'icônes de marque avant mise en avant commerciale de la PWA.
+- **Nouveau composant `AgendaSemaine`** (`app/Http/Livewire/AgendaSemaine.php`) : vue semaine avec navigation, lecture + actions démarrer/terminer réutilisant la même logique que `SalleAttente` (copie assumée, pas d'héritage — extraire en trait `HandlesRdvLifecycle` si un 3e consommateur apparaît). Différence volontaire avec `SalleAttente` : les RDV `'Terminé'` restent visibles (l'agenda montre l'historique de la semaine), seuls les `'Annulé'` sont exclus. Pas de création de RDV en V1 (reste sur `CreateRendezVous` existant).
+- **Salle d'attente/soins réutilisées sans duplication** : `SalleAttente.php`/`SalleSoins.php` gagnent un paramètre `modeMobile` (défaut `false`) qui bascule uniquement la vue rendue (`salle-attente-mobile.blade.php`/`salle-soins-mobile.blade.php`), aucune logique métier dupliquée ni modifiée. Convention pour la suite : tout nouveau composant Livewire ayant besoin d'une variante mobile suit ce patron plutôt que de dupliquer le composant.
+- **Dette documentée** : pas de notification push cross-poste réelle (mise à jour via `wire:poll.15s` uniquement, délai perçu jusqu'à 15s entre postes — jugé acceptable, pas une urgence vitale) ; Web Push (VAPID) explicitement hors scope, chantier futur si ce délai s'avère insuffisant en usage réel ; manifest/icônes génériques, pas de branding par cabinet ; paiement mobile local reporté à un chantier séparé.
 
 ---
 

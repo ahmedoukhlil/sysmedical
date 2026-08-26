@@ -10,11 +10,13 @@ class SalleSoins extends Component
 {
     public $date;
     public $patientOuvert = null;
+    public bool $modeMobile = false;
 
     protected $listeners = ['refresh' => '$refresh'];
 
-    public function mount()
+    public function mount($modeMobile = false)
     {
+        $this->modeMobile = $modeMobile;
         $this->date = now()->format('Y-m-d');
     }
 
@@ -118,7 +120,7 @@ class SalleSoins extends Component
 
     public function render()
     {
-        return view('livewire.salle-soins', [
+        return view($this->modeMobile ? 'livewire.salle-soins-mobile' : 'livewire.salle-soins', [
             'patients'   => $this->patients,
             'canCreate'  => Auth::user()->hasPermission('ordonnance.create'),
         ]);

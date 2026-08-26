@@ -12,13 +12,15 @@ class SalleAttente extends Component
     public $date;
     public $medecinFiltre = null;
     public $medecins = [];
+    public bool $modeMobile = false;
 
     protected $listeners = [
         'refresh' => '$refresh',
     ];
 
-    public function mount()
+    public function mount($modeMobile = false)
     {
+        $this->modeMobile = $modeMobile;
         $this->date = now()->format('Y-m-d');
         $this->loadMedecins();
 
@@ -99,7 +101,7 @@ class SalleAttente extends Component
 
     public function render()
     {
-        return view('livewire.salle-attente', [
+        return view($this->modeMobile ? 'livewire.salle-attente-mobile' : 'livewire.salle-attente', [
             'rdvParMedecin' => $this->rendezVous,
         ]);
     }
