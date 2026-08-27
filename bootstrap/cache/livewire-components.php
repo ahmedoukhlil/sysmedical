@@ -4,6 +4,7 @@
   'acte-manager' => 'App\\Http\\Livewire\\ActeManager',
   'acte-search' => 'App\\Http\\Livewire\\ActeSearch',
   'actes-patient' => 'App\\Http\\Livewire\\ActesPatient',
+  'agenda-semaine' => 'App\\Http\\Livewire\\AgendaSemaine',
   'assureur-create' => 'App\\Http\\Livewire\\AssureurCreate',
   'assureur-manager' => 'App\\Http\\Livewire\\AssureurManager',
   'auth' => 'App\\Http\\Livewire\\Auth',
