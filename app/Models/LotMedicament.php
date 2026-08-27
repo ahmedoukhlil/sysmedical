@@ -76,7 +76,7 @@ class LotMedicament extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'fkidUser', 'id');
+        return $this->belongsTo(User::class, 'fkidUser', 'Iduser');
     }
 
     public function mouvements()
