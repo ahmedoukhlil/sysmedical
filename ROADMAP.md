@@ -133,6 +133,27 @@ Ces chantiers sont volontairement en dernier : ils apportent de la valeur commer
 
 ---
 
+## Audit des modèles Eloquent (2026-08-27)
+
+Audit exhaustif des ~65 modèles `app/Models/*.php` sous l'angle bonnes pratiques Laravel/Eloquent. Corrections appliquées immédiatement (par ordre de commit) :
+
+- **Faille d'isolation tenant** : `TFournisseurPersonnel` avait une colonne `fkidcaibnet` (faute de frappe en base, ni `fkidCabinet` ni `fkidcabinet`) sans aucun trait tenant — invisible à toute recherche standard. Ajout de `BelongsToTenant` avec `$tenantColumn` pointant explicitement sur le nom réel (conservé tel quel, pas de renommage de colonne). Modèle confirmé mort (0 référence), corrigé par précaution avant une éventuelle réactivation.
+- **Relation cabinet erronée** : `StockMedicament::cabinet()` pointait vers le modèle `Cabinet` (mort) au lieu d'`Infocabinet` (la vraie table tenant) — corrigé.
+- **Garde-fou `BelongsToTenant`** : ajout d'une vérification `Schema::hasColumn()` en environnement non-production qui échoue bruyamment à la création si `$tenantColumn` n'est pas déclaré et que la colonne par défaut (`fkidCabinet`) n'existe pas réellement — évite qu'un futur modèle avec une colonne en casse différente ne remplisse silencieusement un attribut fantôme jamais persisté ni filtré.
+- **Casts booléens corrigés** : `Masquer`/`IsImprimer`/`IsSupprimer` étaient castés `int` sur 5 modèles (`Acte`, `Fichetraitement`, `LotMedicament`, `StockMedicament`) — passés en `boolean`. `Ordonnanceref::statutSoin` (énuméré `en_attente|en_cours|termine`) était absent des `$casts` malgré sa présence en `$fillable` — ajouté en `string`.
+- **Pseudo-relations mortes trompeuses supprimées** : `TUser::rendezVous()`/`factures()` portaient un nom de relation Eloquent mais exécutaient une requête immédiate (`->get()`) au lieu de retourner une vraie relation différée — aucun appelant trouvé, supprimées.
+- **Relation `LotMedicament::user()` corrigée** : utilisait `'id'` comme clé locale au lieu de `'Iduser'` (vraie PK de `t_user`) — n'aurait jamais pu se résoudre correctement.
+- **20 modèles morts supprimés** : `Currentuser`, `CurrentuserEnregistrement`, `TCampagnie`, `TCategorieCompteClient`, `TCurrentexercice`, `TExercice`, `TSouscompte`, `TTypeOperation`, `TArretCompte`, `TArretSituationCompte`, `TSoldeCaisse`, `TBanque`, `SoldeParJour`, `Periode`, `Problème`, `Typerecettesdepense`, `Typereglement`, `Ficheaimprimerautrefoi`, `Pjconvention`, `Factureaimprimer` — résidus de la génération Reliese initiale, zéro référence externe confirmée par grep exhaustif. `Cabinet` (déjà connu comme mort, 2 références résiduelles) volontairement non touché ici.
+- **SoftDeletes sur `Facture`/`Reglement`/`CaisseOperation`** : aligne ces 3 tables financières sur la politique déjà en place sur les 6 tables santé. Corrigé au passage `MedecinFinanceService::getRecettes()`/`getStatistiques()` (jointures manuelles qui ne bénéficiaient pas automatiquement du scope SoftDeletes d'un modèle joint) pour exclure explicitement les factures annulées des calculs de chiffre d'affaires par médecin. `PatientManager::deletePatient()` reste volontairement en suppression physique pour les factures lors d'une purge complète de patient (décision Phase 1.5 déjà actée, un test existant le vérifie).
+
+**Dette documentée, non traitée (risque jugé trop élevé pour une correction automatique)** :
+- **Montants financiers en `DOUBLE` réel en base** (pas juste un cast Eloquent `float` — vérifié dans les migrations de création) sur `facture`, `caisse_operations`, `reglements`, `detailfacturepatient`, `acte`, `bordereauxfactures`, `consommables`. Une vraie correction nécessiterait un `ALTER TABLE ... DECIMAL(x,y)` sur des tables financières déjà en production, combiné à une réécriture de la logique arithmétique PHP dans `ReglementFacture.php` (calculs en cascade de `TotFacture`/`TotalPEC`/`TotalfactPatient`/`TotReglPatient` via `+`/`-`/`*`/`min()`/`max()` sur des floats natifs — un cast `decimal` renvoie des strings côté Eloquent, et aucun usage de `bcmath` n'existe dans le projet pour sécuriser ces calculs). Aucune preuve d'imprécision réellement constatée en production (pas de jeu de données permettant de le vérifier). **Chantier à traiter séparément avec validation métier explicite avant toute exécution, pas en correction d'audit automatique.**
+- Duplication `User`/`TUser` (même table `t_user`, relations divergentes, casse différente `typeuser`/`typeUser`) — déjà documentée comme dette de longue date, non retraitée ici (chantier de réconciliation à part entière).
+- Modèle `Cabinet` mort avec 2 références résiduelles à vérifier avant suppression définitive.
+- Autres opportunités mineures relevées mais non corrigées (pas d'urgence) : `$timestamps` non exploité sur des colonnes `DtCr`/`DtAjout` existantes (pourrait utiliser `const CREATED_AT`), quelques accesseurs dupliquant l'API du modèle (`Acte::getActeNomAttribute()`), risque de requête N+1 sur `Detailfacturepatient::getLibelleAttribute()` si consommé sans `with()` préalable.
+
+---
+
 ## Vue d'ensemble
 
 | Phase | Objectif | Effort cumulé approx. | Condition de sortie |
