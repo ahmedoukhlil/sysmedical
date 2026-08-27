@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
 use App\Models\Concerns\BelongsToTenant;
 
@@ -46,6 +47,7 @@ use App\Models\Concerns\BelongsToTenant;
 class Facture extends Model
 {
 	use BelongsToTenant;
+	use SoftDeletes;
 
 	protected $table = 'facture';
 	protected $primaryKey = 'Idfacture';

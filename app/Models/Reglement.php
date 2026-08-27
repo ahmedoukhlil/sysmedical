@@ -8,6 +8,7 @@ namespace App\Models;
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Concerns\BelongsToTenantViaRelation;
 
 /**
@@ -30,6 +31,7 @@ use App\Models\Concerns\BelongsToTenantViaRelation;
 class Reglement extends Model
 {
 	use BelongsToTenantViaRelation;
+	use SoftDeletes;
 
 	protected static $tenantRelation = 'facture';
 	protected static $tenantRelationColumn = 'fkidCabinet';

@@ -23,6 +23,7 @@ class MedecinFinanceService
     {
         // Récupérer toutes les factures où ce médecin a participé
         $recettes = Detailfacturepatient::join('facture', 'detailfacturepatient.fkidfacture', '=', 'facture.Idfacture')
+            ->whereNull('facture.deleted_at')
             ->where('detailfacturepatient.fkidMedecin', $medecinId)
             ->whereBetween('facture.DtFacture', [$dateDebut, $dateFin])
             ->select(
@@ -96,19 +97,22 @@ class MedecinFinanceService
     {
         // Nombre de patients traités par ce médecin dans la période
         $nbPatients = Detailfacturepatient::join('facture', 'detailfacturepatient.fkidfacture', '=', 'facture.Idfacture')
+            ->whereNull('facture.deleted_at')
             ->where('detailfacturepatient.fkidMedecin', $medecinId)
             ->whereBetween('facture.DtFacture', [$dateDebut, $dateFin])
             ->distinct('facture.IDPatient')
             ->count('facture.IDPatient');
-            
+
         // Nombre d'actes réalisés par ce médecin
         $nbActes = Detailfacturepatient::join('facture', 'detailfacturepatient.fkidfacture', '=', 'facture.Idfacture')
+            ->whereNull('facture.deleted_at')
             ->where('detailfacturepatient.fkidMedecin', $medecinId)
             ->whereBetween('facture.DtFacture', [$dateDebut, $dateFin])
             ->count();
-            
+
         // Montant moyen par acte
         $montantMoyenParActe = Detailfacturepatient::join('facture', 'detailfacturepatient.fkidfacture', '=', 'facture.Idfacture')
+            ->whereNull('facture.deleted_at')
             ->where('detailfacturepatient.fkidMedecin', $medecinId)
             ->whereBetween('facture.DtFacture', [$dateDebut, $dateFin])
             ->avg(DB::raw('detailfacturepatient.PrixFacture * detailfacturepatient.Quantite'));

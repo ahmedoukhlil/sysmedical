@@ -311,7 +311,14 @@ class PatientManager extends Component
                     DB::table('facture')->where('IDPatient', $id)->pluck('Idfacture')
                 )->delete();
 
-                // Supprimer les factures
+                // Supprimer physiquement les factures (hors périmètre SoftDeletes :
+                // décision produit actée en Phase 1.5 — Facture, Detailfacturepatient,
+                // CaisseOperation, rendezvous restent en suppression physique lors
+                // d'une suppression complète de patient, contrairement aux données
+                // santé). Utilise DB::table() explicitement pour contourner le
+                // SoftDeletes ajouté depuis sur le modèle Facture, qui vise la
+                // suppression individuelle d'une facture (ReglementFacture.php),
+                // pas ce cas de purge totale patient.
                 DB::table('facture')->where('IDPatient', $id)->delete();
 
                 // Supprimer (soft delete) les ordonnances et leurs détails
