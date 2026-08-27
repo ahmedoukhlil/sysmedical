@@ -70,9 +70,10 @@
                     <input type="checkbox" wire:model.defer="isActive" class="rounded border-gray-300 text-green-600">
                     Compte actif
                 </label>
-                <button type="submit"
-                        class="px-5 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors">
-                    <i class="fas fa-save mr-1"></i> Enregistrer
+                <button type="submit" wire:loading.attr="disabled" wire:target="save"
+                        class="px-5 py-2 bg-green-600 text-white text-sm font-medium rounded-lg hover:bg-green-700 transition-colors disabled:opacity-60">
+                    <span wire:loading.remove wire:target="save"><i class="fas fa-save mr-1"></i> Enregistrer</span>
+                    <span wire:loading wire:target="save"><i class="fas fa-spinner fa-spin mr-1"></i> Enregistrement...</span>
                 </button>
             </div>
         </form>
@@ -89,9 +90,10 @@
                 @endforeach
             </select>
         </div>
-        <div class="flex-1">
+        <div class="flex-1 relative">
             <input type="text" wire:model="search" placeholder="Rechercher un utilisateur…"
                    class="w-full px-4 py-1.5 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500">
+            <span wire:loading wire:target="search" class="absolute right-3 top-1/2 -translate-y-1/2"><i class="fas fa-spinner fa-spin text-gray-400"></i></span>
         </div>
     </div>
 
@@ -131,10 +133,11 @@
                         </span>
                     </td>
                     <td class="px-4 py-3">
-                        <button wire:click="toggleStatus({{ $user->Iduser }})"
-                                class="px-2.5 py-0.5 text-xs rounded-full font-medium transition-colors
+                        <button wire:click="toggleStatus({{ $user->Iduser }})" wire:loading.attr="disabled" wire:target="toggleStatus({{ $user->Iduser }})"
+                                class="px-2.5 py-0.5 text-xs rounded-full font-medium transition-colors disabled:opacity-60
                                 {{ !$user->ismasquer ? 'bg-green-100 text-green-800 hover:bg-green-200' : 'bg-red-100 text-red-800 hover:bg-red-200' }}">
-                            {{ !$user->ismasquer ? 'Actif' : 'Inactif' }}
+                            <span wire:loading.remove wire:target="toggleStatus({{ $user->Iduser }})">{{ !$user->ismasquer ? 'Actif' : 'Inactif' }}</span>
+                            <span wire:loading wire:target="toggleStatus({{ $user->Iduser }})"><i class="fas fa-spinner fa-spin"></i></span>
                         </button>
                     </td>
                     <td class="px-4 py-3">
@@ -335,9 +338,10 @@
                 <div class="flex justify-end gap-3 pt-2 border-t border-gray-100">
                     <button type="button" wire:click="closeModal"
                             class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200">Annuler</button>
-                    <button type="submit"
-                            class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:opacity-90">
-                        <i class="fas fa-save mr-1"></i> Enregistrer
+                    <button type="submit" wire:loading.attr="disabled" wire:target="save"
+                            class="px-4 py-2 bg-primary text-white rounded-lg text-sm hover:opacity-90 disabled:opacity-60">
+                        <span wire:loading.remove wire:target="save"><i class="fas fa-save mr-1"></i> Enregistrer</span>
+                        <span wire:loading wire:target="save"><i class="fas fa-spinner fa-spin mr-1"></i> Enregistrement...</span>
                     </button>
                 </div>
             </form>
@@ -357,10 +361,11 @@
             <div class="flex justify-end gap-3">
                 <button type="button" onclick="document.getElementById('force-delete-dialog').close()"
                         class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200">Annuler</button>
-                <button type="button" wire:click="forceDeleteUser"
+                <button type="button" wire:click="forceDeleteUser" wire:loading.attr="disabled" wire:target="forceDeleteUser"
                         onclick="document.getElementById('force-delete-dialog').close()"
-                        class="px-4 py-2 bg-red-700 text-white rounded-lg text-sm hover:bg-red-800 font-medium">
-                    <i class="fas fa-trash-alt mr-1"></i> Supprimer définitivement
+                        class="px-4 py-2 bg-red-700 text-white rounded-lg text-sm hover:bg-red-800 font-medium disabled:opacity-60">
+                    <span wire:loading.remove wire:target="forceDeleteUser"><i class="fas fa-trash-alt mr-1"></i> Supprimer définitivement</span>
+                    <span wire:loading wire:target="forceDeleteUser"><i class="fas fa-spinner fa-spin mr-1"></i> Suppression...</span>
                 </button>
             </div>
         </div>
@@ -436,9 +441,10 @@
                        placeholder="Ex: Infirmier, Comptable...">
             </div>
             <div class="flex gap-2">
-                <button wire:click="saveRole"
-                        class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 flex items-center gap-1">
-                    <i class="fas fa-save"></i> {{ $roleEditId ? 'Enregistrer' : 'Créer' }}
+                <button wire:click="saveRole" wire:loading.attr="disabled" wire:target="saveRole"
+                        class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 flex items-center gap-1 disabled:opacity-60">
+                    <span wire:loading.remove wire:target="saveRole" class="flex items-center gap-1"><i class="fas fa-save"></i> {{ $roleEditId ? 'Enregistrer' : 'Créer' }}</span>
+                    <span wire:loading wire:target="saveRole" class="flex items-center gap-1"><i class="fas fa-spinner fa-spin"></i> Enregistrement...</span>
                 </button>
                 @if($roleEditId)
                 <button wire:click="cancelRoleEdit"
@@ -526,9 +532,10 @@
                 <div class="flex justify-end gap-3">
                     <button wire:click="$set('showRoleDeleteConfirm', false)"
                             class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg text-sm hover:bg-gray-200">Annuler</button>
-                    <button wire:click="deleteRole"
-                            class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700">
-                        <i class="fas fa-trash mr-1"></i> Confirmer
+                    <button wire:click="deleteRole" wire:loading.attr="disabled" wire:target="deleteRole"
+                            class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm hover:bg-red-700 disabled:opacity-60">
+                        <span wire:loading.remove wire:target="deleteRole"><i class="fas fa-trash mr-1"></i> Confirmer</span>
+                        <span wire:loading wire:target="deleteRole"><i class="fas fa-spinner fa-spin mr-1"></i> Suppression...</span>
                     </button>
                 </div>
             </div>

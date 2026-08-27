@@ -11,9 +11,10 @@
                 @if($logoActuel && file_exists(public_path($logoActuel)))
                 <div class="relative group">
                     <img src="{{ asset($logoActuel) }}" alt="Logo" class="max-h-28 max-w-xs object-contain rounded-lg border border-gray-200 shadow-sm">
-                    <button type="button" wire:click="supprimerLogo"
-                        class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white text-xs flex items-center justify-center shadow hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <i class="fas fa-times"></i>
+                    <button type="button" wire:click="supprimerLogo" wire:loading.attr="disabled" wire:target="supprimerLogo"
+                        class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-red-500 text-white text-xs flex items-center justify-center shadow hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity disabled:opacity-60">
+                        <span wire:loading.remove wire:target="supprimerLogo"><i class="fas fa-times"></i></span>
+                        <span wire:loading wire:target="supprimerLogo"><i class="fas fa-spinner fa-spin"></i></span>
                     </button>
                 </div>
                 @endif
@@ -200,9 +201,10 @@
 
         {{-- Bouton Enregistrer --}}
         <div class="flex justify-end">
-            <button type="submit"
-                class="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary/90 shadow-sm transition-colors">
-                <i class="fas fa-save"></i> Enregistrer les paramètres
+            <button type="submit" wire:loading.attr="disabled" wire:target="save"
+                class="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-primary text-white text-sm font-semibold hover:bg-primary/90 shadow-sm transition-colors disabled:opacity-60">
+                <span wire:loading.remove wire:target="save"><i class="fas fa-save"></i> Enregistrer les paramètres</span>
+                <span wire:loading wire:target="save"><i class="fas fa-spinner fa-spin"></i> Enregistrement...</span>
             </button>
         </div>
     </form>

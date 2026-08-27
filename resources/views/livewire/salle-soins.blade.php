@@ -115,16 +115,18 @@
                         @if(!$canCreate && $patient)
                         <div class="flex items-center gap-1.5 flex-shrink-0" wire:click.stop>
                             @if($statut === 'en_attente')
-                            <button wire:click="demarrerSoins({{ $patient->ID }})"
+                            <button wire:click="demarrerSoins({{ $patient->ID }})" wire:loading.attr="disabled" wire:target="demarrerSoins({{ $patient->ID }})"
                                 title="Prendre en charge"
-                                class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-500 text-white hover:bg-blue-600 text-xs font-semibold">
-                                <i class="fas fa-play text-[10px]"></i> Démarrer
+                                class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-blue-500 text-white hover:bg-blue-600 text-xs font-semibold disabled:opacity-60">
+                                <span wire:loading.remove wire:target="demarrerSoins({{ $patient->ID }})"><i class="fas fa-play text-[10px]"></i> Démarrer</span>
+                                <span wire:loading wire:target="demarrerSoins({{ $patient->ID }})"><i class="fas fa-spinner fa-spin text-[10px]"></i></span>
                             </button>
                             @elseif($statut === 'en_cours')
-                            <button wire:click="terminerSoins({{ $patient->ID }})"
+                            <button wire:click="terminerSoins({{ $patient->ID }})" wire:loading.attr="disabled" wire:target="terminerSoins({{ $patient->ID }})"
                                 title="Marquer les soins comme terminés"
-                                class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-green-500 text-white hover:bg-green-600 text-xs font-semibold">
-                                <i class="fas fa-check text-[10px]"></i> Terminer
+                                class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-green-500 text-white hover:bg-green-600 text-xs font-semibold disabled:opacity-60">
+                                <span wire:loading.remove wire:target="terminerSoins({{ $patient->ID }})"><i class="fas fa-check text-[10px]"></i> Terminer</span>
+                                <span wire:loading wire:target="terminerSoins({{ $patient->ID }})"><i class="fas fa-spinner fa-spin text-[10px]"></i></span>
                             </button>
                             @endif
                         </div>
@@ -199,9 +201,10 @@
 
                             {{-- Bouton terminer (infirmier, en_cours) --}}
                             @if(!$canCreate && $statut === 'en_cours')
-                            <button wire:click="terminerSoins({{ $patient->ID }})"
-                                class="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-500 text-white hover:bg-green-600 text-xs font-semibold">
-                                <i class="fas fa-check text-[10px]"></i> Terminer les soins
+                            <button wire:click="terminerSoins({{ $patient->ID }})" wire:loading.attr="disabled" wire:target="terminerSoins({{ $patient->ID }})"
+                                class="ml-auto flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-green-500 text-white hover:bg-green-600 text-xs font-semibold disabled:opacity-60">
+                                <span wire:loading.remove wire:target="terminerSoins({{ $patient->ID }})"><i class="fas fa-check text-[10px]"></i> Terminer les soins</span>
+                                <span wire:loading wire:target="terminerSoins({{ $patient->ID }})"><i class="fas fa-spinner fa-spin text-[10px]"></i></span>
                             </button>
                             @endif
                         </div>

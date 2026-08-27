@@ -52,8 +52,9 @@
                 <input type="number" step="0.01" wire:model.defer="prixRef" class="form-input" placeholder="0.00" min="0">
                 @error('prixRef') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
             </div>
-            <button type="submit" class="btn-primary">
-                <i class="fas fa-save"></i> Enregistrer
+            <button type="submit" wire:loading.attr="disabled" wire:target="save" class="btn-primary disabled:opacity-60">
+                <span wire:loading.remove wire:target="save"><i class="fas fa-save"></i> Enregistrer</span>
+                <span wire:loading wire:target="save"><i class="fas fa-spinner fa-spin"></i> Enregistrement...</span>
             </button>
         </form>
     </div>
@@ -70,9 +71,10 @@
             </select>
         </div>
         @endif
-        <div class="flex-1">
+        <div class="flex-1 relative">
             <input type="text" wire:model="search" class="form-input"
                 placeholder="{{ $activeTab === 'medicaments' ? 'Rechercher un médicament...' : 'Rechercher une analyse / radio...' }}">
+            <span wire:loading wire:target="search" class="absolute right-3 top-1/2 -translate-y-1/2"><i class="fas fa-spinner fa-spin text-gray-400"></i></span>
         </div>
     </div>
 
@@ -130,7 +132,7 @@
                                 <i class="fas fa-plus-circle"></i> Stock
                             </button>
                             @endif
-                            <button wire:click="confirmDelete({{ $medicament->IDMedic }})" class="text-red-600 hover:text-red-800 text-sm font-medium">
+                            <button wire:click="confirmDelete({{ $medicament->IDMedic }})" wire:loading.attr="disabled" wire:target="confirmDelete({{ $medicament->IDMedic }})" class="text-red-600 hover:text-red-800 text-sm font-medium disabled:opacity-60">
                                 <i class="fas fa-trash"></i>
                             </button>
                         </div>
@@ -184,7 +186,10 @@
                     </div>
                     <div class="modal-footer px-0 pb-0">
                         <button type="button" wire:click="closeModal" class="btn-secondary">Annuler</button>
-                        <button type="submit" class="btn-primary">Enregistrer</button>
+                        <button type="submit" wire:loading.attr="disabled" wire:target="save" class="btn-primary disabled:opacity-60">
+                            <span wire:loading.remove wire:target="save">Enregistrer</span>
+                            <span wire:loading wire:target="save"><i class="fas fa-spinner fa-spin mr-1"></i> Enregistrement...</span>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -241,8 +246,9 @@
                     </div>
                     <div class="modal-footer px-0 pb-0">
                         <button type="button" wire:click="closeStockModal" class="btn-secondary">Annuler</button>
-                        <button type="submit" class="btn-primary">
-                            <i class="fas fa-plus mr-1"></i> Ajouter au stock
+                        <button type="submit" wire:loading.attr="disabled" wire:target="saveStock" class="btn-primary disabled:opacity-60">
+                            <span wire:loading.remove wire:target="saveStock"><i class="fas fa-plus mr-1"></i> Ajouter au stock</span>
+                            <span wire:loading wire:target="saveStock"><i class="fas fa-spinner fa-spin mr-1"></i> Enregistrement...</span>
                         </button>
                     </div>
                 </form>
@@ -263,7 +269,10 @@
                 <p class="text-gray-600">Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.</p>
                 <div class="modal-footer px-0 pb-0 mt-6">
                     <button wire:click="$set('showDeleteModal', false)" class="btn-secondary">Annuler</button>
-                    <button wire:click="deleteMedicament" class="btn-danger">Supprimer</button>
+                    <button wire:click="deleteMedicament" wire:loading.attr="disabled" wire:target="deleteMedicament" class="btn-danger disabled:opacity-60">
+                        <span wire:loading.remove wire:target="deleteMedicament">Supprimer</span>
+                        <span wire:loading wire:target="deleteMedicament"><i class="fas fa-spinner fa-spin mr-1"></i> Suppression...</span>
+                    </button>
                 </div>
             </div>
         </div>

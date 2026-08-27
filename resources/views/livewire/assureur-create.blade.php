@@ -18,7 +18,10 @@
             @error('DtConvention') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
         </div>
         <div class="flex justify-end">
-            <button type="submit" class="px-6 py-3 bg-primary text-white rounded hover:bg-primary-dark text-lg font-bold">Enregistrer</button>
+            <button type="submit" wire:loading.attr="disabled" wire:target="save" class="px-6 py-3 bg-primary text-white rounded hover:bg-primary-dark text-lg font-bold disabled:opacity-60">
+                <span wire:loading.remove wire:target="save">Enregistrer</span>
+                <span wire:loading wire:target="save"><i class="fas fa-spinner fa-spin mr-1"></i> Enregistrement...</span>
+            </button>
         </div>
     </form>
 </div> 

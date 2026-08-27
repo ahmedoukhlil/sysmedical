@@ -234,15 +234,15 @@
                                                 @if($canManageRdv)
                                                     <div class="flex items-center justify-center space-x-2">
                                                         @if($rdv->rdvConfirmer !== 'confirmé')
-                                                            <button wire:click="confirmerRendezVous({{ $rdv->IDRdv }})" class="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" title="Confirmer le rendez-vous">
-                                                                <i class="fas fa-check mr-1"></i>
-                                                                Confirmer
+                                                            <button wire:click="confirmerRendezVous({{ $rdv->IDRdv }})" wire:loading.attr="disabled" wire:target="confirmerRendezVous({{ $rdv->IDRdv }})" class="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500 disabled:opacity-60" title="Confirmer le rendez-vous">
+                                                                <span wire:loading.remove wire:target="confirmerRendezVous({{ $rdv->IDRdv }})"><i class="fas fa-check mr-1"></i>Confirmer</span>
+                                                                <span wire:loading wire:target="confirmerRendezVous({{ $rdv->IDRdv }})"><i class="fas fa-spinner fa-spin mr-1"></i>Confirmation...</span>
                                                             </button>
                                                         @endif
                                                         @if($rdv->rdvConfirmer !== 'annulé')
-                                                            <button wire:click="annulerRendezVous({{ $rdv->IDRdv }})" class="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500" title="Annuler le rendez-vous">
-                                                                <i class="fas fa-times mr-1"></i>
-                                                                Annuler
+                                                            <button wire:click="annulerRendezVous({{ $rdv->IDRdv }})" wire:loading.attr="disabled" wire:target="annulerRendezVous({{ $rdv->IDRdv }})" class="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 disabled:opacity-60" title="Annuler le rendez-vous">
+                                                                <span wire:loading.remove wire:target="annulerRendezVous({{ $rdv->IDRdv }})"><i class="fas fa-times mr-1"></i>Annuler</span>
+                                                                <span wire:loading wire:target="annulerRendezVous({{ $rdv->IDRdv }})"><i class="fas fa-spinner fa-spin mr-1"></i>Annulation...</span>
                                                             </button>
                                                         @endif
                                                     </div>
@@ -277,9 +277,9 @@
                         <!-- Bouton d'annulation en masse -->
                         @if($canManageRdv && count($selectedRendezVous) > 0)
                             <div class="mt-6">
-                                <button wire:click="annulerSelection" class="w-full md:w-auto px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors flex items-center justify-center">
-                                    <i class="fas fa-times mr-2"></i>
-                                    Annuler la sélection
+                                <button wire:click="annulerSelection" wire:loading.attr="disabled" wire:target="annulerSelection" class="w-full md:w-auto px-6 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 transition-colors flex items-center justify-center disabled:opacity-60">
+                                    <span wire:loading.remove wire:target="annulerSelection"><i class="fas fa-times mr-2"></i>Annuler la sélection</span>
+                                    <span wire:loading wire:target="annulerSelection"><i class="fas fa-spinner fa-spin mr-2"></i>Annulation...</span>
                                 </button>
                             </div>
                         @endif

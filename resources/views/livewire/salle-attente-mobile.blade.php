@@ -53,14 +53,16 @@
                             @if($patient)
                                 <div class="flex gap-2 mt-2">
                                     @if(!$enCours)
-                                        <button wire:click="demarrerRdv({{ $rdv->IDRdv }})"
-                                            class="flex-1 py-2 rounded-lg bg-primary text-white text-xs font-semibold">
-                                            Démarrer
+                                        <button wire:click="demarrerRdv({{ $rdv->IDRdv }})" wire:loading.attr="disabled" wire:target="demarrerRdv({{ $rdv->IDRdv }})"
+                                            class="flex-1 py-2 rounded-lg bg-primary text-white text-xs font-semibold disabled:opacity-60">
+                                            <span wire:loading.remove wire:target="demarrerRdv({{ $rdv->IDRdv }})">Démarrer</span>
+                                            <span wire:loading wire:target="demarrerRdv({{ $rdv->IDRdv }})"><i class="fas fa-spinner fa-spin"></i></span>
                                         </button>
                                     @else
-                                        <button wire:click="terminerRdv({{ $rdv->IDRdv }})"
-                                            class="flex-1 py-2 rounded-lg bg-green-500 text-white text-xs font-semibold">
-                                            Terminer
+                                        <button wire:click="terminerRdv({{ $rdv->IDRdv }})" wire:loading.attr="disabled" wire:target="terminerRdv({{ $rdv->IDRdv }})"
+                                            class="flex-1 py-2 rounded-lg bg-green-500 text-white text-xs font-semibold disabled:opacity-60">
+                                            <span wire:loading.remove wire:target="terminerRdv({{ $rdv->IDRdv }})">Terminer</span>
+                                            <span wire:loading wire:target="terminerRdv({{ $rdv->IDRdv }})"><i class="fas fa-spinner fa-spin"></i></span>
                                         </button>
                                     @endif
                                 </div>

@@ -117,10 +117,11 @@
 
                                 {{-- Bouton FIN (uniquement si en cours) --}}
                                 @if($enCours)
-                                <button wire:click.stop="terminerRdv({{ $rdv->IDRdv }})"
+                                <button wire:click.stop="terminerRdv({{ $rdv->IDRdv }})" wire:loading.attr="disabled" wire:target="terminerRdv({{ $rdv->IDRdv }})"
                                     title="Terminer la consultation"
-                                    class="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-green-500 text-white hover:bg-green-600 text-xs font-semibold">
-                                    <i class="fas fa-check text-[10px]"></i> Fin
+                                    class="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-green-500 text-white hover:bg-green-600 text-xs font-semibold disabled:opacity-60">
+                                    <span wire:loading.remove wire:target="terminerRdv({{ $rdv->IDRdv }})"><i class="fas fa-check text-[10px]"></i> Fin</span>
+                                    <span wire:loading wire:target="terminerRdv({{ $rdv->IDRdv }})"><i class="fas fa-spinner fa-spin text-[10px]"></i></span>
                                 </button>
                                 @endif
 

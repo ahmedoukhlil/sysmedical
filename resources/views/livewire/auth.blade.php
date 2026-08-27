@@ -18,6 +18,9 @@
             <input wire:model="remember" type="checkbox" class="form-check-input" id="remember">
             <label class="form-check-label" for="remember">Se souvenir de moi</label>
         </div>
-        <button type="submit" class="btn btn-primary">Se connecter</button>
+        <button type="submit" wire:loading.attr="disabled" wire:target="login" class="btn btn-primary disabled:opacity-60">
+            <span wire:loading.remove wire:target="login">Se connecter</span>
+            <span wire:loading wire:target="login"><i class="fas fa-spinner fa-spin mr-1"></i> Connexion...</span>
+        </button>
     </form>
 </div>

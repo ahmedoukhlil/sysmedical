@@ -47,12 +47,14 @@
                             <div class="flex items-center gap-2">
                                 <x-status-badge :status="$rdv->rdvConfirmer" />
                                 @if(!in_array($rdv->rdvConfirmer, ['En cours', 'Terminé', 'terminé']))
-                                    <button wire:click="demarrerRdv({{ $rdv->IDRdv }})" class="text-xs px-2 py-1 rounded bg-green-100 text-green-700">
-                                        Démarrer
+                                    <button wire:click="demarrerRdv({{ $rdv->IDRdv }})" wire:loading.attr="disabled" wire:target="demarrerRdv({{ $rdv->IDRdv }})" class="text-xs px-2 py-1 rounded bg-green-100 text-green-700 disabled:opacity-60">
+                                        <span wire:loading.remove wire:target="demarrerRdv({{ $rdv->IDRdv }})">Démarrer</span>
+                                        <span wire:loading wire:target="demarrerRdv({{ $rdv->IDRdv }})"><i class="fas fa-spinner fa-spin"></i></span>
                                     </button>
                                 @elseif($rdv->rdvConfirmer === 'En cours')
-                                    <button wire:click="terminerRdv({{ $rdv->IDRdv }})" class="text-xs px-2 py-1 rounded bg-gray-100 text-gray-700">
-                                        Terminer
+                                    <button wire:click="terminerRdv({{ $rdv->IDRdv }})" wire:loading.attr="disabled" wire:target="terminerRdv({{ $rdv->IDRdv }})" class="text-xs px-2 py-1 rounded bg-gray-100 text-gray-700 disabled:opacity-60">
+                                        <span wire:loading.remove wire:target="terminerRdv({{ $rdv->IDRdv }})">Terminer</span>
+                                        <span wire:loading wire:target="terminerRdv({{ $rdv->IDRdv }})"><i class="fas fa-spinner fa-spin"></i></span>
                                     </button>
                                 @endif
                             </div>

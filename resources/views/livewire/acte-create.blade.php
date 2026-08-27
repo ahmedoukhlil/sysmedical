@@ -56,7 +56,10 @@
         </div>
 
         <div class="flex justify-end mt-6">
-            <button type="submit" class="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 text-lg font-bold">Enregistrer</button>
+            <button type="submit" wire:loading.attr="disabled" wire:target="save" class="px-6 py-3 bg-blue-600 text-white rounded hover:bg-blue-700 text-lg font-bold disabled:opacity-60">
+                <span wire:loading.remove wire:target="save">Enregistrer</span>
+                <span wire:loading wire:target="save"><i class="fas fa-spinner fa-spin mr-1"></i> Enregistrement...</span>
+            </button>
         </div>
     </form>
 </div> 

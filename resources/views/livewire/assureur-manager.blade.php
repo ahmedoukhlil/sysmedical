@@ -22,15 +22,17 @@
                 <input type="number" step="0.01" wire:model.defer="tauxdePEC" class="form-input" placeholder="0.00">
                 @error('tauxdePEC') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
             </div>
-            <button type="submit" class="btn-primary shrink-0">
-                <i class="fas fa-save"></i> Enregistrer
+            <button type="submit" wire:loading.attr="disabled" wire:target="save" class="btn-primary shrink-0 disabled:opacity-60">
+                <span wire:loading.remove wire:target="save"><i class="fas fa-save"></i> Enregistrer</span>
+                <span wire:loading wire:target="save"><i class="fas fa-spinner fa-spin"></i> Enregistrement...</span>
             </button>
         </form>
     </div>
 
     {{-- Recherche --}}
-    <div class="mb-4">
+    <div class="mb-4 relative">
         <input type="text" wire:model="search" class="form-input" placeholder="Rechercher un assureur...">
+        <span wire:loading wire:target="search" class="absolute right-3 top-1/2 -translate-y-1/2"><i class="fas fa-spinner fa-spin text-gray-400"></i></span>
     </div>
 
     {{-- Tableau --}}
@@ -91,7 +93,10 @@
                     </div>
                     <div class="modal-footer px-0 pb-0">
                         <button type="button" wire:click="closeModal" class="btn-secondary">Annuler</button>
-                        <button type="submit" class="btn-primary">Enregistrer</button>
+                        <button type="submit" wire:loading.attr="disabled" wire:target="save" class="btn-primary disabled:opacity-60">
+                            <span wire:loading.remove wire:target="save">Enregistrer</span>
+                            <span wire:loading wire:target="save"><i class="fas fa-spinner fa-spin mr-1"></i> Enregistrement...</span>
+                        </button>
                     </div>
                 </form>
             </div>
@@ -111,7 +116,10 @@
                 <p class="text-gray-600">Êtes-vous sûr de vouloir supprimer cet assureur ? Cette action est irréversible.</p>
                 <div class="modal-footer px-0 pb-0 mt-6">
                     <button wire:click="$set('showDeleteModal', false)" class="btn-secondary">Annuler</button>
-                    <button wire:click="deleteAssureur" class="btn-danger">Supprimer</button>
+                    <button wire:click="deleteAssureur" wire:loading.attr="disabled" wire:target="deleteAssureur" class="btn-danger disabled:opacity-60">
+                        <span wire:loading.remove wire:target="deleteAssureur">Supprimer</span>
+                        <span wire:loading wire:target="deleteAssureur"><i class="fas fa-spinner fa-spin mr-1"></i> Suppression...</span>
+                    </button>
                 </div>
             </div>
         </div>

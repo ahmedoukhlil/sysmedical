@@ -415,8 +415,9 @@
 
                 <div class="flex justify-end gap-3 pt-2">
                     <button wire:click="closeAjustementModal" class="btn-secondary">Annuler</button>
-                    <button wire:click="enregistrerAjustement" class="btn-primary">
-                        <i class="fas fa-save mr-1"></i> Enregistrer l'ajustement
+                    <button wire:click="enregistrerAjustement" wire:loading.attr="disabled" wire:target="enregistrerAjustement" class="btn-primary disabled:opacity-60">
+                        <span wire:loading.remove wire:target="enregistrerAjustement"><i class="fas fa-save mr-1"></i> Enregistrer l'ajustement</span>
+                        <span wire:loading wire:target="enregistrerAjustement"><i class="fas fa-spinner fa-spin mr-1"></i> Enregistrement...</span>
                     </button>
                 </div>
             </div>
@@ -515,8 +516,9 @@
 
                     <div class="modal-footer px-0 pb-0">
                         <button type="button" wire:click="closeEntreeModal" class="btn-secondary">Annuler</button>
-                        <button type="submit" class="btn-primary">
-                            <i class="fas fa-plus-circle"></i> Enregistrer l'entrée
+                        <button type="submit" wire:loading.attr="disabled" wire:target="enregistrerEntree" class="btn-primary disabled:opacity-60">
+                            <span wire:loading.remove wire:target="enregistrerEntree"><i class="fas fa-plus-circle"></i> Enregistrer l'entrée</span>
+                            <span wire:loading wire:target="enregistrerEntree"><i class="fas fa-spinner fa-spin"></i> Enregistrement...</span>
                         </button>
                     </div>
                 </form>

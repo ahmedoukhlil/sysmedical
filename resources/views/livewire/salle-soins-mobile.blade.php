@@ -40,14 +40,16 @@
                     @if(!$canCreate && $patient)
                         <div class="flex gap-2 px-3 pb-3">
                             @if($statut === 'en_attente')
-                                <button wire:click="demarrerSoins({{ $patient->ID }})"
-                                    class="flex-1 py-2 rounded-lg bg-blue-500 text-white text-xs font-semibold">
-                                    Démarrer
+                                <button wire:click="demarrerSoins({{ $patient->ID }})" wire:loading.attr="disabled" wire:target="demarrerSoins({{ $patient->ID }})"
+                                    class="flex-1 py-2 rounded-lg bg-blue-500 text-white text-xs font-semibold disabled:opacity-60">
+                                    <span wire:loading.remove wire:target="demarrerSoins({{ $patient->ID }})">Démarrer</span>
+                                    <span wire:loading wire:target="demarrerSoins({{ $patient->ID }})"><i class="fas fa-spinner fa-spin"></i></span>
                                 </button>
                             @elseif($statut === 'en_cours')
-                                <button wire:click="terminerSoins({{ $patient->ID }})"
-                                    class="flex-1 py-2 rounded-lg bg-green-500 text-white text-xs font-semibold">
-                                    Terminer
+                                <button wire:click="terminerSoins({{ $patient->ID }})" wire:loading.attr="disabled" wire:target="terminerSoins({{ $patient->ID }})"
+                                    class="flex-1 py-2 rounded-lg bg-green-500 text-white text-xs font-semibold disabled:opacity-60">
+                                    <span wire:loading.remove wire:target="terminerSoins({{ $patient->ID }})">Terminer</span>
+                                    <span wire:loading wire:target="terminerSoins({{ $patient->ID }})"><i class="fas fa-spinner fa-spin"></i></span>
                                 </button>
                             @endif
                         </div>

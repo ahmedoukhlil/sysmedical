@@ -77,8 +77,9 @@
                 @if($isEditing)
                 <button type="button" wire:click="cancelEdit" class="btn-secondary">Annuler</button>
                 @endif
-                <button type="submit" class="btn-primary">
-                    <i class="fas fa-save mr-1"></i> {{ $isEditing ? 'Modifier' : 'Ajouter' }}
+                <button type="submit" wire:loading.attr="disabled" wire:target="save" class="btn-primary disabled:opacity-60">
+                    <span wire:loading.remove wire:target="save"><i class="fas fa-save mr-1"></i> {{ $isEditing ? 'Modifier' : 'Ajouter' }}</span>
+                    <span wire:loading wire:target="save"><i class="fas fa-spinner fa-spin mr-1"></i> Enregistrement...</span>
                 </button>
             </div>
         </form>
@@ -109,7 +110,7 @@
             </div>
         </div>
         <div class="mt-3 flex justify-end">
-            <button wire:click="resetFilters" class="btn-secondary text-sm">
+            <button wire:click="resetFilters" wire:loading.attr="disabled" wire:target="resetFilters" class="btn-secondary text-sm disabled:opacity-60">
                 <i class="fas fa-undo mr-1"></i> Réinitialiser
             </button>
         </div>

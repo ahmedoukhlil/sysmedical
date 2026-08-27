@@ -116,17 +116,21 @@
                             <td class="px-4 py-3 whitespace-nowrap text-center">
                                 @if($canManageRdv)
                                     <div class="flex space-x-1">
-                                        <button type="button" wire:click="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Confirmé')" class="inline-flex items-center px-2 py-1 rounded bg-blue-500 text-white text-xs font-semibold hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400" title="Patient présent au cabinet">
-                                            <i class="fas fa-user-check"></i>
+                                        <button type="button" wire:click="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Confirmé')" wire:loading.attr="disabled" wire:target="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Confirmé')" class="inline-flex items-center px-2 py-1 rounded bg-blue-500 text-white text-xs font-semibold hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:opacity-60" title="Patient présent au cabinet">
+                                            <span wire:loading.remove wire:target="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Confirmé')"><i class="fas fa-user-check"></i></span>
+                                            <span wire:loading wire:target="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Confirmé')"><i class="fas fa-spinner fa-spin"></i></span>
                                         </button>
-                                        <button type="button" wire:click="changerStatutRendezVous({{ $rdv->IDRdv }}, 'En cours')" class="inline-flex items-center px-2 py-1 rounded bg-green-500 text-white text-xs font-semibold hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400" title="Avec le médecin">
-                                            <i class="fas fa-user-md"></i>
+                                        <button type="button" wire:click="changerStatutRendezVous({{ $rdv->IDRdv }}, 'En cours')" wire:loading.attr="disabled" wire:target="changerStatutRendezVous({{ $rdv->IDRdv }}, 'En cours')" class="inline-flex items-center px-2 py-1 rounded bg-green-500 text-white text-xs font-semibold hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 disabled:opacity-60" title="Avec le médecin">
+                                            <span wire:loading.remove wire:target="changerStatutRendezVous({{ $rdv->IDRdv }}, 'En cours')"><i class="fas fa-user-md"></i></span>
+                                            <span wire:loading wire:target="changerStatutRendezVous({{ $rdv->IDRdv }}, 'En cours')"><i class="fas fa-spinner fa-spin"></i></span>
                                         </button>
-                                        <button type="button" wire:click="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Terminé')" class="inline-flex items-center px-2 py-1 rounded bg-gray-500 text-white text-xs font-semibold hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400" title="Terminé">
-                                            <i class="fas fa-check-double"></i>
+                                        <button type="button" wire:click="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Terminé')" wire:loading.attr="disabled" wire:target="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Terminé')" class="inline-flex items-center px-2 py-1 rounded bg-gray-500 text-white text-xs font-semibold hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-400 disabled:opacity-60" title="Terminé">
+                                            <span wire:loading.remove wire:target="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Terminé')"><i class="fas fa-check-double"></i></span>
+                                            <span wire:loading wire:target="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Terminé')"><i class="fas fa-spinner fa-spin"></i></span>
                                         </button>
-                                        <button type="button" wire:click="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Annulé')" class="inline-flex items-center px-2 py-1 rounded bg-red-500 text-white text-xs font-semibold hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400" title="Annulé">
-                                            <i class="fas fa-times"></i>
+                                        <button type="button" wire:click="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Annulé')" wire:loading.attr="disabled" wire:target="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Annulé')" class="inline-flex items-center px-2 py-1 rounded bg-red-500 text-white text-xs font-semibold hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400 disabled:opacity-60" title="Annulé">
+                                            <span wire:loading.remove wire:target="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Annulé')"><i class="fas fa-times"></i></span>
+                                            <span wire:loading wire:target="changerStatutRendezVous({{ $rdv->IDRdv }}, 'Annulé')"><i class="fas fa-spinner fa-spin"></i></span>
                                         </button>
                                     </div>
                                 @else

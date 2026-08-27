@@ -12,8 +12,9 @@
 
                         <!-- Bouton d'enregistrement -->
                         <div class="mt-6 flex justify-end">
-                            <button type="submit" class="px-4 py-2 bg-primary text-white rounded hover:bg-primary hover:text-white">
-                                Enregistrer la consultation
+                            <button type="submit" wire:loading.attr="disabled" wire:target="enregistrerConsultation" class="px-4 py-2 bg-primary text-white rounded hover:bg-primary hover:text-white disabled:opacity-60">
+                                <span wire:loading.remove wire:target="enregistrerConsultation">Enregistrer la consultation</span>
+                                <span wire:loading wire:target="enregistrerConsultation"><i class="fas fa-spinner fa-spin mr-1"></i> Enregistrement...</span>
                             </button>
                         </div>
                     </form>
