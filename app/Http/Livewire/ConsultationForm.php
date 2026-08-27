@@ -140,9 +140,7 @@ class ConsultationForm extends Component
     {
         // Utiliser le cache pour les médecins
         $this->medecins = cache()->remember('active_medecins', 3600, function() {
-            return Medecin::where('Masquer', 0)
-                         ->orderBy('Nom')
-                         ->get();
+            return Medecin::orderBy('Nom')->get();
         });
     }
 
