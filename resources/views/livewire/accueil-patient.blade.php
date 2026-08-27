@@ -18,6 +18,17 @@
         <i class="fas fa-staff-snake text-4xl md:text-5xl opacity-20 flex-shrink-0"></i>
     </div>
 
+    {{-- Alerte : rôle sans aucune permission configurée (page autrement vide sans indice) --}}
+    @if(empty($u->getRolePermissions()))
+    <div class="mb-4 md:mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-800 flex items-start gap-3">
+        <i class="fas fa-triangle-exclamation text-amber-500 mt-0.5"></i>
+        <div>
+            <p class="font-semibold">Aucune permission n'est configurée pour votre rôle.</p>
+            <p class="text-sm text-amber-700">Les fonctionnalités de cette page resteront masquées tant qu'un administrateur n'aura pas attribué de permissions à votre profil.</p>
+        </div>
+    </div>
+    @endif
+
     {{-- Recherche patient + actions rapides --}}
     @if($u->hasPermission('patient.view'))
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-3 md:p-5 flex flex-col lg:flex-row items-stretch lg:items-center gap-3 mb-4 md:mb-6">
