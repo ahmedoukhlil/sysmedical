@@ -37,14 +37,14 @@
         </div>
         <div class="flex gap-2 flex-shrink-0">
             @if($u->hasPermission('patient.view'))
-            <button wire:click="openGestionPatientsModal" wire:loading.attr="disabled" wire:target="openGestionPatientsModal" class="btn-secondary text-sm px-4 py-2.5 justify-center whitespace-nowrap">
+            <button wire:click="openGestionPatientsModal" wire:loading.attr="disabled" wire:target="openGestionPatientsModal" title="Voir, ajouter ou modifier les patients du cabinet" class="btn-secondary text-sm px-4 py-2.5 justify-center whitespace-nowrap">
                 <i class="fas fa-users" wire:loading.class="opacity-0" wire:target="openGestionPatientsModal"></i>
                 <span class="spinner spinner-dark" wire:loading wire:target="openGestionPatientsModal"></span>
                 Liste patients
             </button>
             @endif
             @if($u->hasPermission('rendez-vous.view'))
-            <button wire:click="showCreateRdv" wire:loading.attr="disabled" wire:target="showCreateRdv" class="btn-secondary text-sm px-4 py-2.5 justify-center whitespace-nowrap relative">
+            <button wire:click="showCreateRdv" wire:loading.attr="disabled" wire:target="showCreateRdv" title="Planifier un nouveau rendez-vous" class="btn-secondary text-sm px-4 py-2.5 justify-center whitespace-nowrap relative">
                 <i class="fas fa-calendar-plus" wire:loading.class="opacity-0" wire:target="showCreateRdv"></i>
                 <span class="spinner spinner-dark" wire:loading wire:target="showCreateRdv"></span>
                 Gestion RDV
@@ -65,7 +65,7 @@
         {{-- Gestion du patient (visible si accès patient) --}}
         @if($u->hasPermission('patient.view'))
         <button wire:click="togglePatientMenu" wire:loading.attr="disabled" wire:target="togglePatientMenu"
-            @if(!$selectedPatient) disabled title="Sélectionnez un patient d'abord" @endif
+            @if(!$selectedPatient) disabled title="Sélectionnez un patient d'abord" @else title="Consultation, facture, rendez-vous et dossier du patient sélectionné" @endif
             class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center
                 {{ $showPatientMenu ? '!bg-primary !text-white !border-primary' : '' }}
                 {{ !$selectedPatient ? 'opacity-50 cursor-not-allowed' : '' }}">
@@ -77,7 +77,7 @@
 
         {{-- Caisse Paie --}}
         @if($u->hasPermission('caisse-operations.view'))
-        <button wire:click="showCaisseOperations" wire:loading.attr="disabled" wire:target="showCaisseOperations" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
+        <button wire:click="showCaisseOperations" wire:loading.attr="disabled" wire:target="showCaisseOperations" title="Historique des encaissements et paiements de la caisse" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
             <i class="fas fa-cash-register" wire:loading.class="opacity-0" wire:target="showCaisseOperations"></i>
             <span class="spinner spinner-dark" wire:loading wire:target="showCaisseOperations"></span>
             <span>Caisse Paie</span>
@@ -86,7 +86,7 @@
 
         {{-- Dépenses --}}
         @if($u->hasPermission('depenses.view'))
-        <button wire:click="openDepenses" wire:loading.attr="disabled" wire:target="openDepenses" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
+        <button wire:click="openDepenses" wire:loading.attr="disabled" wire:target="openDepenses" title="Enregistrer les dépenses du cabinet (loyer, fournitures, etc.)" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
             <i class="fas fa-receipt" wire:loading.class="opacity-0" wire:target="openDepenses"></i>
             <span class="spinner spinner-dark" wire:loading wire:target="openDepenses"></span>
             <span>Dépenses</span>
@@ -95,7 +95,7 @@
 
         {{-- Statistiques --}}
         @if($u->hasPermission('statistiques.view'))
-        <button wire:click="showStatistiques" wire:loading.attr="disabled" wire:target="showStatistiques" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
+        <button wire:click="showStatistiques" wire:loading.attr="disabled" wire:target="showStatistiques" title="Chiffres et rapports d'activité du cabinet" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
             <i class="fas fa-chart-bar" wire:loading.class="opacity-0" wire:target="showStatistiques"></i>
             <span class="spinner spinner-dark" wire:loading wire:target="showStatistiques"></span>
             <span>Statistiques</span>
@@ -105,7 +105,7 @@
         {{-- Salle d'attente --}}
         @if($u->hasPermission('salle-attente.view'))
         <div class="relative">
-            <button wire:click="ouvrirSalleAttente" wire:loading.attr="disabled" wire:target="ouvrirSalleAttente"
+            <button wire:click="ouvrirSalleAttente" wire:loading.attr="disabled" wire:target="ouvrirSalleAttente" title="Voir les patients en attente et démarrer une consultation"
                 class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center
                     {{ $showSalleAttenteModal ? '!bg-primary !text-white !border-primary' : '' }}">
                 <i class="fas fa-couch" wire:loading.class="opacity-0" wire:target="ouvrirSalleAttente"></i>
@@ -122,7 +122,7 @@
         {{-- Salle de soins (infirmiers) --}}
         @if($u->hasPermission('salle-soins.view'))
         <div class="relative">
-            <button wire:click="ouvrirSalleSoins" wire:loading.attr="disabled" wire:target="ouvrirSalleSoins"
+            <button wire:click="ouvrirSalleSoins" wire:loading.attr="disabled" wire:target="ouvrirSalleSoins" title="Patients en cours de soins avec le médecin"
                 class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center
                     {{ $showSalleSoinsModal ? '!bg-primary !text-white !border-primary' : '' }}">
                 <i class="fas fa-syringe" wire:loading.class="opacity-0" wire:target="ouvrirSalleSoins"></i>
@@ -138,7 +138,7 @@
 
         {{-- Gestion du cabinet --}}
         @if($u->hasAnyPermission(['medecin.view','assureur.view','act.view','stock.view','pharmacie.view','user.view','medecin.manage']))
-        <button wire:click="toggleCabinetMenu" wire:loading.attr="disabled" wire:target="toggleCabinetMenu"
+        <button wire:click="toggleCabinetMenu" wire:loading.attr="disabled" wire:target="toggleCabinetMenu" title="Réglages du cabinet : médecins, assurances, actes, médicaments, utilisateurs"
             class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center
                 {{ $showCabinetMenu ? '!bg-primary !text-white !border-primary' : '' }}">
             <i class="fas fa-cogs" wire:loading.class="opacity-0" wire:target="toggleCabinetMenu"></i>
@@ -154,7 +154,7 @@
         <div class="patient-submenu flex flex-wrap gap-2 justify-center py-3 px-3 md:px-4 bg-blue-50/60 border border-primary/20 rounded-xl show" data-menu="patient">
 
             @if($u->hasPermission('consultation.view'))
-            <button wire:click="showConsultation" wire:loading.attr="disabled" wire:target="showConsultation" type="button" class="patient-nav-button nav-button flex items-center gap-2 px-4 py-2.5 min-w-[9rem] border-2 rounded-xl text-sm font-semibold justify-center">
+            <button wire:click="showConsultation" wire:loading.attr="disabled" wire:target="showConsultation" type="button" title="Démarrer ou consulter une consultation médicale" class="patient-nav-button nav-button flex items-center gap-2 px-4 py-2.5 min-w-[9rem] border-2 rounded-xl text-sm font-semibold justify-center">
                 <i class="fas fa-stethoscope" wire:loading.class="opacity-0" wire:target="showConsultation"></i>
                 <span class="spinner spinner-dark" wire:loading wire:target="showConsultation"></span>
                 <span>Consultation</span>
@@ -162,7 +162,7 @@
             @endif
 
             @if($u->hasPermission('facture.view') || $u->hasPermission('facture.view.own'))
-            <button wire:click="showReglement" wire:loading.attr="disabled" wire:target="showReglement" type="button" class="patient-nav-button nav-button flex items-center gap-2 px-4 py-2.5 min-w-[9rem] border-2 rounded-xl text-sm font-semibold justify-center">
+            <button wire:click="showReglement" wire:loading.attr="disabled" wire:target="showReglement" type="button" title="Voir et encaisser les factures du patient" class="patient-nav-button nav-button flex items-center gap-2 px-4 py-2.5 min-w-[9rem] border-2 rounded-xl text-sm font-semibold justify-center">
                 <i class="fas fa-file-invoice-dollar" wire:loading.class="opacity-0" wire:target="showReglement"></i>
                 <span class="spinner spinner-dark" wire:loading wire:target="showReglement"></span>
                 <span>Facture / Devis</span>
@@ -170,7 +170,7 @@
             @endif
 
             @if($u->hasPermission('rendez-vous.view'))
-            <button wire:click="showRendezVous" wire:loading.attr="disabled" wire:target="showRendezVous" type="button" class="patient-nav-button nav-button flex items-center gap-2 px-4 py-2.5 min-w-[9rem] border-2 rounded-xl text-sm font-semibold justify-center">
+            <button wire:click="showRendezVous" wire:loading.attr="disabled" wire:target="showRendezVous" type="button" title="Voir ou planifier les rendez-vous du patient" class="patient-nav-button nav-button flex items-center gap-2 px-4 py-2.5 min-w-[9rem] border-2 rounded-xl text-sm font-semibold justify-center">
                 <i class="fas fa-calendar-check" wire:loading.class="opacity-0" wire:target="showRendezVous"></i>
                 <span class="spinner spinner-dark" wire:loading wire:target="showRendezVous"></span>
                 <span>Rendez-vous</span>
@@ -178,12 +178,12 @@
             @endif
 
             @if($u->hasPermission('ordonnance.create'))
-            <button wire:click="ouvrirUrgenceModal" wire:loading.attr="disabled" wire:target="ouvrirUrgenceModal" type="button" class="patient-nav-button nav-button flex items-center gap-2 px-4 py-2.5 min-w-[9rem] border-2 rounded-xl text-sm font-semibold justify-center">
+            <button wire:click="ouvrirUrgenceModal" wire:loading.attr="disabled" wire:target="ouvrirUrgenceModal" type="button" title="Prescrire un traitement d'urgence immédiat" class="patient-nav-button nav-button flex items-center gap-2 px-4 py-2.5 min-w-[9rem] border-2 rounded-xl text-sm font-semibold justify-center">
                 <i class="fas fa-bolt" wire:loading.class="opacity-0" wire:target="ouvrirUrgenceModal"></i>
                 <span class="spinner spinner-dark" wire:loading wire:target="ouvrirUrgenceModal"></span>
                 <span>Trt. Urgence</span>
             </button>
-            <button wire:click="ouvrirOrdonnanceModal" wire:loading.attr="disabled" wire:target="ouvrirOrdonnanceModal" type="button" class="patient-nav-button nav-button flex items-center gap-2 px-4 py-2.5 min-w-[9rem] border-2 rounded-xl text-sm font-semibold justify-center">
+            <button wire:click="ouvrirOrdonnanceModal" wire:loading.attr="disabled" wire:target="ouvrirOrdonnanceModal" type="button" title="Rédiger ou consulter les ordonnances du patient" class="patient-nav-button nav-button flex items-center gap-2 px-4 py-2.5 min-w-[9rem] border-2 rounded-xl text-sm font-semibold justify-center">
                 <i class="fas fa-file-prescription" wire:loading.class="opacity-0" wire:target="ouvrirOrdonnanceModal"></i>
                 <span class="spinner spinner-dark" wire:loading wire:target="ouvrirOrdonnanceModal"></span>
                 <span>Ordonnances</span>
@@ -191,7 +191,7 @@
             @endif
 
             @if($u->hasPermission('dossier.view'))
-            <button wire:click="showDossierMedical" wire:loading.attr="disabled" wire:target="showDossierMedical" type="button" class="patient-nav-button nav-button flex items-center gap-2 px-4 py-2.5 min-w-[9rem] border-2 rounded-xl text-sm font-semibold justify-center">
+            <button wire:click="showDossierMedical" wire:loading.attr="disabled" wire:target="showDossierMedical" type="button" title="Historique médical complet du patient" class="patient-nav-button nav-button flex items-center gap-2 px-4 py-2.5 min-w-[9rem] border-2 rounded-xl text-sm font-semibold justify-center">
                 <i class="fas fa-folder-open" wire:loading.class="opacity-0" wire:target="showDossierMedical"></i>
                 <span class="spinner spinner-dark" wire:loading wire:target="showDossierMedical"></span>
                 <span>Dossier médical</span>
@@ -199,7 +199,7 @@
             @endif
 
             @if($u->hasPermission('consultation.create'))
-            <button wire:click="ouvrirActesPatientModal" wire:loading.attr="disabled" wire:target="ouvrirActesPatientModal" type="button" class="patient-nav-button nav-button flex items-center gap-2 px-4 py-2.5 min-w-[9rem] border-2 rounded-xl text-sm font-semibold justify-center">
+            <button wire:click="ouvrirActesPatientModal" wire:loading.attr="disabled" wire:target="ouvrirActesPatientModal" type="button" title="Actes et soins prévus pour ce patient aujourd'hui" class="patient-nav-button nav-button flex items-center gap-2 px-4 py-2.5 min-w-[9rem] border-2 rounded-xl text-sm font-semibold justify-center">
                 <i class="fas fa-procedures" wire:loading.class="opacity-0" wire:target="ouvrirActesPatientModal"></i>
                 <span class="spinner spinner-dark" wire:loading wire:target="ouvrirActesPatientModal"></span>
                 <span>Actes à effectuer</span>
@@ -215,7 +215,7 @@
         <div class="flex flex-wrap gap-2 justify-center py-3 px-3 md:px-4 bg-gray-50 border border-gray-200 rounded-xl" data-menu="cabinet">
 
             @if($u->hasPermission('assureur.view'))
-            <button wire:click="ouvrirAssureurModal" wire:loading.attr="disabled" wire:target="ouvrirAssureurModal" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
+            <button wire:click="ouvrirAssureurModal" wire:loading.attr="disabled" wire:target="ouvrirAssureurModal" title="Liste des compagnies d'assurance et taux de prise en charge" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
                 <i class="fas fa-shield-alt" wire:loading.class="opacity-0" wire:target="ouvrirAssureurModal"></i>
                 <span class="spinner spinner-dark" wire:loading wire:target="ouvrirAssureurModal"></span>
                 Assurances
@@ -223,7 +223,7 @@
             @endif
 
             @if($u->hasPermission('act.view'))
-            <button wire:click="ouvrirListeActesModal" wire:loading.attr="disabled" wire:target="ouvrirListeActesModal" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
+            <button wire:click="ouvrirListeActesModal" wire:loading.attr="disabled" wire:target="ouvrirListeActesModal" title="Liste des actes médicaux et de leurs tarifs" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
                 <i class="fas fa-list-alt" wire:loading.class="opacity-0" wire:target="ouvrirListeActesModal"></i>
                 <span class="spinner spinner-dark" wire:loading wire:target="ouvrirListeActesModal"></span>
                 Actes / Soins
@@ -231,7 +231,7 @@
             @endif
 
             @if($u->hasPermission('pharmacie.view'))
-            <button wire:click="ouvrirListeMedicamentsModal" wire:loading.attr="disabled" wire:target="ouvrirListeMedicamentsModal" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
+            <button wire:click="ouvrirListeMedicamentsModal" wire:loading.attr="disabled" wire:target="ouvrirListeMedicamentsModal" title="Liste des médicaments et leurs prix" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
                 <i class="fas fa-pills" wire:loading.class="opacity-0" wire:target="ouvrirListeMedicamentsModal"></i>
                 <span class="spinner spinner-dark" wire:loading wire:target="ouvrirListeMedicamentsModal"></span>
                 Médicaments
@@ -239,7 +239,7 @@
             @endif
 
             @if($u->hasPermission('medecin.view'))
-            <button wire:click="ouvrirMedecinsModal" wire:loading.attr="disabled" wire:target="ouvrirMedecinsModal" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
+            <button wire:click="ouvrirMedecinsModal" wire:loading.attr="disabled" wire:target="ouvrirMedecinsModal" title="Liste des médecins du cabinet" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
                 <i class="fas fa-user-md" wire:loading.class="opacity-0" wire:target="ouvrirMedecinsModal"></i>
                 <span class="spinner spinner-dark" wire:loading wire:target="ouvrirMedecinsModal"></span>
                 Médecins
@@ -247,7 +247,7 @@
             @endif
 
             @if($u->hasPermission('caisse-operations.view'))
-            <button wire:click="ouvrirTypePaiementModal" wire:loading.attr="disabled" wire:target="ouvrirTypePaiementModal" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
+            <button wire:click="ouvrirTypePaiementModal" wire:loading.attr="disabled" wire:target="ouvrirTypePaiementModal" title="Modes de paiement acceptés (espèces, carte, etc.)" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
                 <i class="fas fa-credit-card" wire:loading.class="opacity-0" wire:target="ouvrirTypePaiementModal"></i>
                 <span class="spinner spinner-dark" wire:loading wire:target="ouvrirTypePaiementModal"></span>
                 Paiements
@@ -256,7 +256,7 @@
 
             @if($u->hasPermission('stock.view'))
             <div class="relative">
-                <button wire:click="ouvrirDashboardStock" wire:loading.attr="disabled" wire:target="ouvrirDashboardStock" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
+                <button wire:click="ouvrirDashboardStock" wire:loading.attr="disabled" wire:target="ouvrirDashboardStock" title="Niveaux de stock des médicaments et alertes de rupture" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
                     <i class="fas fa-chart-line" wire:loading.class="opacity-0" wire:target="ouvrirDashboardStock"></i>
                     <span class="spinner spinner-dark" wire:loading wire:target="ouvrirDashboardStock"></span>
                     Suivi stock
@@ -277,13 +277,13 @@
             @endif
 
             @if($u->hasPermission('user.view'))
-            <a href="{{ route('users.index') }}" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
+            <a href="{{ route('users.index') }}" title="Créer et gérer les comptes du personnel du cabinet" class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center">
                 <i class="fas fa-users-cog"></i> Utilisateurs
             </a>
             @endif
 
             @if($u->hasPermission('medecin.manage'))
-            <button wire:click="ouvrirParametresCabinet" wire:loading.attr="disabled" wire:target="ouvrirParametresCabinet"
+            <button wire:click="ouvrirParametresCabinet" wire:loading.attr="disabled" wire:target="ouvrirParametresCabinet" title="Informations générales du cabinet (nom, logo, coordonnées)"
                 class="nav-button btn-secondary text-sm px-4 py-2.5 min-w-[9rem] justify-center
                     {{ $showParametresCabinetModal ? '!bg-primary !text-white !border-primary' : '' }}">
                 <i class="fas fa-sliders-h" wire:loading.class="opacity-0" wire:target="ouvrirParametresCabinet"></i>
