@@ -101,74 +101,16 @@
                                     </select>
                                 @else
                                     @php
-                                        $statusClass = 'bg-yellow-100 text-yellow-800';
-                                        $statusIcon = 'fas fa-clock';
-                                        
-                                        switch($rdv->rdvConfirmer) {
-                                            case 'En Attente':
-                                            case 'En attente':
-                                                $statusClass = 'bg-yellow-100 text-yellow-800';
-                                                $statusIcon = 'fas fa-clock';
-                                                break;
-                                            case 'confirmé':
-                                            case 'Confirmé':
-                                                $statusClass = 'bg-blue-100 text-blue-800';
-                                                $statusIcon = 'fas fa-user-check';
-                                                break;
-                                            case 'En cours':
-                                                $statusClass = 'bg-green-100 text-green-800';
-                                                $statusIcon = 'fas fa-user-md';
-                                                break;
-                                            case 'terminé':
-                                            case 'Terminé':
-                                                $statusClass = 'bg-gray-100 text-gray-800';
-                                                $statusIcon = 'fas fa-check-double';
-                                                break;
-                                            case 'annulé':
-                                            case 'Annulé':
-                                                $statusClass = 'bg-red-100 text-red-800';
-                                                $statusIcon = 'fas fa-times';
-                                                break;
-                                            case 'Consultation':
-                                                $statusClass = 'bg-purple-100 text-purple-800';
-                                                $statusIcon = 'fas fa-stethoscope';
-                                                break;
-                                            default:
-                                                $statusClass = 'bg-yellow-100 text-yellow-800';
-                                                $statusIcon = 'fas fa-clock';
-                                                break;
-                                        }
+                                        $rdvStatusMap = [
+                                            'en attente'   => ['class' => 'bg-yellow-100 text-yellow-800', 'label' => 'En Attente', 'icon' => 'fas fa-clock'],
+                                            'confirmé'     => ['class' => 'bg-blue-100 text-blue-800', 'label' => 'Présent au cabinet', 'icon' => 'fas fa-user-check'],
+                                            'en cours'     => ['class' => 'bg-green-100 text-green-800', 'label' => 'Avec le médecin', 'icon' => 'fas fa-user-md'],
+                                            'terminé'      => ['class' => 'bg-gray-100 text-gray-800', 'label' => 'Terminé', 'icon' => 'fas fa-check-double'],
+                                            'annulé'       => ['class' => 'bg-red-100 text-red-800', 'label' => 'Annulé', 'icon' => 'fas fa-times'],
+                                            'consultation' => ['class' => 'bg-purple-100 text-purple-800', 'label' => 'Consultation', 'icon' => 'fas fa-stethoscope'],
+                                        ];
                                     @endphp
-                                    
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $statusClass }}">
-                                        <i class="{{ $statusIcon }} mr-1"></i>
-                                        @switch($rdv->rdvConfirmer)
-                                            @case('En Attente')
-                                            @case('En attente')
-                                                En Attente
-                                                @break
-                                            @case('confirmé')
-                                            @case('Confirmé')
-                                                Présent au cabinet
-                                                @break
-                                            @case('En cours')
-                                                Avec le médecin
-                                                @break
-                                            @case('terminé')
-                                            @case('Terminé')
-                                                Terminé
-                                                @break
-                                            @case('annulé')
-                                            @case('Annulé')
-                                                Annulé
-                                                @break
-                                            @case('Consultation')
-                                                Consultation
-                                                @break
-                                            @default
-                                                En Attente
-                                        @endswitch
-                                    </span>
+                                    <x-status-badge domain="generic" :map="$rdvStatusMap" :status="$rdv->rdvConfirmer" />
                                 @endif
                             </td>
                             <td class="px-4 py-3 whitespace-nowrap text-center">
