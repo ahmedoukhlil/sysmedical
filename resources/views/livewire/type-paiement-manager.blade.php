@@ -10,7 +10,7 @@
             <div class="md:col-span-2">
                 <label class="block text-sm font-medium text-gray-700 mb-1">Libellé *</label>
                 <input type="text" wire:model.defer="LibPaie" class="form-input" required>
-                @error('LibPaie') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+                @error('LibPaie') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
             </div>
             <div class="flex gap-2">
                 <button type="submit" class="btn-primary flex-1">

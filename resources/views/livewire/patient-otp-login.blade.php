@@ -14,7 +14,7 @@
             <form wire:submit.prevent="requestOtp" class="space-y-4">
                 <label class="block text-sm font-medium text-gray-700">Numéro de téléphone</label>
                 <input type="text" wire:model.defer="telephone" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                @error('telephone') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+                @error('telephone') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 <button type="submit" wire:loading.attr="disabled" wire:target="requestOtp" class="w-full bg-primary text-white rounded-lg py-2 disabled:opacity-60">
                     <span wire:loading.remove wire:target="requestOtp">Recevoir un code par WhatsApp</span>
                     <span wire:loading wire:target="requestOtp"><i class="fas fa-spinner fa-spin mr-1"></i> Envoi...</span>
@@ -24,7 +24,7 @@
             <form wire:submit.prevent="verifyOtp" class="space-y-4">
                 <label class="block text-sm font-medium text-gray-700">Code reçu par WhatsApp</label>
                 <input type="text" wire:model.defer="code" maxlength="6" class="w-full border border-gray-300 rounded-lg px-3 py-2">
-                @error('code') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+                @error('code') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
                 <button type="submit" wire:loading.attr="disabled" wire:target="verifyOtp" class="w-full bg-primary text-white rounded-lg py-2 disabled:opacity-60">
                     <span wire:loading.remove wire:target="verifyOtp">Valider</span>
                     <span wire:loading wire:target="verifyOtp"><i class="fas fa-spinner fa-spin mr-1"></i> Vérification...</span>

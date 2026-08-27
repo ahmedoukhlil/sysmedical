@@ -10,12 +10,12 @@
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Nom *</label>
                 <input type="text" wire:model.defer="Nom" class="form-input" required>
-                @error('Nom') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+                @error('Nom') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1">Contact *</label>
                 <input type="text" wire:model.defer="Contact" class="form-input" required>
-                @error('Contact') <span class="text-red-600 text-xs">{{ $message }}</span> @enderror
+                @error('Contact') <span class="text-red-500 text-xs">{{ $message }}</span> @enderror
             </div>
             <div class="flex gap-2">
                 <button type="submit" class="btn-primary flex-1">
