@@ -103,11 +103,11 @@
 
     {{-- Modal édition --}}
     @if($showModal)
-    <div class="modal-overlay" style="z-index:60;">
-        <div class="modal-box max-w-lg w-full">
+    <div class="modal-overlay" style="z-index:60;" role="dialog" aria-modal="true" aria-labelledby="modal-title-acte-edit">
+        <div class="modal-box max-w-lg w-full" tabindex="-1">
             <div class="modal-header">
-                <h2><i class="fas fa-edit mr-2"></i>Modifier un acte</h2>
-                <button wire:click="closeModal" class="modal-close"><i class="fas fa-times"></i></button>
+                <h2 id="modal-title-acte-edit"><i class="fas fa-edit mr-2"></i>Modifier un acte</h2>
+                <button wire:click="closeModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form wire:submit.prevent="save" class="space-y-4">
@@ -147,11 +147,11 @@
 
     {{-- Modal suppression --}}
     @if($showDeleteModal)
-    <div class="modal-overlay" style="z-index:60;">
-        <div class="modal-box max-w-md w-full">
+    <div class="modal-overlay" style="z-index:60;" role="dialog" aria-modal="true" aria-labelledby="modal-title-acte-delete">
+        <div class="modal-box max-w-md w-full" tabindex="-1">
             <div class="modal-header">
-                <h2><i class="fas fa-exclamation-triangle mr-2"></i>Confirmer la suppression</h2>
-                <button wire:click="$set('showDeleteModal', false)" class="modal-close"><i class="fas fa-times"></i></button>
+                <h2 id="modal-title-acte-delete"><i class="fas fa-exclamation-triangle mr-2"></i>Confirmer la suppression</h2>
+                <button wire:click="$set('showDeleteModal', false)" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <p class="text-gray-600">Êtes-vous sûr de vouloir supprimer cet acte ? Cette action est irréversible.</p>

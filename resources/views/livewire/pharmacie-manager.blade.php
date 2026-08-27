@@ -102,10 +102,10 @@
 
     {{-- Modal de détails --}}
     @if($showDetailModal)
-    <div class="modal-overlay" wire:click.self="fermerDetailModal">
-        <div class="modal-box max-w-5xl w-full">
+    <div class="modal-overlay" wire:click.self="fermerDetailModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-pharmacie-detail">
+        <div class="modal-box max-w-5xl w-full" tabindex="-1">
             <div class="modal-header">
-                <h2>
+                <h2 id="modal-title-pharmacie-detail">
                     @if($detailType === 'total') Détails — Total médicaments
                     @elseif($detailType === 'valeur') Détails — Valeur du stock
                     @elseif($detailType === 'quantite') Détails — Unités disponibles
@@ -117,7 +117,7 @@
                     @elseif($detailType === 'sorties') Détails — Sorties ce mois
                     @endif
                 </h2>
-                <button wire:click="fermerDetailModal" class="modal-close"><i class="fas fa-times"></i></button>
+                <button wire:click="fermerDetailModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 @if(count($detailData) > 0)
@@ -293,16 +293,16 @@
 
     {{-- Modal ajustement de stock (inventaire) --}}
     @if($showAjustementModal)
-    <div class="modal-overlay" style="z-index:70;" wire:click.self="closeAjustementModal">
-        <div class="modal-box max-w-lg w-full">
+    <div class="modal-overlay" style="z-index:70;" wire:click.self="closeAjustementModal" role="dialog" aria-modal="true" aria-labelledby="modal-title-ajustement-stock">
+        <div class="modal-box max-w-lg w-full" tabindex="-1">
             <div class="modal-header">
                 <div>
-                    <h2><i class="fas fa-edit mr-2"></i>Ajuster le stock</h2>
+                    <h2 id="modal-title-ajustement-stock"><i class="fas fa-edit mr-2"></i>Ajuster le stock</h2>
                     @if($ajustementLibelle)
                         <p class="text-sm text-gray-500 mt-0.5">{{ $ajustementLibelle }}</p>
                     @endif
                 </div>
-                <button wire:click="closeAjustementModal" class="modal-close"><i class="fas fa-times"></i></button>
+                <button wire:click="closeAjustementModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <div class="mb-4 p-3 bg-blue-50 border border-blue-200 rounded-lg text-sm text-blue-800 flex items-start gap-2">
@@ -426,16 +426,16 @@
 
     {{-- Modal entrée de stock --}}
     @if($showEntreeModal)
-    <div class="modal-overlay" style="z-index:70;">
-        <div class="modal-box max-w-2xl w-full">
+    <div class="modal-overlay" style="z-index:70;" role="dialog" aria-modal="true" aria-labelledby="modal-title-entree-stock">
+        <div class="modal-box max-w-2xl w-full" tabindex="-1">
             <div class="modal-header">
                 <div>
-                    <h2><i class="fas fa-plus-circle mr-2"></i>Alimenter le stock</h2>
+                    <h2 id="modal-title-entree-stock"><i class="fas fa-plus-circle mr-2"></i>Alimenter le stock</h2>
                     @if($entreeLibelleMedic)
                     <p>{{ $entreeLibelleMedic }}</p>
                     @endif
                 </div>
-                <button wire:click="closeEntreeModal" class="modal-close"><i class="fas fa-times"></i></button>
+                <button wire:click="closeEntreeModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form wire:submit.prevent="enregistrerEntree" class="space-y-4">

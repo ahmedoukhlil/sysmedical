@@ -205,11 +205,11 @@
 
     {{-- Modal confirmation suppression --}}
     @if($showConfirmDelete)
-    <div class="modal-overlay" style="z-index:80">
-        <div class="modal-box sm:max-w-md">
+    <div class="modal-overlay" style="z-index:80" role="dialog" aria-modal="true" aria-labelledby="modal-title-caisse-delete">
+        <div class="modal-box sm:max-w-md" tabindex="-1">
             <div class="modal-header" style="background:#dc2626">
-                <h3><i class="fas fa-exclamation-triangle mr-2"></i>Confirmer la suppression</h3>
-                <button type="button" wire:click="$set('showConfirmDelete', false)" class="modal-close">&times;</button>
+                <h3 id="modal-title-caisse-delete"><i class="fas fa-exclamation-triangle mr-2"></i>Confirmer la suppression</h3>
+                <button type="button" wire:click="$set('showConfirmDelete', false)" class="modal-close" aria-label="Fermer">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="flex items-start gap-3 mb-4">

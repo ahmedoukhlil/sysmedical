@@ -284,11 +284,11 @@
 
     {{-- ═══════════════════ MODAL ÉDITION ═══════════════════ --}}
     @if($showModal)
-    <div class="modal-overlay" style="z-index:60">
-        <div class="modal-box sm:max-w-lg">
+    <div class="modal-overlay" style="z-index:60" role="dialog" aria-modal="true" aria-labelledby="modal-title-user-edit">
+        <div class="modal-box sm:max-w-lg" tabindex="-1">
             <div class="modal-header">
-                <h3>Modifier un utilisateur</h3>
-                <button type="button" wire:click="closeModal" class="modal-close">&times;</button>
+                <h3 id="modal-title-user-edit">Modifier un utilisateur</h3>
+                <button type="button" wire:click="closeModal" class="modal-close" aria-label="Fermer">&times;</button>
             </div>
             <form wire:submit.prevent="save" class="modal-body space-y-4">
                 <div>
@@ -527,11 +527,11 @@
 
     {{-- Confirmation suppression rôle --}}
     @if($showRoleDeleteConfirm)
-    <div class="modal-overlay" style="z-index:60">
-        <div class="modal-box sm:max-w-sm">
+    <div class="modal-overlay" style="z-index:60" role="dialog" aria-modal="true" aria-labelledby="modal-title-role-delete">
+        <div class="modal-box sm:max-w-sm" tabindex="-1">
             <div class="modal-header">
-                <h3><i class="fas fa-exclamation-triangle mr-2"></i>Supprimer ce rôle ?</h3>
-                <button type="button" wire:click="$set('showRoleDeleteConfirm', false)" class="modal-close">&times;</button>
+                <h3 id="modal-title-role-delete"><i class="fas fa-exclamation-triangle mr-2"></i>Supprimer ce rôle ?</h3>
+                <button type="button" wire:click="$set('showRoleDeleteConfirm', false)" class="modal-close" aria-label="Fermer">&times;</button>
             </div>
             <div class="modal-body">
                 <p class="text-sm text-gray-600 mb-6">Cette action supprimera également toutes les permissions associées à ce rôle.</p>

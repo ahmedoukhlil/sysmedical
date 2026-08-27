@@ -154,11 +154,11 @@
 
     {{-- Modal édition --}}
     @if($showModal)
-    <div class="modal-overlay" style="z-index:60;">
-        <div class="modal-box max-w-lg w-full">
+    <div class="modal-overlay" style="z-index:60;" role="dialog" aria-modal="true" aria-labelledby="modal-title-medicament-edit">
+        <div class="modal-box max-w-lg w-full" tabindex="-1">
             <div class="modal-header">
-                <h2><i class="fas fa-edit mr-2"></i>Modifier</h2>
-                <button wire:click="closeModal" class="modal-close"><i class="fas fa-times"></i></button>
+                <h2 id="modal-title-medicament-edit"><i class="fas fa-edit mr-2"></i>Modifier</h2>
+                <button wire:click="closeModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form wire:submit.prevent="save" class="space-y-4">
@@ -194,11 +194,11 @@
 
     {{-- Modal ajout de stock --}}
     @if($showStockModal)
-    <div class="modal-overlay" style="z-index:60;">
-        <div class="modal-box max-w-2xl w-full">
+    <div class="modal-overlay" style="z-index:60;" role="dialog" aria-modal="true" aria-labelledby="modal-title-medicament-stock">
+        <div class="modal-box max-w-2xl w-full" tabindex="-1">
             <div class="modal-header">
-                <h2><i class="fas fa-boxes mr-2"></i>Ajouter du stock</h2>
-                <button wire:click="closeStockModal" class="modal-close"><i class="fas fa-times"></i></button>
+                <h2 id="modal-title-medicament-stock"><i class="fas fa-boxes mr-2"></i>Ajouter du stock</h2>
+                <button wire:click="closeStockModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form wire:submit.prevent="saveStock" class="space-y-4">
@@ -253,11 +253,11 @@
 
     {{-- Modal suppression --}}
     @if($showDeleteModal)
-    <div class="modal-overlay" style="z-index:60;">
-        <div class="modal-box max-w-md w-full">
+    <div class="modal-overlay" style="z-index:60;" role="dialog" aria-modal="true" aria-labelledby="modal-title-medicament-delete">
+        <div class="modal-box max-w-md w-full" tabindex="-1">
             <div class="modal-header">
-                <h2><i class="fas fa-exclamation-triangle mr-2"></i>Confirmer la suppression</h2>
-                <button wire:click="$set('showDeleteModal', false)" class="modal-close"><i class="fas fa-times"></i></button>
+                <h2 id="modal-title-medicament-delete"><i class="fas fa-exclamation-triangle mr-2"></i>Confirmer la suppression</h2>
+                <button wire:click="$set('showDeleteModal', false)" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <p class="text-gray-600">Êtes-vous sûr de vouloir supprimer cet élément ? Cette action est irréversible.</p>

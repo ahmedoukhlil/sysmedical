@@ -62,11 +62,11 @@
 
     {{-- Modal confirmation suppression type de paiement --}}
     @if($showDeleteConfirm)
-    <div class="modal-overlay" style="z-index:70">
-        <div class="modal-box sm:max-w-md">
+    <div class="modal-overlay" style="z-index:70" role="dialog" aria-modal="true" aria-labelledby="modal-title-type-paiement-delete">
+        <div class="modal-box sm:max-w-md" tabindex="-1">
             <div class="modal-header" style="background:#dc2626">
-                <h3><i class="fas fa-exclamation-triangle mr-2"></i>Supprimer ce type de paiement ?</h3>
-                <button type="button" wire:click="$set('showDeleteConfirm', false)" class="modal-close">&times;</button>
+                <h3 id="modal-title-type-paiement-delete"><i class="fas fa-exclamation-triangle mr-2"></i>Supprimer ce type de paiement ?</h3>
+                <button type="button" wire:click="$set('showDeleteConfirm', false)" class="modal-close" aria-label="Fermer">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="flex items-start gap-3 mb-4">

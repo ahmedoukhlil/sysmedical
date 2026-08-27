@@ -185,14 +185,14 @@
 
     <!-- Modal de règlement de facture -->
     @if($showReglementModal && $factureSelectionnee)
-    <div class="modal-overlay" style="z-index:60;">
-        <div class="modal-box max-w-lg w-full">
+    <div class="modal-overlay" style="z-index:60;" role="dialog" aria-modal="true" aria-labelledby="modal-title-reglement-facture">
+        <div class="modal-box max-w-lg w-full" tabindex="-1">
             <div class="modal-header">
                 <div>
-                    <h2><i class="fas fa-money-bill-wave mr-2"></i>Paiement facture</h2>
+                    <h2 id="modal-title-reglement-facture"><i class="fas fa-money-bill-wave mr-2"></i>Paiement facture</h2>
                     <p>Facture N° {{ $factureSelectionnee['numero'] ?? '---' }}</p>
                 </div>
-                <button wire:click="closeReglementForm" class="modal-close"><i class="fas fa-times"></i></button>
+                <button wire:click="closeReglementForm" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 @php
@@ -254,14 +254,14 @@
 
     <!-- Modal ajout d'acte -->
     @if($showAddActeForm && $factureIdForActe)
-    <div class="modal-overlay" style="z-index:60;">
-        <div class="modal-box max-w-2xl w-full">
+    <div class="modal-overlay" style="z-index:60;" role="dialog" aria-modal="true" aria-labelledby="modal-title-add-acte">
+        <div class="modal-box max-w-2xl w-full" tabindex="-1">
             <div class="modal-header">
                 <div>
-                    <h2><i class="fas fa-plus mr-2"></i>Ajouter un acte</h2>
+                    <h2 id="modal-title-add-acte"><i class="fas fa-plus mr-2"></i>Ajouter un acte</h2>
                     <p>Facture N° {{ $factures->firstWhere('id', $factureIdForActe)['numero'] ?? '' }}</p>
                 </div>
-                <button wire:click="closeAddActeForm" class="modal-close"><i class="fas fa-times"></i></button>
+                <button wire:click="closeAddActeForm" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form wire:submit.prevent="saveActeToFacture" wire:key="form-add-acte-{{ $factureIdForActe }}">
@@ -312,11 +312,11 @@
 
     <!-- Modal ajout médicament / analyse / radio -->
     @if($showAddMedicamentForm && $factureIdForActe)
-    <div class="modal-overlay" style="z-index:60;">
-        <div class="modal-box max-w-2xl w-full">
+    <div class="modal-overlay" style="z-index:60;" role="dialog" aria-modal="true" aria-labelledby="modal-title-add-medicament">
+        <div class="modal-box max-w-2xl w-full" tabindex="-1">
             <div class="modal-header">
                 <div>
-                    <h2>
+                    <h2 id="modal-title-add-medicament">
                         <i class="fas {{ $selectedMedicamentType === '1' ? 'fa-pills' : 'fa-microscope' }} mr-2"></i>
                         @if($selectedMedicamentType === '1') Ajouter un médicament
                         @else Ajouter une analyse / radio
@@ -324,7 +324,7 @@
                     </h2>
                     <p>Facture N° {{ $factures->firstWhere('id', $factureIdForActe)['numero'] ?? '' }}</p>
                 </div>
-                <button wire:click="closeAddMedicamentForm" class="modal-close"><i class="fas fa-times"></i></button>
+                <button wire:click="closeAddMedicamentForm" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
             </div>
             <div class="modal-body">
                 <form wire:submit.prevent="saveMedicamentToFacture" wire:key="form-add-medicament-{{ $factureIdForActe }}">
@@ -412,11 +412,11 @@
 
     <!-- Modal de sélection du médecin -->
     @if($showMedecinModal)
-    <div class="modal-overlay" style="z-index:60">
-        <div class="modal-box sm:max-w-lg">
+    <div class="modal-overlay" style="z-index:60" role="dialog" aria-modal="true" aria-labelledby="modal-title-select-medecin">
+        <div class="modal-box sm:max-w-lg" tabindex="-1">
             <div class="modal-header">
-                <h2><i class="fas fa-user-md mr-2"></i>Sélectionner un médecin</h2>
-                <button type="button" wire:click="$set('showMedecinModal', false)" class="modal-close">&times;</button>
+                <h2 id="modal-title-select-medecin"><i class="fas fa-user-md mr-2"></i>Sélectionner un médecin</h2>
+                <button type="button" wire:click="$set('showMedecinModal', false)" class="modal-close" aria-label="Fermer">&times;</button>
             </div>
             <div class="modal-body">
                 <input type="text" wire:model.debounce.300ms="searchMedecin"

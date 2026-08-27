@@ -170,14 +170,14 @@
 
     <!-- Modal de création/édition -->
     @if($showModal && !$creationOnly)
-    <div class="modal-overlay" style="z-index:60;">
-        <div class="modal-box max-w-2xl w-full">
+    <div class="modal-overlay" style="z-index:60;" role="dialog" aria-modal="true" aria-labelledby="modal-title-patient-form">
+        <div class="modal-box max-w-2xl w-full" tabindex="-1">
             <div class="modal-header">
                 <div>
-                    <h2><i class="fas {{ $patientId ? 'fa-user-edit' : 'fa-user-plus' }} mr-2"></i>{{ $patientId ? 'Modifier le patient' : 'Nouveau patient' }}</h2>
+                    <h2 id="modal-title-patient-form"><i class="fas {{ $patientId ? 'fa-user-edit' : 'fa-user-plus' }} mr-2"></i>{{ $patientId ? 'Modifier le patient' : 'Nouveau patient' }}</h2>
                     <p>{{ $patientId ? 'Modifiez les informations du patient' : 'Remplissez les informations du nouveau patient' }}</p>
                 </div>
-                <button wire:click="closeModal" class="modal-close"><i class="fas fa-times"></i></button>
+                <button wire:click="closeModal" class="modal-close" aria-label="Fermer"><i class="fas fa-times"></i></button>
             </div>
 
             <form wire:submit.prevent="save" style="display:flex; flex-direction:column; flex:1; min-height:0; overflow:hidden;">
@@ -520,11 +520,11 @@
 
     {{-- Modal confirmation suppression patient --}}
     @if($showDeleteConfirm)
-    <div class="modal-overlay" style="z-index:70">
-        <div class="modal-box sm:max-w-md">
+    <div class="modal-overlay" style="z-index:70" role="dialog" aria-modal="true" aria-labelledby="modal-title-delete-patient">
+        <div class="modal-box sm:max-w-md" tabindex="-1">
             <div class="modal-header" style="background:#dc2626">
-                <h3><i class="fas fa-exclamation-triangle mr-2"></i>Supprimer définitivement ?</h3>
-                <button type="button" wire:click="$set('showDeleteConfirm', false)" class="modal-close">&times;</button>
+                <h3 id="modal-title-delete-patient"><i class="fas fa-exclamation-triangle mr-2"></i>Supprimer définitivement ?</h3>
+                <button type="button" wire:click="$set('showDeleteConfirm', false)" class="modal-close" aria-label="Fermer">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="flex items-start gap-3 mb-4">
