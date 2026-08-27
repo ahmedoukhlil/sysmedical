@@ -36,8 +36,9 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1">Date fin</label>
                 <input type="date" wire:model="date_fin" class="form-input">
             </div>
-            <button wire:click="resetFilters" class="btn-secondary">
-                <i class="fas fa-undo mr-1"></i> Réinitialiser
+            <button wire:click="resetFilters" wire:loading.attr="disabled" wire:target="resetFilters" class="btn-secondary disabled:opacity-60">
+                <span wire:loading.remove wire:target="resetFilters"><i class="fas fa-undo mr-1"></i> Réinitialiser</span>
+                <span wire:loading wire:target="resetFilters"><i class="fas fa-spinner fa-spin mr-1"></i> Chargement...</span>
             </button>
         </div>
     </div>
