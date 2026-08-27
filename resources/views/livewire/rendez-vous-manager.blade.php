@@ -149,49 +149,4 @@
         <!-- Pagination et autres éléments peuvent être ajoutés ici -->
     </div>
 
-    @if(session()->has('message'))
-        <div class="mt-4 rounded-lg bg-gradient-to-r from-green-50 to-white p-4 shadow-md">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-check-circle text-green-600"></i>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm font-medium text-green-800">
-                        {{ session('message') }}
-                    </p>
-                </div>
-                <div class="ml-auto pl-3">
-                    <div class="-mx-1.5 -my-1.5">
-                        <button type="button" class="inline-flex rounded-lg bg-green-50 p-1.5 text-green-500 hover:bg-green-100 focus:outline-none focus:ring-2 focus:ring-green-600 focus:ring-offset-2 focus:ring-offset-green-50 transition-all duration-200" onclick="this.parentElement.parentElement.parentElement.parentElement.remove()">
-                            <span class="sr-only">Fermer</span>
-                            <i class="fas fa-times h-5 w-5"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
-
-    @if(session()->has('error'))
-        <div class="mt-4 rounded-lg bg-gradient-to-r from-red-50 to-white p-4 shadow-md">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-exclamation-circle text-red-600"></i>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm font-medium text-red-800">
-                        {{ session('error') }}
-                    </p>
-                </div>
-                <div class="ml-auto pl-3">
-                    <div class="-mx-1.5 -my-1.5">
-                        <button type="button" class="inline-flex rounded-lg bg-red-50 p-1.5 text-red-500 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-600 focus:ring-offset-2 focus:ring-offset-red-50 transition-all duration-200" onclick="this.parentElement.parentElement.parentElement.parentElement.remove()">
-                            <span class="sr-only">Fermer</span>
-                            <i class="fas fa-times h-5 w-5"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
 </div>

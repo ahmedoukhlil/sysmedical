@@ -61,11 +61,11 @@ class AssureurManager extends Component
             $assureur = Assureur::where('IDAssureur', $this->assureurId)->first();
             if ($assureur) {
                 $assureur->update($data);
-                session()->flash('message', 'Assureur modifié avec succès.');
+                $this->emit('toast', ['message' => 'Assureur modifié avec succès.', 'type' => 'success']);
             }
         } else {
             Assureur::create($data);
-            session()->flash('message', 'Assureur créé avec succès.');
+            $this->emit('toast', ['message' => 'Assureur créé avec succès.', 'type' => 'success']);
         }
         $this->closeModal();
     }
@@ -81,7 +81,7 @@ class AssureurManager extends Component
         $assureur = Assureur::where('IDAssureur', $this->assureurToDelete)->first();
         if ($assureur) {
             $assureur->delete();
-            session()->flash('message', 'Assureur supprimé avec succès.');
+            $this->emit('toast', ['message' => 'Assureur supprimé avec succès.', 'type' => 'success']);
         }
         $this->showDeleteModal = false;
         $this->assureurToDelete = null;

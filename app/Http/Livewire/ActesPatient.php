@@ -204,7 +204,7 @@ class ActesPatient extends Component
                 $this->search_acte = '';
                 $this->loadActes();
 
-                session()->flash('success', $messageSucces);
+                $this->emit('toast', ['message' => $messageSucces, 'type' => 'success']);
             });
         } catch (\Exception $e) {
             \Log::error('Erreur ActesPatient::save()', ['error' => $e->getMessage()]);

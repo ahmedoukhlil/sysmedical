@@ -1,11 +1,5 @@
 <div class="p-4 md:p-6">
 
-    @if(session()->has('message'))
-    <div class="mb-4 flex items-center gap-2 px-4 py-3 bg-green-50 border-l-4 border-green-500 rounded text-green-800 text-sm">
-        <i class="fas fa-check-circle"></i> {{ session('message') }}
-    </div>
-    @endif
-
     {{-- Onglets --}}
     <div class="flex border-b border-gray-200 mb-5">
         <button wire:click="switchTab('medicaments')"

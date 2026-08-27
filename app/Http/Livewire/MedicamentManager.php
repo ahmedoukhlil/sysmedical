@@ -121,7 +121,7 @@ class MedicamentManager extends Component
                 $medicament = Medicament::find($this->medicamentId);
                 if ($medicament) {
                     $medicament->update($data);
-                    session()->flash('message', 'Médicament modifié avec succès.');
+                    $this->emit('toast', ['message' => 'Médicament modifié avec succès.', 'type' => 'success']);
                 }
             } else {
                 $medicament = Medicament::create($data);
@@ -142,16 +142,16 @@ class MedicamentManager extends Component
                             'Masquer' => 0
                         ]
                     );
-                    session()->flash('message', 'Médicament créé avec succès. Le stock a été initialisé. Vous pouvez maintenant ajouter des quantités.');
+                    $this->emit('toast', ['message' => 'Médicament créé avec succès. Le stock a été initialisé. Vous pouvez maintenant ajouter des quantités.', 'type' => 'success']);
                 } else {
-                    session()->flash('message', 'Médicament créé avec succès.');
+                    $this->emit('toast', ['message' => 'Médicament créé avec succès.', 'type' => 'success']);
                 }
             }
             DB::commit();
             Cache::forget('referentiel_medicaments_v2_' . (Auth::user()->fkidcabinet ?? 1));
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Erreur lors de l\'enregistrement : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de l\'enregistrement : ' . $e->getMessage(), 'type' => 'error']);
         }
 
         $this->closeModal();
@@ -169,7 +169,7 @@ class MedicamentManager extends Component
         if ($medicament) {
             $medicament->delete();
             Cache::forget('referentiel_medicaments_v2_' . (Auth::user()->fkidcabinet ?? 1));
-            session()->flash('message', 'Médicament supprimé avec succès.');
+            $this->emit('toast', ['message' => 'Médicament supprimé avec succès.', 'type' => 'success']);
         }
         $this->showDeleteModal = false;
         $this->medicamentToDelete = null;
@@ -187,7 +187,7 @@ class MedicamentManager extends Component
     {
         $medicament = Medicament::find($medicamentId);
         if (!$medicament || $medicament->fkidtype != 1) {
-            session()->flash('error', 'Seuls les médicaments peuvent avoir un stock.');
+            $this->emit('toast', ['message' => 'Seuls les médicaments peuvent avoir un stock.', 'type' => 'error']);
             return;
         }
         
@@ -322,7 +322,7 @@ class MedicamentManager extends Component
             ]);
         });
 
-        session()->flash('message', 'Stock ajouté avec succès.');
+        $this->emit('toast', ['message' => 'Stock ajouté avec succès.', 'type' => 'success']);
         // Réinitialiser les champs sauf le médicament pour permettre d'ajouter plus de stock
         $this->resetStockForm();
     }

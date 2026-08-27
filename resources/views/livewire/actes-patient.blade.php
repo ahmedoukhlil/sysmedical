@@ -1,10 +1,4 @@
 <div>
-    @if(session()->has('success'))
-        <div class="mb-4 p-3 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm">
-            <i class="fas fa-check-circle mr-1"></i> {{ session('success') }}
-        </div>
-    @endif
-
     @if($errors->has('general'))
         <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm">
             <i class="fas fa-exclamation-circle mr-1"></i> {{ $errors->first('general') }}

@@ -247,13 +247,13 @@ class PatientManager extends Component
                     throw new \Exception('Patient non trouvé');
                 }
                 $patient->update($data);
-                session()->flash('message', 'Patient mis à jour avec succès.');
+                $this->emit('toast', ['message' => 'Patient mis à jour avec succès.', 'type' => 'success']);
             } else {
                 $patient = Patient::create($data);
                 if (!$patient) {
                     throw new \Exception('Erreur lors de la création du patient');
                 }
-                session()->flash('message', 'Patient créé avec succès.');
+                $this->emit('toast', ['message' => 'Patient créé avec succès.', 'type' => 'success']);
             }
 
             $this->resetForm();
@@ -270,7 +270,7 @@ class PatientManager extends Component
                 : $e->getMessage();
 
             \Log::error('Erreur création patient : ' . $message);
-            session()->flash('error', 'Erreur lors de la création du patient (code: ' . $e->getCode() . ')');
+            $this->emit('toast', ['message' => 'Erreur lors de la création du patient (code: ' . $e->getCode() . ')', 'type' => 'error']);
             // Ne pas fermer le modal ni reset le formulaire en cas d'erreur
         }
     }
@@ -282,10 +282,10 @@ class PatientManager extends Component
             if ($patient) {
                 $patient->choix = !$patient->choix;
                 $patient->save();
-                session()->flash('message', 'Statut du patient mis à jour avec succès.');
+                $this->emit('toast', ['message' => 'Statut du patient mis à jour avec succès.', 'type' => 'success']);
             }
         } catch (\Exception $e) {
-            session()->flash('error', 'Une erreur est survenue lors de la mise à jour du statut.');
+            $this->emit('toast', ['message' => 'Une erreur est survenue lors de la mise à jour du statut.', 'type' => 'error']);
         }
     }
 
@@ -348,11 +348,11 @@ class PatientManager extends Component
             $this->showDeleteConfirm = false;
             $this->patientToDelete = null;
             $this->patientToDeleteNom = '';
-            session()->flash('message', 'Patient et toutes ses données supprimés avec succès.');
+            $this->emit('toast', ['message' => 'Patient et toutes ses données supprimés avec succès.', 'type' => 'success']);
 
         } catch (\Exception $e) {
             \Log::error('Erreur suppression patient', ['error' => $e->getMessage()]);
-            session()->flash('error', 'Erreur lors de la suppression : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de la suppression : ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 

@@ -512,24 +512,15 @@
         </div>
     @endif
 
-         <!-- Messages de notification -->
-     @if (session()->has('message'))
+         <!-- Bouton d'impression du reçu -->
+     @if($showPrintButton)
         <div class="fixed bottom-4 right-4 bg-green-100 border border-green-400 text-green-700 px-3 sm:px-4 py-2 sm:py-3 rounded shadow-lg text-sm sm:text-base">
-             {{ session('message') }}
-             @if($showPrintButton)
-                 <div class="mt-2">
-                    <button wire:click="printRendezVous" class="inline-flex items-center px-2 sm:px-3 py-1 bg-blue-600 text-white text-xs sm:text-sm rounded hover:bg-blue-700 touch-friendly-button">
-                         <i class="fas fa-print mr-1"></i>
-                         Imprimer le reçu
-                     </button>
-                 </div>
-             @endif
-         </div>
-     @endif
-
-     @if (session()->has('error'))
-        <div class="fixed bottom-4 right-4 bg-red-100 border border-red-400 text-red-700 px-3 sm:px-4 py-2 sm:py-3 rounded shadow-lg text-sm sm:text-base">
-             {{ session('error') }}
+             <div class="mt-2">
+                <button wire:click="printRendezVous" class="inline-flex items-center px-2 sm:px-3 py-1 bg-blue-600 text-white text-xs sm:text-sm rounded hover:bg-blue-700 touch-friendly-button">
+                     <i class="fas fa-print mr-1"></i>
+                     Imprimer le reçu
+                 </button>
+             </div>
          </div>
      @endif
 </div>

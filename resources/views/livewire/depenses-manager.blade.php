@@ -1,16 +1,5 @@
 <div class="p-4 md:p-6 space-y-6">
 
-    @if(session()->has('message'))
-    <div class="flex items-center gap-2 px-4 py-3 bg-green-50 border-l-4 border-green-500 rounded text-green-800 text-sm">
-        <i class="fas fa-check-circle"></i> {{ session('message') }}
-    </div>
-    @endif
-    @if(session()->has('error'))
-    <div class="flex items-center gap-2 px-4 py-3 bg-red-50 border-l-4 border-red-500 rounded text-red-800 text-sm">
-        <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
-    </div>
-    @endif
-
     {{-- Statistiques --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">

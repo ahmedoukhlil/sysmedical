@@ -59,7 +59,7 @@ class PatientSearch extends Component
             $user = Auth::user();
             
             if (!$user || !$user->fkidcabinet) {
-                session()->flash('error', 'Utilisateur non authentifié ou sans cabinet.');
+                $this->emit('toast', ['message' => 'Utilisateur non authentifié ou sans cabinet.', 'type' => 'error']);
                 return;
             }
 
@@ -113,7 +113,7 @@ class PatientSearch extends Component
             $this->showResults = true;
             
         } catch (\Exception $e) {
-            session()->flash('error', 'Erreur lors de la recherche : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de la recherche : ' . $e->getMessage(), 'type' => 'error']);
         } finally {
             $this->isSearching = false;
         }
@@ -149,10 +149,10 @@ class PatientSearch extends Component
                 \Log::info('Patient sélectionné dans PatientSearch', ['patient_id' => $this->selectedPatient['ID']]);
                 $this->emit('patientSelected', $this->selectedPatient);
             } else {
-                session()->flash('error', 'Patient non trouvé.');
+                $this->emit('toast', ['message' => 'Patient non trouvé.', 'type' => 'error']);
             }
         } catch (\Exception $e) {
-            session()->flash('error', 'Une erreur est survenue lors de la sélection du patient.');
+            $this->emit('toast', ['message' => 'Une erreur est survenue lors de la sélection du patient.', 'type' => 'error']);
         }
     }
 

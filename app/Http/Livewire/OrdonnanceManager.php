@@ -106,7 +106,7 @@ class OrdonnanceManager extends Component
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            session()->flash('error', 'Erreur lors du chargement du formulaire d\'ordonnance.');
+            $this->emit('toast', ['message' => 'Erreur lors du chargement du formulaire d\'ordonnance.', 'type' => 'error']);
         }
     }
 
@@ -344,7 +344,7 @@ class OrdonnanceManager extends Component
         });
 
         if (empty($lignesValides)) {
-            session()->flash('error', 'Veuillez ajouter au moins une ligne à l\'ordonnance.');
+            $this->emit('toast', ['message' => 'Veuillez ajouter au moins une ligne à l\'ordonnance.', 'type' => 'error']);
             return;
         }
 
@@ -517,7 +517,7 @@ class OrdonnanceManager extends Component
             if (!empty($horsStock)) {
                 $msg .= ' Non facturé (stock épuisé) : ' . implode(', ', $horsStock) . '.';
             }
-            session()->flash('message', $msg);
+            $this->emit('toast', ['message' => $msg, 'type' => 'success']);
             $this->loadOrdonnancesPatient();
             $this->resetForm();
 
@@ -539,7 +539,7 @@ class OrdonnanceManager extends Component
 
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Erreur lors de la création de l\'ordonnance : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de la création de l\'ordonnance : ' . $e->getMessage(), 'type' => 'error']);
             Log::error('Erreur création ordonnance', [
                 'error' => $e->getMessage(),
                 'patient_id' => $this->patientId,
@@ -629,13 +629,13 @@ class OrdonnanceManager extends Component
             $ordonnanceRef = Ordonnanceref::find($ordonnanceId);
 
             if (!$ordonnanceRef) {
-                session()->flash('error', 'Ordonnance introuvable.');
+                $this->emit('toast', ['message' => 'Ordonnance introuvable.', 'type' => 'error']);
                 return;
             }
 
             // Vérifier les permissions
             if ($ordonnanceRef->fkidprescripteur != Auth::id() && !Auth::user()->isDocteurProprietaire()) {
-                session()->flash('error', 'Vous n\'avez pas la permission de supprimer cette ordonnance.');
+                $this->emit('toast', ['message' => 'Vous n\'avez pas la permission de supprimer cette ordonnance.', 'type' => 'error']);
                 return;
             }
 
@@ -649,12 +649,12 @@ class OrdonnanceManager extends Component
 
             DB::commit();
 
-            session()->flash('message', 'Ordonnance supprimée avec succès.');
+            $this->emit('toast', ['message' => 'Ordonnance supprimée avec succès.', 'type' => 'success']);
             $this->loadOrdonnancesPatient();
 
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Erreur lors de la suppression : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de la suppression : ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 

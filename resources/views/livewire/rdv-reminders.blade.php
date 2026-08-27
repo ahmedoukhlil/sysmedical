@@ -1,19 +1,5 @@
 <div class="space-y-4">
 
-    {{-- Flash messages --}}
-    @if(session()->has('success'))
-        <div class="flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-200 rounded-lg text-green-800 text-sm">
-            <i class="fas fa-check-circle text-green-500"></i>
-            {{ session('success') }}
-        </div>
-    @endif
-    @if(session()->has('error'))
-        <div class="flex items-center gap-2 px-4 py-3 bg-red-50 border border-red-200 rounded-lg text-red-800 text-sm">
-            <i class="fas fa-exclamation-circle text-red-500"></i>
-            {{ session('error') }}
-        </div>
-    @endif
-
     {{-- Filtres --}}
     <div class="bg-white border border-gray-200 rounded-xl p-4">
         <div class="grid grid-cols-1 md:grid-cols-3 gap-3">

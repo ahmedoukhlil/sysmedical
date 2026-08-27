@@ -406,22 +406,22 @@ class MedecinPaiementStats extends Component
             $rdv = Rendezvou::find($id);
 
             if (!$this->canManageRdv) {
-                session()->flash('error', 'Vous n\'avez pas la permission d\'annuler des rendez-vous.');
+                $this->emit('toast', ['message' => 'Vous n\'avez pas la permission d\'annuler des rendez-vous.', 'type' => 'error']);
                 return;
             }
 
             if ($user->isDocteur() && !$user->isDocteurProprietaire() && $rdv->fkidMedecin != $user->fkidmedecin) {
-                session()->flash('error', 'Vous ne pouvez annuler que vos propres rendez-vous.');
+                $this->emit('toast', ['message' => 'Vous ne pouvez annuler que vos propres rendez-vous.', 'type' => 'error']);
                 return;
             }
 
             if ($rdv) {
                 $rdv->update(['rdvConfirmer' => 'annulé']);
-                session()->flash('message', 'Rendez-vous annulé.');
+                $this->emit('toast', ['message' => 'Rendez-vous annulé.', 'type' => 'success']);
                 $this->loadRendezVous();
             }
         } catch (\Exception $e) {
-            session()->flash('error', 'Erreur lors de l\'annulation du rendez-vous.');
+            $this->emit('toast', ['message' => 'Erreur lors de l\'annulation du rendez-vous.', 'type' => 'error']);
         }
     }
 
@@ -432,22 +432,22 @@ class MedecinPaiementStats extends Component
             $rdv = Rendezvou::find($id);
 
             if (!$this->canManageRdv) {
-                session()->flash('error', 'Vous n\'avez pas la permission de confirmer des rendez-vous.');
+                $this->emit('toast', ['message' => 'Vous n\'avez pas la permission de confirmer des rendez-vous.', 'type' => 'error']);
                 return;
             }
 
             if ($user->isDocteur() && !$user->isDocteurProprietaire() && $rdv->fkidMedecin != $user->fkidmedecin) {
-                session()->flash('error', 'Vous ne pouvez confirmer que vos propres rendez-vous.');
+                $this->emit('toast', ['message' => 'Vous ne pouvez confirmer que vos propres rendez-vous.', 'type' => 'error']);
                 return;
             }
 
             if ($rdv) {
                 $rdv->update(['rdvConfirmer' => 'confirmé']);
-                session()->flash('message', 'Rendez-vous confirmé.');
+                $this->emit('toast', ['message' => 'Rendez-vous confirmé.', 'type' => 'success']);
                 $this->loadRendezVous();
             }
         } catch (\Exception $e) {
-            session()->flash('error', 'Erreur lors de la confirmation du rendez-vous.');
+            $this->emit('toast', ['message' => 'Erreur lors de la confirmation du rendez-vous.', 'type' => 'error']);
         }
     }
 
@@ -457,7 +457,7 @@ class MedecinPaiementStats extends Component
             $user = Auth::user();
 
             if (!$this->canManageRdv) {
-                session()->flash('error', 'Vous n\'avez pas la permission d\'annuler des rendez-vous.');
+                $this->emit('toast', ['message' => 'Vous n\'avez pas la permission d\'annuler des rendez-vous.', 'type' => 'error']);
                 return;
             }
 
@@ -467,7 +467,7 @@ class MedecinPaiementStats extends Component
                     ->exists();
 
                 if ($invalidRdv) {
-                    session()->flash('error', 'Vous ne pouvez annuler que vos propres rendez-vous.');
+                    $this->emit('toast', ['message' => 'Vous ne pouvez annuler que vos propres rendez-vous.', 'type' => 'error']);
                     return;
                 }
             }
@@ -476,10 +476,10 @@ class MedecinPaiementStats extends Component
                 ->update(['rdvConfirmer' => 'annulé']);
             $this->selectedRendezVous = [];
             $this->selectAll = false;
-            session()->flash('message', 'Rendez-vous sélectionnés annulés.');
+            $this->emit('toast', ['message' => 'Rendez-vous sélectionnés annulés.', 'type' => 'success']);
             $this->loadRendezVous();
         } catch (\Exception $e) {
-            session()->flash('error', 'Erreur lors de l\'annulation des rendez-vous.');
+            $this->emit('toast', ['message' => 'Erreur lors de l\'annulation des rendez-vous.', 'type' => 'error']);
         }
     }
 

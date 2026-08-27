@@ -83,13 +83,13 @@ class ActeManager extends Component
             $acte = Acte::find($this->acteId);
             if ($acte) {
                 $acte->update($data);
-                session()->flash('message', 'Acte modifié avec succès.');
+                $this->emit('toast', ['message' => 'Acte modifié avec succès.', 'type' => 'success']);
             }
         } else {
             $data['nordre'] = $maxNordre + 1;
             $data['user'] = auth()->user()->name ?? 'system';
             Acte::create($data);
-            session()->flash('message', 'Acte créé avec succès.');
+            $this->emit('toast', ['message' => 'Acte créé avec succès.', 'type' => 'success']);
         }
         $this->closeModal();
     }
@@ -105,7 +105,7 @@ class ActeManager extends Component
         $acte = Acte::find($this->acteToDelete);
         if ($acte) {
             $acte->delete();
-            session()->flash('message', 'Acte supprimé avec succès.');
+            $this->emit('toast', ['message' => 'Acte supprimé avec succès.', 'type' => 'success']);
         }
         $this->showDeleteModal = false;
         $this->acteToDelete = null;

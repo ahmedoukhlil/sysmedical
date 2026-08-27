@@ -1,11 +1,5 @@
 <div class="p-4 md:p-6">
 
-    @if(session()->has('message'))
-    <div class="mb-4 flex items-center gap-2 px-4 py-3 bg-green-50 border-l-4 border-green-500 rounded text-green-800 text-sm">
-        <i class="fas fa-check-circle"></i> {{ session('message') }}
-    </div>
-    @endif
-
     {{-- Formulaire ajout --}}
     <div class="mb-6 bg-primary-light border-l-4 border-primary rounded-lg p-4">
         <h3 class="text-sm font-semibold text-primary uppercase tracking-wide mb-4">

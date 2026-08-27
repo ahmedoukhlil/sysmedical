@@ -30,32 +30,6 @@
         </button>
     </div>
 
-    {{-- Flash messages --}}
-    @if(session()->has('success_dossier'))
-        <div class="mb-4 bg-green-50 border-l-4 border-green-500 text-green-800 p-3 rounded-r text-sm">
-            <i class="fas fa-check-circle mr-1"></i> {{ session('success_dossier') }}
-        </div>
-    @endif
-    @if(session()->has('success_consultation'))
-        <div class="mb-4 bg-green-50 border-l-4 border-green-500 text-green-800 p-3 rounded-r text-sm">
-            <i class="fas fa-check-circle mr-1"></i> {{ session('success_consultation') }}
-        </div>
-    @endif
-    @if(session()->has('error_consultation'))
-        <div class="mb-4 bg-red-50 border-l-4 border-red-500 text-red-800 p-3 rounded-r text-sm">
-            <i class="fas fa-exclamation-circle mr-1"></i> {{ session('error_consultation') }}
-        </div>
-    @endif
-    @if(session()->has('success_analyse'))
-        <div class="mb-4 bg-green-50 border-l-4 border-green-500 text-green-800 p-3 rounded-r text-sm">
-            <i class="fas fa-check-circle mr-1"></i> {{ session('success_analyse') }}
-        </div>
-    @endif
-    @if(session()->has('error_analyse'))
-        <div class="mb-4 bg-red-50 border-l-4 border-red-500 text-red-800 p-3 rounded-r text-sm">
-            <i class="fas fa-exclamation-circle mr-1"></i> {{ session('error_analyse') }}
-        </div>
-    @endif
 
     {{-- ================================================================ --}}
     {{-- ONGLET 1 : Dossier permanent --}}

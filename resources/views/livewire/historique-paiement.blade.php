@@ -3,11 +3,6 @@
     <div id="historique-paiement-modal" wire:key="historique-paiement-modal-{{ $patient['ID'] ?? '0' }}" class="bg-white rounded-lg shadow-lg w-full max-w-3xl p-4 relative print-modal max-h-[85vh] overflow-y-auto">
         <!-- Bouton X pour fermer -->
         <button type="button" wire:click="fermerModal" class="absolute top-2 right-2 text-gray-500 hover:text-primary text-2xl font-bold focus:outline-none print:hidden" aria-label="Fermer">&times;</button>
-        @if (session()->has('message'))
-            <div class="mb-4 p-2 bg-primary-light text-primary rounded text-center">
-                {{ session('message') }}
-            </div>
-        @endif
         @include('consultations.entete-facture')
 
         <!-- Infos patient et bouton imprimer -->

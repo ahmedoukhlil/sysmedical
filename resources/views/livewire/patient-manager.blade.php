@@ -27,33 +27,6 @@
     </div>
     @endif
 
-    <!-- Messages de notification -->
-    @if (session()->has('message'))
-        <div class="rounded-lg bg-green-50 p-4">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-check-circle text-green-400"></i>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm font-medium text-green-800">{{ session('message') }}</p>
-                </div>
-            </div>
-        </div>
-    @endif
-
-    @if (session()->has('error'))
-        <div class="rounded-lg bg-red-50 p-4">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-exclamation-circle text-red-400"></i>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm font-medium text-red-800">{{ session('error') }}</p>
-                </div>
-            </div>
-        </div>
-    @endif
-
     @if(!$creationOnly)
     <!-- Tableau des patients -->
     <div class="bg-white rounded-lg shadow overflow-hidden w-full">

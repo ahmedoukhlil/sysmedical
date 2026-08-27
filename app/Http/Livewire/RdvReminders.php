@@ -79,18 +79,18 @@ class RdvReminders extends Component
             $rdv = Rendezvou::with(['patient', 'medecin'])->find($rdvId);
             
             if (!$rdv) {
-                session()->flash('error', 'Rendez-vous non trouvé.');
+                $this->emit('toast', ['message' => 'Rendez-vous non trouvé.', 'type' => 'error']);
                 return;
             }
 
             if (!$rdv->patient) {
-                session()->flash('error', 'Patient non trouvé pour ce rendez-vous.');
+                $this->emit('toast', ['message' => 'Patient non trouvé pour ce rendez-vous.', 'type' => 'error']);
                 return;
             }
 
             // Vérifier que le patient a un numéro de téléphone
             if (empty($rdv->patient->Telephone1)) {
-                session()->flash('error', 'Le patient n\'a pas de numéro de téléphone enregistré.');
+                $this->emit('toast', ['message' => 'Le patient n\'a pas de numéro de téléphone enregistré.', 'type' => 'error']);
                 return;
             }
 
@@ -115,7 +115,7 @@ class RdvReminders extends Component
                 'Relance WhatsApp envoyée pour ' . $rdv->patient->Nom :
                 'Rappel WhatsApp envoyé pour ' . $rdv->patient->Nom;
             
-            session()->flash('success', $successMessage);
+            $this->emit('toast', ['message' => $successMessage, 'type' => 'success']);
             
             // Log pour débogage
             \Log::info('WhatsApp reminder sent', [
@@ -128,7 +128,7 @@ class RdvReminders extends Component
             $this->emit('$refresh');
 
         } catch (\Exception $e) {
-            session()->flash('error', 'Erreur lors de l\'envoi du rappel: ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de l\'envoi du rappel: ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 

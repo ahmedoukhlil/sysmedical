@@ -102,16 +102,16 @@ class DepensesManager extends Component
     {
         $user = Auth::user();
         if (($user->IdClasseUser ?? 0) != 3) {
-            session()->flash('error', 'Seul le médecin propriétaire peut créer ou modifier une dépense.');
+            $this->emit('toast', ['message' => 'Seul le médecin propriétaire peut créer ou modifier une dépense.', 'type' => 'error']);
             return;
         }
 
         $this->validate();
-        
+
         // Validation supplémentaire : s'assurer que le type de tiers n'est pas Patient ou Assureur
         $typeTiers = Typetier::find($this->fkIdTypeTiers);
         if ($typeTiers && in_array($typeTiers->LibelleTypeTiers, ['Patients', 'Assureurs'])) {
-            session()->flash('error', 'Les patients et assureurs ne peuvent pas être utilisés pour les dépenses (ce sont des recettes).');
+            $this->emit('toast', ['message' => 'Les patients et assureurs ne peuvent pas être utilisés pour les dépenses (ce sont des recettes).', 'type' => 'error']);
             return;
         }
 
@@ -137,10 +137,10 @@ class DepensesManager extends Component
 
         if ($this->isEditing) {
             CaisseOperation::where('cle', $this->editingId)->update($data);
-            session()->flash('message', 'Dépense modifiée avec succès.');
+            $this->emit('toast', ['message' => 'Dépense modifiée avec succès.', 'type' => 'success']);
         } else {
             CaisseOperation::create($data);
-            session()->flash('message', 'Dépense ajoutée avec succès.');
+            $this->emit('toast', ['message' => 'Dépense ajoutée avec succès.', 'type' => 'success']);
         }
 
         $this->resetForm();
@@ -153,7 +153,7 @@ class DepensesManager extends Component
     {
         $user = Auth::user();
         if (($user->IdClasseUser ?? 0) != 3) {
-            session()->flash('error', 'Seul le médecin propriétaire peut modifier une dépense.');
+            $this->emit('toast', ['message' => 'Seul le médecin propriétaire peut modifier une dépense.', 'type' => 'error']);
             return;
         }
 
@@ -173,14 +173,14 @@ class DepensesManager extends Component
     {
         $user = Auth::user();
         if (($user->IdClasseUser ?? 0) != 3) {
-            session()->flash('error', 'Seul le médecin propriétaire peut supprimer une dépense.');
+            $this->emit('toast', ['message' => 'Seul le médecin propriétaire peut supprimer une dépense.', 'type' => 'error']);
             return;
         }
 
         $depense = CaisseOperation::find($id);
         if ($depense) {
             $depense->delete();
-            session()->flash('message', 'Dépense supprimée avec succès.');
+            $this->emit('toast', ['message' => 'Dépense supprimée avec succès.', 'type' => 'success']);
         }
     }
 

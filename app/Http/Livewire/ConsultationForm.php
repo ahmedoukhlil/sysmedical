@@ -377,7 +377,7 @@ class ConsultationForm extends Component
                 $errorMessage = 'Erreur de validation: ' . implode(' | ', $errorMessages);
                 
                 $this->addError('general', $errorMessage);
-                session()->flash('error', $errorMessage);
+                $this->emit('toast', ['message' => $errorMessage, 'type' => 'error']);
                 return;
             }
 
@@ -412,7 +412,7 @@ class ConsultationForm extends Component
                 session(['last_facture_id' => $facture->Idfacture]);
                 
                 // Ajouter un message de succès
-                session()->flash('success', 'La consultation a été enregistrée avec succès.');
+                $this->emit('toast', ['message' => 'La consultation a été enregistrée avec succès.', 'type' => 'success']);
                 
                 // Ouvrir le reçu dans un nouvel onglet
                 $receiptUrl = route('consultations.receipt', $facture->Idfacture);

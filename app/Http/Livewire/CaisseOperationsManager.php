@@ -111,24 +111,24 @@ class CaisseOperationsManager extends Component
         try {
             $operation = CaisseOperation::find($operationId);
             if (!$operation) {
-                session()->flash('error', 'Opération introuvable.');
+                $this->emit('toast', ['message' => 'Opération introuvable.', 'type' => 'error']);
                 return;
             }
 
             // Vérifier que c'est bien une recette (entrée d'espèces)
             if ($operation->entreEspece <= 0) {
-                session()->flash('error', 'Seules les recettes peuvent être supprimées depuis cette action.');
+                $this->emit('toast', ['message' => 'Seules les recettes peuvent être supprimées depuis cette action.', 'type' => 'error']);
                 return;
             }
 
             // Vérifier les permissions
             $user = Auth::user();
             if (!$this->canDeleteFinances) {
-                session()->flash('error', 'Vous n\'avez pas la permission de supprimer des opérations.');
+                $this->emit('toast', ['message' => 'Vous n\'avez pas la permission de supprimer des opérations.', 'type' => 'error']);
                 return;
             }
             if ($this->isOwnOnly && $operation->fkidmedecin != $user->fkidmedecin) {
-                session()->flash('error', 'Vous ne pouvez supprimer que les recettes de vos consultations.');
+                $this->emit('toast', ['message' => 'Vous ne pouvez supprimer que les recettes de vos consultations.', 'type' => 'error']);
                 return;
             }
 
@@ -164,7 +164,7 @@ class CaisseOperationsManager extends Component
 
             DB::commit();
 
-            session()->flash('message', 'Recette supprimée avec succès. Le règlement a été annulé sur la facture.');
+            $this->emit('toast', ['message' => 'Recette supprimée avec succès. Le règlement a été annulé sur la facture.', 'type' => 'success']);
             $this->emit('caisseOperationsUpdated');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -173,7 +173,7 @@ class CaisseOperationsManager extends Component
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            session()->flash('error', 'Erreur lors de la suppression : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de la suppression : ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 
@@ -186,19 +186,19 @@ class CaisseOperationsManager extends Component
         try {
             $user = Auth::user();
             if (!$this->canDeleteFinances || !$this->canViewDepenses) {
-                session()->flash('error', 'Vous n\'avez pas la permission de supprimer une dépense.');
+                $this->emit('toast', ['message' => 'Vous n\'avez pas la permission de supprimer une dépense.', 'type' => 'error']);
                 return;
             }
 
             $operation = CaisseOperation::find($operationId);
             if (!$operation) {
-                session()->flash('error', 'Opération introuvable.');
+                $this->emit('toast', ['message' => 'Opération introuvable.', 'type' => 'error']);
                 return;
             }
 
             // Vérifier que c'est bien une dépense (sortie d'espèces)
             if ($operation->retraitEspece <= 0) {
-                session()->flash('error', 'Seules les dépenses peuvent être supprimées depuis cette action.');
+                $this->emit('toast', ['message' => 'Seules les dépenses peuvent être supprimées depuis cette action.', 'type' => 'error']);
                 return;
             }
 
@@ -211,7 +211,7 @@ class CaisseOperationsManager extends Component
 
             DB::commit();
 
-            session()->flash('message', 'Dépense supprimée avec succès.');
+            $this->emit('toast', ['message' => 'Dépense supprimée avec succès.', 'type' => 'success']);
             $this->emit('caisseOperationsUpdated');
         } catch (\Exception $e) {
             DB::rollBack();
@@ -220,7 +220,7 @@ class CaisseOperationsManager extends Component
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            session()->flash('error', 'Erreur lors de la suppression : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de la suppression : ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 

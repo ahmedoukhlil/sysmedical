@@ -210,7 +210,7 @@ class DossierMedicalManager extends Component
             ]
         );
         $this->loadDossier();
-        session()->flash('success_dossier', 'Dossier medical mis a jour.');
+        $this->emit('toast', ['message' => 'Dossier medical mis a jour.', 'type' => 'success']);
     }
 
     public function ajouterMedicament()
@@ -286,10 +286,10 @@ class DossierMedicalManager extends Component
             $this->resetConsultationForm();
             $this->loadConsultations();
             $this->onglet = 'historique';
-            session()->flash('success_consultation', 'Consultation enregistree.');
+            $this->emit('toast', ['message' => 'Consultation enregistree.', 'type' => 'success']);
         } catch (\Exception $e) {
             Log::error('DossierMedical: sauvegarderConsultation', ['error' => $e->getMessage()]);
-            session()->flash('error_consultation', 'Erreur : '.$e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur : '.$e->getMessage(), 'type' => 'error']);
         }
     }
 
@@ -367,9 +367,9 @@ class DossierMedicalManager extends Component
         if (!$quotaService->hasRoomFor(Auth::user()->fkidcabinet, $totalBytes)) {
             $restant = $quotaService->remainingBytes(Auth::user()->fkidcabinet);
             $restantMo = $restant !== null ? round($restant / 1024 / 1024, 1) : null;
-            session()->flash('error_analyse', $restantMo !== null
+            $this->emit('toast', ['message' => $restantMo !== null
                 ? "Quota de stockage insuffisant. Espace restant : {$restantMo} Mo. Supprimez des fichiers ou contactez l'administrateur pour changer de plan."
-                : "Quota de stockage insuffisant.");
+                : "Quota de stockage insuffisant.", 'type' => 'error']);
             return;
         }
 
@@ -399,10 +399,10 @@ class DossierMedicalManager extends Component
             $this->analyseNotes     = '';
             $this->analyseDate      = '';
             $this->loadAnalyses();
-            session()->flash('success_analyse', count($this->analysesFichiers) . ' fichier(s) uploadé(s).');
+            $this->emit('toast', ['message' => count($this->analysesFichiers) . ' fichier(s) uploadé(s).', 'type' => 'success']);
         } catch (\Exception $e) {
             Log::error('DossierMedical: uploadAnalyses', ['error' => $e->getMessage()]);
-            session()->flash('error_analyse', 'Erreur upload : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur upload : ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 

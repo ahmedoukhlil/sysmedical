@@ -118,19 +118,4 @@
         </div>
     @endif
 
-    <!-- Messages d'erreur -->
-    @if(session()->has('error'))
-        <div class="mt-3 p-3 bg-red-50 border border-red-200 rounded-lg">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <i class="fas fa-exclamation-circle text-red-400"></i>
-                </div>
-                <div class="ml-3">
-                    <p class="text-sm text-red-800">
-                        {{ session('error') }}
-                    </p>
-                </div>
-            </div>
-        </div>
-    @endif
 </div> 

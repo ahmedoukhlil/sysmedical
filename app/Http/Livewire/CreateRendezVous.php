@@ -191,7 +191,7 @@ class CreateRendezVous extends Component
     public function openBulkEditModal()
     {
         if (empty($this->selectedRdvIds)) {
-            session()->flash('error', 'Veuillez sélectionner au moins un rendez-vous.');
+            $this->emit('toast', ['message' => 'Veuillez sélectionner au moins un rendez-vous.', 'type' => 'error']);
             return;
         }
 
@@ -225,18 +225,18 @@ class CreateRendezVous extends Component
         
         // Validation
         if (empty($this->selectedRdvIds)) {
-            session()->flash('error', 'Aucun rendez-vous sélectionné.');
+            $this->emit('toast', ['message' => 'Aucun rendez-vous sélectionné.', 'type' => 'error']);
             return;
         }
 
         if (empty($this->bulkEditData['newDate']) || empty($this->bulkEditData['startTime'])) {
-            session()->flash('error', 'Veuillez remplir tous les champs obligatoires.');
+            $this->emit('toast', ['message' => 'Veuillez remplir tous les champs obligatoires.', 'type' => 'error']);
             return;
         }
 
         // Validation de la date
         if (Carbon::parse($this->bulkEditData['newDate'])->lt(Carbon::today())) {
-            session()->flash('error', 'La date ne peut pas être antérieure à aujourd\'hui.');
+            $this->emit('toast', ['message' => 'La date ne peut pas être antérieure à aujourd\'hui.', 'type' => 'error']);
             return;
         }
 
@@ -282,7 +282,7 @@ class CreateRendezVous extends Component
             \DB::commit();
 
             if ($updatedCount > 0) {
-                session()->flash('message', "{$updatedCount} rendez-vous mis à jour avec succès.");
+                $this->emit('toast', ['message' => "{$updatedCount} rendez-vous mis à jour avec succès.", 'type' => 'success']);
                 
                 // Vider la sélection
                 $this->selectedRdvIds = [];
@@ -294,12 +294,12 @@ class CreateRendezVous extends Component
                 // Rafraîchir la page
                 $this->resetPage();
             } else {
-                session()->flash('error', 'Aucun rendez-vous n\'a pu être mis à jour.');
+                $this->emit('toast', ['message' => 'Aucun rendez-vous n\'a pu être mis à jour.', 'type' => 'error']);
             }
 
         } catch (\Exception $e) {
             \DB::rollBack();
-            session()->flash('error', 'Erreur lors de la mise à jour: ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de la mise à jour: ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 
@@ -310,13 +310,13 @@ class CreateRendezVous extends Component
         // Vérification supplémentaire des permissions
         $user = Auth::user();
         if ($this->isDocteur && $this->medecin_id != $user->fkidmedecin) {
-            session()->flash('error', 'Vous ne pouvez créer des rendez-vous que pour vous-même.');
+            $this->emit('toast', ['message' => 'Vous ne pouvez créer des rendez-vous que pour vous-même.', 'type' => 'error']);
             return;
         }
 
         // Vérification des conflits d'horaires
         if (Rendezvou::hasConflict($this->medecin_id, $this->date_rdv, $this->heure_rdv)) {
-            session()->flash('error', 'Ce créneau horaire n\'est pas disponible. Le médecin a déjà un rendez-vous à cette heure.');
+            $this->emit('toast', ['message' => 'Ce créneau horaire n\'est pas disponible. Le médecin a déjà un rendez-vous à cette heure.', 'type' => 'error']);
             return;
         }
 
@@ -341,7 +341,7 @@ class CreateRendezVous extends Component
 
             $this->reset(['patient_id', 'heure_rdv', 'acte_prevu']);
             $this->resetPage();
-            session()->flash('message', 'Rendez-vous créé avec succès.');
+            $this->emit('toast', ['message' => 'Rendez-vous créé avec succès.', 'type' => 'success']);
             
             // Émettre un événement pour réinitialiser le composant PatientSearch
             $this->emit('clearPatient');
@@ -361,7 +361,7 @@ class CreateRendezVous extends Component
             $this->dispatchBrowserEvent('open-receipt', ['url' => $this->printUrl]);
         } catch (\Exception $e) {
             \DB::rollBack();
-            session()->flash('error', 'Erreur lors de la création du rendez-vous: ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de la création du rendez-vous: ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 
@@ -445,33 +445,33 @@ class CreateRendezVous extends Component
             $rdv = Rendezvou::find($id);
 
             if (!$this->canManageRdv) {
-                session()->flash('error', 'Vous n\'avez pas la permission de modifier des rendez-vous.');
+                $this->emit('toast', ['message' => 'Vous n\'avez pas la permission de modifier des rendez-vous.', 'type' => 'error']);
                 return;
             }
 
             // Si c'est un docteur simple, vérifier que le rendez-vous lui appartient
             if ($this->isDocteur && $rdv->fkidMedecin != $user->fkidmedecin) {
-                session()->flash('error', 'Vous ne pouvez modifier que vos propres rendez-vous.');
+                $this->emit('toast', ['message' => 'Vous ne pouvez modifier que vos propres rendez-vous.', 'type' => 'error']);
                 return;
             }
 
             $statutsValides = ['En Attente', 'Confirmé', 'En cours', 'Terminé', 'Annulé'];
-            
+
             if (!in_array($nouveauStatut, $statutsValides)) {
-                session()->flash('error', 'Statut invalide.');
+                $this->emit('toast', ['message' => 'Statut invalide.', 'type' => 'error']);
                 return;
             }
 
             // Utiliser la méthode centralisée du modèle
             $result = Rendezvou::updateStatusWithConflictManagement($id, $nouveauStatut);
-            
+
             if ($result['success']) {
-                session()->flash('message', $result['message']);
+                $this->emit('toast', ['message' => $result['message'], 'type' => 'success']);
             } else {
-                session()->flash('error', $result['message']);
+                $this->emit('toast', ['message' => $result['message'], 'type' => 'error']);
             }
         } catch (\Exception $e) {
-            session()->flash('error', 'Erreur lors de la modification du statut: ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de la modification du statut: ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 
@@ -532,17 +532,17 @@ class CreateRendezVous extends Component
     public function proposerProchainCreneau()
     {
         if (!$this->medecin_id || !$this->date_rdv) {
-            session()->flash('error', 'Veuillez d\'abord sélectionner un médecin et une date.');
+            $this->emit('toast', ['message' => 'Veuillez d\'abord sélectionner un médecin et une date.', 'type' => 'error']);
             return;
         }
 
         $prochainCreneau = Rendezvou::getProchainCreneauPropose($this->medecin_id, $this->date_rdv);
-        
+
         if ($prochainCreneau) {
             $this->heure_rdv = $prochainCreneau;
-            session()->flash('message', 'Créneau proposé : ' . $prochainCreneau . ' (dernier RDV + 10 min)');
+            $this->emit('toast', ['message' => 'Créneau proposé : ' . $prochainCreneau . ' (dernier RDV + 10 min)', 'type' => 'success']);
         } else {
-            session()->flash('error', 'Aucun créneau disponible pour cette date. Tous les créneaux sont occupés.');
+            $this->emit('toast', ['message' => 'Aucun créneau disponible pour cette date. Tous les créneaux sont occupés.', 'type' => 'error']);
         }
     }
 }

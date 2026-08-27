@@ -205,7 +205,7 @@ class PharmacieManager extends Component
     {
         $medicament = Medicament::find($medicamentId);
         if (!$medicament) {
-            session()->flash('error', 'Médicament introuvable.');
+            $this->emit('toast', ['message' => 'Médicament introuvable.', 'type' => 'error']);
             return;
         }
         $cabinetId = Auth::user()->fkidcabinet;
@@ -286,7 +286,7 @@ class PharmacieManager extends Component
             ->where('fkidCabinet', $cabinetId)->first();
 
         if (!$stock) {
-            session()->flash('error', 'Stock introuvable pour ce médicament.');
+            $this->emit('toast', ['message' => 'Stock introuvable pour ce médicament.', 'type' => 'error']);
             return;
         }
 
@@ -295,7 +295,7 @@ class PharmacieManager extends Component
         $ecart = $nouvelleQuantite - $ancienneQuantite;
 
         if ($ecart == 0) {
-            session()->flash('error', 'Aucun changement de quantité.');
+            $this->emit('toast', ['message' => 'Aucun changement de quantité.', 'type' => 'error']);
             return;
         }
 
@@ -320,7 +320,7 @@ class PharmacieManager extends Component
             ]);
         });
 
-        session()->flash('message', 'Stock ajusté avec succès (' . ($ecart > 0 ? '+' : '') . number_format($ecart, 0) . ').');
+        $this->emit('toast', ['message' => 'Stock ajusté avec succès (' . ($ecart > 0 ? '+' : '') . number_format($ecart, 0) . ').', 'type' => 'success']);
         $this->closeAjustementModal();
         $this->calculerAlertes();
 
@@ -401,7 +401,7 @@ class PharmacieManager extends Component
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            session()->flash('error', 'Erreur lors de la recherche : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de la recherche : ' . $e->getMessage(), 'type' => 'error']);
             $this->entreeMedicamentsResults = [];
             $this->entreeShowMedicamentResults = false;
         } finally {
@@ -421,10 +421,10 @@ class PharmacieManager extends Component
                 $this->entreeMedicamentsResults = [];
                 $this->entreeShowMedicamentResults = false;
             } else {
-                session()->flash('error', 'Médicament non trouvé ou invalide.');
+                $this->emit('toast', ['message' => 'Médicament non trouvé ou invalide.', 'type' => 'error']);
             }
         } catch (\Exception $e) {
-            session()->flash('error', 'Une erreur est survenue lors de la sélection du médicament.');
+            $this->emit('toast', ['message' => 'Une erreur est survenue lors de la sélection du médicament.', 'type' => 'error']);
         }
     }
 
@@ -510,7 +510,7 @@ class PharmacieManager extends Component
             ]);
         });
 
-        session()->flash('message', 'Entrée de stock enregistrée avec succès.');
+        $this->emit('toast', ['message' => 'Entrée de stock enregistrée avec succès.', 'type' => 'success']);
         $this->closeEntreeModal();
         $this->calculerAlertes();
     }
@@ -520,15 +520,15 @@ class PharmacieManager extends Component
     public function ajouterAuPanierVente($medicamentId, $quantite = null)
     {
         if (!$this->patientId) {
-            session()->flash('error', 'Veuillez sélectionner un patient pour effectuer une vente.');
+            $this->emit('toast', ['message' => 'Veuillez sélectionner un patient pour effectuer une vente.', 'type' => 'error']);
             return;
         }
 
         // Utiliser la quantité depuis quantiteVente si disponible, sinon utiliser le paramètre ou 1
         $quantiteFinale = $quantite ?? ($this->quantiteVente[$medicamentId] ?? 1);
-        
+
         if ($quantiteFinale <= 0) {
-            session()->flash('error', 'La quantité doit être supérieure à 0.');
+            $this->emit('toast', ['message' => 'La quantité doit être supérieure à 0.', 'type' => 'error']);
             return;
         }
 
@@ -537,24 +537,24 @@ class PharmacieManager extends Component
             ->first();
 
         if (!$stock) {
-            session()->flash('error', 'Médicament non trouvé en stock.');
+            $this->emit('toast', ['message' => 'Médicament non trouvé en stock.', 'type' => 'error']);
             return;
         }
 
         if ($stock->quantiteStock < $quantiteFinale) {
-            session()->flash('error', 'Stock insuffisant. Stock disponible: ' . number_format($stock->quantiteStock, 0));
+            $this->emit('toast', ['message' => 'Stock insuffisant. Stock disponible: ' . number_format($stock->quantiteStock, 0), 'type' => 'error']);
             return;
         }
 
         $medicament = Medicament::find($medicamentId);
         if (!$medicament) {
-            session()->flash('error', 'Médicament non trouvé.');
+            $this->emit('toast', ['message' => 'Médicament non trouvé.', 'type' => 'error']);
             return;
         }
 
         // Vérifier que c'est bien un médicament (fkidtype = 1)
         if ($medicament->fkidtype != 1) {
-            session()->flash('error', 'Seuls les médicaments peuvent être vendus depuis l\'onglet Pharmacie.');
+            $this->emit('toast', ['message' => 'Seuls les médicaments peuvent être vendus depuis l\'onglet Pharmacie.', 'type' => 'error']);
             return;
         }
 
@@ -569,7 +569,7 @@ class PharmacieManager extends Component
         if ($index !== false) {
             $nouvelleQuantite = $this->panierVente[$index]['quantite'] + $quantiteFinale;
             if ($nouvelleQuantite > $stock->quantiteStock) {
-                session()->flash('error', 'Quantité totale dépasse le stock disponible.');
+                $this->emit('toast', ['message' => 'Quantité totale dépasse le stock disponible.', 'type' => 'error']);
                 return;
             }
             $this->panierVente[$index]['quantite'] = $nouvelleQuantite;
@@ -588,14 +588,14 @@ class PharmacieManager extends Component
 
         // Réinitialiser la quantité dans l'input
         $this->quantiteVente[$medicamentId] = 1;
-        session()->flash('message', 'Médicament ajouté au panier.');
+        $this->emit('toast', ['message' => 'Médicament ajouté au panier.', 'type' => 'success']);
     }
 
     public function retirerDuPanierVente($index)
     {
         unset($this->panierVente[$index]);
         $this->panierVente = array_values($this->panierVente);
-        session()->flash('message', 'Médicament retiré du panier.');
+        $this->emit('toast', ['message' => 'Médicament retiré du panier.', 'type' => 'success']);
     }
 
     public function modifierQuantitePanier($index, $quantite)
@@ -607,7 +607,7 @@ class PharmacieManager extends Component
 
         if (isset($this->panierVente[$index])) {
             if ($quantite > $this->panierVente[$index]['stockDisponible']) {
-                session()->flash('error', 'La quantité ne peut pas dépasser le stock disponible.');
+                $this->emit('toast', ['message' => 'La quantité ne peut pas dépasser le stock disponible.', 'type' => 'error']);
                 return;
             }
             $this->panierVente[$index]['quantite'] = $quantite;
@@ -619,7 +619,7 @@ class PharmacieManager extends Component
     {
         if (isset($this->panierVente[$index])) {
             if ($prixFacture < 0) {
-                session()->flash('error', 'Le prix ne peut pas être négatif.');
+                $this->emit('toast', ['message' => 'Le prix ne peut pas être négatif.', 'type' => 'error']);
                 return;
             }
             $this->panierVente[$index]['prixFacture'] = $prixFacture;
@@ -635,12 +635,12 @@ class PharmacieManager extends Component
     public function creerFacture()
     {
         if (empty($this->panierVente)) {
-            session()->flash('error', 'Le panier est vide.');
+            $this->emit('toast', ['message' => 'Le panier est vide.', 'type' => 'error']);
             return;
         }
 
         if (!$this->patientId) {
-            session()->flash('error', 'Veuillez sélectionner un patient.');
+            $this->emit('toast', ['message' => 'Veuillez sélectionner un patient.', 'type' => 'error']);
             return;
         }
 
@@ -775,12 +775,12 @@ class PharmacieManager extends Component
             $this->showFactureModal = true;
 
             DB::commit();
-            session()->flash('message', 'Facture créée avec succès. Le stock sera déduit lors du paiement complet de la facture.');
+            $this->emit('toast', ['message' => 'Facture créée avec succès. Le stock sera déduit lors du paiement complet de la facture.', 'type' => 'success']);
             $this->calculerAlertes();
 
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Erreur lors de la création de la facture : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de la création de la facture : ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 
