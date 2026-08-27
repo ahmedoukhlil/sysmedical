@@ -85,7 +85,6 @@ class CreateRendezVous extends Component
     {
         // Charger seulement les médecins nécessaires
         $this->medecins = Medecin::select('idMedecin', 'Nom')
-            ->where('Masquer', 0)
             ->orderBy('Nom')
             ->get();
         // Charger seulement les actes nécessaires
