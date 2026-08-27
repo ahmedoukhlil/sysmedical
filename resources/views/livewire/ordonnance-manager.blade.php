@@ -123,7 +123,7 @@
                     {{-- Choix du type (Médicale / Analyses / Radios) --}}
                     @if(true)
                     <div class="mb-4">
-                        <div class="grid grid-cols-3 gap-2">
+                        <div class="grid grid-cols-3 gap-1.5 sm:gap-2">
                             <button type="button"
                                     wire:click="changerTypeOrdonnance(1)"
                                     class="px-3 py-2 rounded-lg border-2 transition-all text-center {{ $typeOrdonnance == 1 ? 'border-green-600 bg-green-50 text-green-700 font-semibold' : 'border-gray-200 bg-white text-gray-600 hover:border-green-300' }}">
