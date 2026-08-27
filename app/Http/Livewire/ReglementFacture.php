@@ -320,13 +320,13 @@ class ReglementFacture extends Component
 
             $this->reset(['montantReglement', 'modePaiement', 'factureSelectionnee', 'pourQui']);
             $this->loadFactures();
-            session()->flash('message', ($isRemboursement ? 'Remboursement' : ($isAcompte ? 'Acompte' : 'Règlement')) . ' enregistré avec succès.');
+            $this->emit('toast', ['message' => ($isRemboursement ? 'Remboursement' : ($isAcompte ? 'Acompte' : 'Règlement')) . ' enregistré avec succès.', 'type' => 'success']);
 
             $receiptUrl = route('reglement-facture.receipt', $operation->getKey());
             $this->dispatchBrowserEvent('open-receipt', ['url' => $receiptUrl]);
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Une erreur est survenue lors de l\'enregistrement : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Une erreur est survenue lors de l\'enregistrement : ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 
@@ -528,7 +528,7 @@ class ReglementFacture extends Component
                 3 => 'Radio',
                 default => 'Item'
             };
-            session()->flash('message', $typeLabel . ' ajouté avec succès. Vous pouvez continuer à ajouter d\'autres items.');
+            $this->emit('toast', ['message' => $typeLabel . ' ajouté avec succès. Vous pouvez continuer à ajouter d\'autres items.', 'type' => 'success']);
 
             // Réinitialiser les champs pour permettre l'ajout d'un nouvel item
             $this->resetAddMedicamentForm();
@@ -539,7 +539,7 @@ class ReglementFacture extends Component
 
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Une erreur est survenue : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Une erreur est survenue : ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 
@@ -649,11 +649,11 @@ class ReglementFacture extends Component
             if ($this->factureSelectionnee) {
                 $this->selectionnerFacture($this->factureSelectionnee['id']);
             }
-            session()->flash('message', 'Acte ajouté avec succès.');
+            $this->emit('toast', ['message' => 'Acte ajouté avec succès.', 'type' => 'success']);
 
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Une erreur est survenue lors de l\'ajout de l\'acte : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Une erreur est survenue lors de l\'ajout de l\'acte : ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 
@@ -792,7 +792,7 @@ class ReglementFacture extends Component
             DB::commit();
             
             $typeItem = $detail->IsAct == 2 ? 'Médicament' : 'Acte';
-            session()->flash('message', $typeItem . ' supprimé avec succès' . ($detail->IsAct == 2 ? '. Le stock a été restauré.' : '.'));
+            $this->emit('toast', ['message' => $typeItem . ' supprimé avec succès' . ($detail->IsAct == 2 ? '. Le stock a été restauré.' : '.'), 'type' => 'success']);
             $this->loadFactures();
             if ($this->factureSelectionnee) {
                 $this->selectionnerFacture($this->factureSelectionnee['id']);
@@ -805,7 +805,7 @@ class ReglementFacture extends Component
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            session()->flash('error', 'Une erreur est survenue lors de la suppression : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Une erreur est survenue lors de la suppression : ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 
@@ -935,10 +935,10 @@ class ReglementFacture extends Component
 
             DB::commit();
             $this->loadFactures();
-            session()->flash('message', 'Facture créée avec succès');
+            $this->emit('toast', ['message' => 'Facture créée avec succès', 'type' => 'success']);
         } catch (\Exception $e) {
             DB::rollBack();
-            session()->flash('error', 'Erreur lors de la création de la facture: ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de la création de la facture: ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 
@@ -1068,16 +1068,16 @@ class ReglementFacture extends Component
     {
         $user = Auth::user();
         if (!$user->hasPermission('facture.delete')) {
-            session()->flash('error', 'Vous n\'avez pas la permission de supprimer une facture.');
+            $this->emit('toast', ['message' => 'Vous n\'avez pas la permission de supprimer une facture.', 'type' => 'error']);
             return;
         }
-        
+
         try {
             DB::beginTransaction();
-            
+
             $facture = Facture::find($factureId);
             if (!$facture) {
-                session()->flash('error', 'Facture introuvable.');
+                $this->emit('toast', ['message' => 'Facture introuvable.', 'type' => 'error']);
                 DB::rollBack();
                 return;
             }
@@ -1208,8 +1208,8 @@ class ReglementFacture extends Component
             // Forcer le rechargement des factures
             $this->factures = $this->getFacturesProperty();
             
-            session()->flash('message', 'Facture N°' . $factureNumero . ' supprimée avec succès. Le stock a été restauré et les montants ont été retirés de la caisse.');
-            
+            $this->emit('toast', ['message' => 'Facture N°' . $factureNumero . ' supprimée avec succès. Le stock a été restauré et les montants ont été retirés de la caisse.', 'type' => 'success']);
+
         } catch (\Exception $e) {
             DB::rollBack();
             \Log::error('Erreur lors de la suppression de la facture', [
@@ -1217,7 +1217,7 @@ class ReglementFacture extends Component
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
-            session()->flash('error', 'Erreur lors de la suppression de la facture : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Erreur lors de la suppression de la facture : ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 

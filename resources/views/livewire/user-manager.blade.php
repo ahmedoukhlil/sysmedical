@@ -1,17 +1,5 @@
 <div class="p-6">
 
-    {{-- Notifications --}}
-    @if (session()->has('message'))
-        <div class="mb-4 p-3 bg-green-100 text-green-800 rounded-lg border border-green-200 flex items-center gap-2">
-            <i class="fas fa-check-circle text-green-600"></i> {{ session('message') }}
-        </div>
-    @endif
-    @if (session()->has('error'))
-        <div class="mb-4 p-3 bg-red-100 text-red-800 rounded-lg border border-red-200 flex items-center gap-2">
-            <i class="fas fa-exclamation-circle text-red-600"></i> {{ session('error') }}
-        </div>
-    @endif
-
     {{-- Titre + Onglets --}}
     <div class="flex items-center justify-between mb-5">
         <h2 class="text-xl font-bold text-gray-800">Gestion des utilisateurs</h2>

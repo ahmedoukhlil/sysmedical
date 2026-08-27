@@ -220,7 +220,7 @@ class UserManager extends Component
                     $user->save();
                 }
 
-                session()->flash('message', 'Utilisateur modifié avec succès.');
+                $this->emit('toast', ['message' => 'Utilisateur modifié avec succès.', 'type' => 'success']);
             } else {
                 // Si c'est une création
                 if (empty($this->password)) {
@@ -241,12 +241,12 @@ class UserManager extends Component
 
                 $userData['password'] = $this->password;
                 TUser::create($userData);
-                session()->flash('message', 'Utilisateur créé avec succès.');
+                $this->emit('toast', ['message' => 'Utilisateur créé avec succès.', 'type' => 'success']);
             }
 
             $this->closeModal();
         } catch (\Exception $e) {
-            session()->flash('error', 'Une erreur est survenue lors de l\'enregistrement de l\'utilisateur : ' . $e->getMessage());
+            $this->emit('toast', ['message' => 'Une erreur est survenue lors de l\'enregistrement de l\'utilisateur : ' . $e->getMessage(), 'type' => 'error']);
         }
     }
 
@@ -268,10 +268,10 @@ class UserManager extends Component
             $user = TUser::find($this->userToDelete);
             if ($user) {
                 $user->delete();
-                session()->flash('message', 'Utilisateur supprimé définitivement.');
+                $this->emit('toast', ['message' => 'Utilisateur supprimé définitivement.', 'type' => 'success']);
             }
         } catch (\Exception $e) {
-            session()->flash('error', 'Erreur lors de la suppression définitive.');
+            $this->emit('toast', ['message' => 'Erreur lors de la suppression définitive.', 'type' => 'error']);
         }
         $this->showForceDeleteModal = false;
         $this->userToDelete = null;
@@ -284,10 +284,10 @@ class UserManager extends Component
             if ($user) {
                 $user->ismasquer = false;
                 $user->save();
-                session()->flash('message', 'Utilisateur réactivé avec succès.');
+                $this->emit('toast', ['message' => 'Utilisateur réactivé avec succès.', 'type' => 'success']);
             }
         } catch (\Exception $e) {
-            session()->flash('error', 'Erreur lors de la réactivation.');
+            $this->emit('toast', ['message' => 'Erreur lors de la réactivation.', 'type' => 'error']);
         }
     }
 
@@ -303,7 +303,7 @@ class UserManager extends Component
                         ->count();
                     
                     if ($ownerCount <= 1) {
-                        session()->flash('error', 'Impossible de supprimer le dernier propriétaire.');
+                        $this->emit('toast', ['message' => 'Impossible de supprimer le dernier propriétaire.', 'type' => 'error']);
                         $this->showDeleteModal = false;
                         return;
                     }
@@ -311,10 +311,10 @@ class UserManager extends Component
 
                 $user->ismasquer = true;
                 $user->save();
-                session()->flash('message', 'Utilisateur supprimé avec succès.');
+                $this->emit('toast', ['message' => 'Utilisateur supprimé avec succès.', 'type' => 'success']);
             }
         } catch (\Exception $e) {
-            session()->flash('error', 'Une erreur est survenue lors de la suppression.');
+            $this->emit('toast', ['message' => 'Une erreur est survenue lors de la suppression.', 'type' => 'error']);
         }
         $this->showDeleteModal = false;
         $this->userToDelete = null;
@@ -332,17 +332,17 @@ class UserManager extends Component
                         ->count();
 
                     if ($activeOwnerCount <= 1) {
-                        session()->flash('error', 'Impossible de désactiver le dernier propriétaire actif.');
+                        $this->emit('toast', ['message' => 'Impossible de désactiver le dernier propriétaire actif.', 'type' => 'error']);
                         return;
                     }
                 }
 
                 $user->ismasquer = !$user->ismasquer;
                 $user->save();
-                session()->flash('message', 'Statut de l\'utilisateur modifié avec succès.');
+                $this->emit('toast', ['message' => 'Statut de l\'utilisateur modifié avec succès.', 'type' => 'success']);
             }
         } catch (\Exception $e) {
-            session()->flash('error', 'Une erreur est survenue lors de la modification du statut.');
+            $this->emit('toast', ['message' => 'Une erreur est survenue lors de la modification du statut.', 'type' => 'error']);
         }
     }
 
@@ -378,7 +378,7 @@ class UserManager extends Component
     {
         $libelle = trim($this->roleLibelle);
         if (empty($libelle)) {
-            session()->flash('error', 'Le libellé du rôle est obligatoire.');
+            $this->emit('toast', ['message' => 'Le libellé du rôle est obligatoire.', 'type' => 'error']);
             return;
         }
 
@@ -386,10 +386,10 @@ class UserManager extends Component
             DB::table('typeuser')
                 ->where('IdClasseUser0', $this->roleEditId)
                 ->update(['Libelle' => $libelle]);
-            session()->flash('message', 'Rôle modifié avec succès.');
+            $this->emit('toast', ['message' => 'Rôle modifié avec succès.', 'type' => 'success']);
         } else {
             DB::table('typeuser')->insert(['Libelle' => $libelle]);
-            session()->flash('message', 'Rôle créé avec succès.');
+            $this->emit('toast', ['message' => 'Rôle créé avec succès.', 'type' => 'success']);
         }
 
         $this->roleEditId = null;
@@ -408,7 +408,7 @@ class UserManager extends Component
         // Empêcher la suppression si des utilisateurs ont ce rôle
         $count = DB::table('t_user')->where('IdClasseUser', $id)->count();
         if ($count > 0) {
-            session()->flash('error', "Impossible de supprimer ce rôle : {$count} utilisateur(s) l'utilisent.");
+            $this->emit('toast', ['message' => "Impossible de supprimer ce rôle : {$count} utilisateur(s) l'utilisent.", 'type' => 'error']);
             return;
         }
         $this->roleToDelete = $id;
@@ -428,7 +428,7 @@ class UserManager extends Component
         $this->roleToDelete = null;
         $this->showRoleDeleteConfirm = false;
         $this->loadRoles();
-        session()->flash('message', 'Rôle supprimé avec succès.');
+        $this->emit('toast', ['message' => 'Rôle supprimé avec succès.', 'type' => 'success']);
     }
 
     public function loadPermissionsTab(): void

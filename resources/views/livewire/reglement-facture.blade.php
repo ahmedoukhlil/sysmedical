@@ -8,19 +8,6 @@
 
     <div class="bg-white rounded-lg shadow-xl overflow-hidden">
         <div class="p-6">
-    <!-- Messages de succès/erreur -->
-    @if (session()->has('message'))
-        <div class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
-            {{ session('message') }}
-        </div>
-    @endif
-
-    @if (session()->has('error'))
-        <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-            {{ session('error') }}
-        </div>
-    @endif
-
     <!-- Recherche du patient -->
     @if($selectedPatient)
         <div class="mb-6">
